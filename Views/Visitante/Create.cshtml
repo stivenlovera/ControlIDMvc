@@ -1,0 +1,519 @@
+@{
+
+
+
+
+
+
+
+    ViewData["Title"] = "Create Visitante";
+}
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Visita</h3>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Nueva visita</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Datos de la visita <small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="col-md-3 col-sm-3 profile_left">
+                            <!-- foto -->
+                            <div class="profile_img">
+                                <div id="crop-avatar">
+                                    <!-- Current avatar -->
+                                    <img class="img-responsive avatar-view" src="~/assets/images/profile_user.jpg"
+                                        width="100%" height="100%" alt="Avatar" title="Change the avatar">
+                                </div>
+                            </div>
+                            <div class="text-center m-2">
+                                <button type="button" class="btn btn-success btn-xs"> Selecione una foto</button>
+                                <button type="button" class="btn btn-success btn-xs" disabled>Eliminar foto</button>
+                            </div>
+                            <hr>
+                            <!-- Document Identidad -->
+                            <div class="profile_img">
+                                <div id="crop-avatar">
+                                    <!-- Current avatar -->
+                                    <img class="img-responsive avatar-view" src="~/assets/images/profile_document.jpg"
+                                        width="100%" height="100%" alt="Avatar" title="Change the avatar">
+                                </div>
+                            </div>
+                            <div class="text-center m-2">
+                                <button type="button" class="btn btn-success btn-xs"> Selecione una foto</button>
+                                <button type="button" class="btn btn-success btn-xs" disabled>Eliminar foto</button>
+                            </div>
+                            <!-- end of skills -->
+                        </div>
+                        <div class="col-md-9 col-sm-9 ">
+                            <!-- end of user-activity-graph -->
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"
+                                            role="tab" aria-controls="home" aria-selected="true">General</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="qr-tab" data-toggle="tab" href="#qr" role="tab"
+                                            aria-controls="qr" aria-selected="true">QR Code</a>
+                                    </li>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                        aria-labelledby="home-tab">
+                                        <!-- start recent activity -->
+
+                                        <h6 class="p-2"><strong>Información personal del visitante</strong></h6>
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="item form-group">
+                                                    <label class="col-form-label col-md-2 col-sm-2"
+                                                        for="nombre">Nombre<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-10 col-sm-10">
+                                                        <input type="text" id="nombre" required="nombre"
+                                                            class="form-control" placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="item form-group">
+                                                    <label class="col-form-label col-md-4 col-sm-4" for="documento">N.
+                                                        de documento<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-8 col-sm-8">
+                                                        <input type="text" id="documento" required="documento"
+                                                            placeholder="" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="item form-group">
+                                                    <label class="col-form-label col-md-4 col-sm-4" for="tipo">Tipo
+                                                        <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-8 col-sm-8">
+                                                        <select id="heard" class="form-control" required>
+                                                            <option value="" selected>CI</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                    <h6 class="p-2"><strong>VEHÍCULO</strong></h6>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="marca">Marca<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="marca" required="marca" class="form-control"
+                                                        placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="modelo">Modelo<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="modelo" required="modelo"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="color">Color<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="color" required="color" class="form-control"
+                                                        placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="patente">Patente<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="patente" required="patente"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="p-2"><strong>PROFESIONAL</strong></h6>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="posicion">Posicion<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="posicion" required="posicion"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="fecha_admision">Fecha de Admision<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="date" id="fecha_admision" required="fecha_admision"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="telefono">Telefono<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="telefono" required="telefono"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="extencion">Extencion<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="extencion" required="extencion"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="p-2"><strong>PERSONAL</strong></h6>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="nombre_padre">Nombre del padre<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="nombre_padre" required="nombre_padre"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="nombre_madre">Nombre del madre<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="nombre_madre" required="nombre_madre"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="fecha_nacimiento">Fecha de Nacimiento<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="date" id="fecha_nacimiento" required="fecha_nacimiento"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="estado_civil">Estado Civil<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="estado_civil" required="estado_civil"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="nacionalidad">Nacionalidad<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="nacionalidad" required="nacionalidad"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="lugar_nacimiento">Lugar de nacimiento<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="lugar_nacimiento" required="lugar_nacimiento"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="nombre">Estado
+                                                    Civil<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <select id="heard" class="form-control" required>
+                                                        <option value="" selected>Masculino</option>
+                                                        <option value="" selected>Femenino</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 class="p-2"><strong>DOMICILIO</strong></h6>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="domicilio">Domicilio<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="domicilio" required="domicilio"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="barrio">Barrio<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="barrio" required="barrio"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="ciudad">Ciudad<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="ciudad" required="ciudad"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="codigo_postal">Codigo Postal<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="codigo_postal" required="codigo_postal"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="nombre">Nombre<span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="nombre" required="Nombre"
+                                                        class="form-control" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-4 col-sm-4"
+                                                    for="matricula">Matricula<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <input type="text" id="matricula" required="required" placeholder=""
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-4 col-sm-4" for="usuario">Usuario ID
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <input type="text" id="usuario" required="usuario"
+                                                        class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="ci">CI <span
+                                                        class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="ci" required="ci" class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="email">Email
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="email" required="email"
+                                                        class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2" for="telefono">Telefono
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="telefono" required="telefono"
+                                                        class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="contraseña">Contraseña <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="contraseña" required="contraseña"
+                                                        class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="contraseña_repetido">Telefono <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="contraseña_repetido"
+                                                        required="contraseña_repetido" class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="item form-group">
+                                                <label class="col-form-label col-md-2 col-sm-2"
+                                                    for="observaciones">Observaciones <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-10 col-sm-10">
+                                                    <input type="text" id="observaciones" required="observaciones"
+                                                        class="form-control ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="checkbox">
+                                                        <label class="">
+                                                            <div class="icheckbox_flat-green checked"
+                                                                style="position: relative;"><input type="checkbox"
+                                                                    class="flat" checked="checked"
+                                                                    style="position: absolute; opacity: 0;"><ins
+                                                                    class="iCheck-helper"
+                                                                    style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                                            </div> Adminsitrador
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="checkbox">
+                                                        <label class="">
+                                                            <div class="icheckbox_flat-green checked"
+                                                                style="position: relative;"><input type="checkbox"
+                                                                    class="flat" checked="checked"
+                                                                    style="position: absolute; opacity: 0;"><ins
+                                                                    class="iCheck-helper"
+                                                                    style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                                            </div> Inactivo
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="checkbox">
+                                                        <label class="">
+                                                            <div class="icheckbox_flat-green checked"
+                                                                style="position: relative;"><input type="checkbox"
+                                                                    class="flat" checked="checked"
+                                                                    style="position: absolute; opacity: 0;"><ins
+                                                                    class="iCheck-helper"
+                                                                    style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                                            </div> Lista de excepciones
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade show" id="qr" role="tabpanel" aria-labelledby="qr-tab">
+                                    <div class="profile_img text-center ">
+                                        <div id="crop-avatar">
+                                            <!-- Current avatar -->
+                                            <img class="img-responsive avatar-view" src="~/assets/images/qr.bmp"
+                                                width="50%" height="50%" alt="Avatar" title="Change the avatar">
+                                        </div>
+                                    </div>
+                                    <div class="text-center m-2">
+                                        <button type="button" class="btn btn-success btn-xs">Generar</button>
+                                        <button type="button" class="btn btn-success btn-xs">Borrar</button>
+                                    </div>
+
+
+                                </div>
+                                <!-- end recent activity -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
