@@ -1,0 +1,349 @@
+@{
+    ViewData["Title"] = "Create Horario";
+}
+@section Estilos {
+<link href="~/assets/vendors/normalize-css/normalize.css" rel="stylesheet">
+<link href="~/assets/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+<link href="~/assets/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+}
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Horario</h3>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Nuevo Horario</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Registro de horario<small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row border pt-2">
+                                    <div class="col-md-2">
+                                        <div class="col">
+                                            <input type="checkbox" name="" id="" value="" class="flat " /> Lunes
+                                        </div>
+                                        <div class="col mt-2">
+                                            <button class="btn btn-success btn-sm">
+                                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="lunes" value="" name="lunes" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                        </label>
+                                        <div class="col-md-10 col-sm-10">
+                                            <input type="text" id="inicio" required="inicio" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                        </label>
+                                        <div class="col-md-10 col-sm-10">
+                                            <input type="text" id="fin" required="fin" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row border pt-2">
+                                    <div class="col-md-2">
+                                        <div class="col">
+                                            <input type="checkbox" name="" id="" value="" class="flat " /> Martes
+                                        </div>
+                                        <div class="col mt-2">
+                                            <button class="btn btn-success btn-sm">
+                                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="martes" value="" name="martes" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                        </label>
+                                        <div class="col-md-10 col-sm-10">
+                                            <input type="text" id="inicio" required="inicio" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                        </label>
+                                        <div class="col-md-10 col-sm-10">
+                                            <input type="text" id="fin" required="fin" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row border pt-2">
+                                    <div class="col-md-2">
+                                        <div class="col">
+                                            <input type="checkbox" name="" id="" value="" class="flat " /> Miercoles
+                                        </div>
+                                        <div class="col mt-2">
+                                            <button class="btn btn-success btn-sm">
+                                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" id="miercoles" value="" name="miercoles" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                        </label>
+                                        <div class="col-md-10 col-sm-10">
+                                            <input type="text" id="inicio" required="inicio" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                        </label>
+                                        <div class="col-md-10 col-sm-10">
+                                            <input type="text" id="fin" required="fin" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row border pt-2"">
+                                    <div class=" col-md-2">
+                                    <div class="col">
+                                        <input type="checkbox" name="" id="" value="" class="flat " /> Jueves
+                                    </div>
+                                    <div class="col mt-2">
+                                        <button class="btn btn-success btn-sm">
+                                            <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="jueves" value="" name="jueves" />
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                    </label>
+                                    <div class="col-md-10 col-sm-10">
+                                        <input type="text" id="inicio" required="inicio" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                    </label>
+                                    <div class="col-md-10 col-sm-10">
+                                        <input type="text" id="fin" required="fin" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row border pt-2"">
+                                    <div class=" col-md-2">
+                                <div class="col">
+                                    <input type="checkbox" name="" id="" value="" class="flat " /> Viernes
+                                </div>
+                                <div class="col mt-2">
+                                    <button class="btn btn-success btn-sm">
+                                        <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" id="viernes" value="" name="viernes" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                </label>
+                                <div class="col-md-10 col-sm-10">
+                                    <input type="text" id="inicio" required="inicio" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                </label>
+                                <div class="col-md-10 col-sm-10">
+                                    <input type="text" id="fin" required="fin" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row border pt-2"">
+                                    <div class=" col-md-2">
+                            <div class="col">
+                                <input type="checkbox" name="" id="" value="" class="flat " /> Sabado
+                            </div>
+                            <div class="col mt-2">
+                                <button class="btn btn-success btn-sm">
+                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" id="sabado" value="" name="sabado" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                            </label>
+                            <div class="col-md-10 col-sm-10">
+                                <input type="text" id="inicio" required="inicio" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                            </label>
+                            <div class="col-md-10 col-sm-10">
+                                <input type="text" id="fin" required="fin" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row border pt-2"">
+                                    <div class=" col-md-2">
+                        <div class="col">
+                            <input type="checkbox" name="" id="" value="" class="flat " /> Domingo
+                        </div>
+                        <div class="col mt-2">
+                            <button class="btn btn-success btn-sm">
+                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" id="domingo" value="" name="domingo" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                        </label>
+                        <div class="col-md-10 col-sm-10">
+                            <input type="text" id="inicio" required="inicio" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                        </label>
+                        <div class="col-md-10 col-sm-10">
+                            <input type="text" id="fin" required="fin" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+@section Scripts {
+
+<script src="~/assets/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+
+<script>
+    function init_IonRangeSlider() {
+        $("#lunes").ionRangeSlider({
+            type: "double",
+            min: +moment('2022-01-01 00:00:00').subtract(24, "hours").format("X"),
+            max: +moment('2022-01-01 23:59:59').subtract(24, "hours").format("X"),
+            grid: true,
+            step: 1,
+            force_edges: true,
+            prettify: function (num) {
+                var m = moment(num, "X");
+                return m.format("HH:mm");
+            }
+        });
+        $("#martes").ionRangeSlider({
+            type: "double",
+            min: +moment('2022-01-01 00:00:00').subtract(24, "hours").format("X"),
+            max: +moment('2022-01-01 23:59:59').subtract(24, "hours").format("X"),
+            grid: true,
+            step: 1,
+            force_edges: true,
+            prettify: function (num) {
+                var m = moment(num, "X");
+                return m.format("HH:mm");
+            }
+        });
+        $("#miercoles").ionRangeSlider({
+            type: "double",
+            min: +moment('2022-01-01 00:00:00').subtract(24, "hours").format("X"),
+            max: +moment('2022-01-01 23:59:59').subtract(24, "hours").format("X"),
+            grid: true,
+            step: 1,
+            force_edges: true,
+            prettify: function (num) {
+                var m = moment(num, "X");
+                return m.format("HH:mm");
+            }
+        });
+        $("#jueves").ionRangeSlider({
+            type: "double",
+            min: +moment('2022-01-01 00:00:00').subtract(24, "hours").format("X"),
+            max: +moment('2022-01-01 23:59:59').subtract(24, "hours").format("X"),
+            grid: true,
+            step: 1,
+            force_edges: true,
+            prettify: function (num) {
+                var m = moment(num, "X");
+                return m.format("HH:mm");
+            }
+        });
+        $("#viernes").ionRangeSlider({
+            type: "double",
+            min: +moment('2022-01-01 00:00:00').subtract(24, "hours").format("X"),
+            max: +moment('2022-01-01 23:59:59').subtract(24, "hours").format("X"),
+            grid: true,
+            step: 1,
+            force_edges: true,
+            prettify: function (num) {
+                var m = moment(num, "X");
+                return m.format("HH:mm");
+            }
+        });
+        $("#sabado").ionRangeSlider({
+            type: "double",
+            min: +moment('2022-01-01 00:00:00').subtract(24, "hours").format("X"),
+            max: +moment('2022-01-01 23:59:59').subtract(24, "hours").format("X"),
+            grid: true,
+            step: 1,
+            force_edges: true,
+            prettify: function (num) {
+                var m = moment(num, "X");
+                return m.format("HH:mm");
+            }
+        });
+        $("#domingo").ionRangeSlider({
+            type: "double",
+            min: +moment('2022-01-01 00:00:00').subtract(24, "hours").format("X"),
+            max: +moment('2022-01-01 23:59:59').subtract(24, "hours").format("X"),
+            grid: true,
+            step: 1,
+            force_edges: true,
+            prettify: function (num) {
+                var m = moment(num, "X");
+                return m.format("HH:mm");
+            }
+        });
+    }
+</script>
+}

@@ -1,0 +1,389 @@
+@{
+    ViewData["Title"] = "Create Regla de Acceso";
+}
+@section Estilos {
+
+}
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Crear regla de Acceso</h3>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <div id="wizard" class="form_wizard wizard_horizontal">
+                            <ul class="wizard_steps">
+                                <li>
+                                    <a href="#step-1">
+                                        <span class="step_no">1</span>
+                                        <span class="step_descr">
+                                            Nombre<br />
+                                            <small>Paso 1</small>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-2">
+                                        <span class="step_no">2</span>
+                                        <span class="step_descr">
+                                            ¿Quien?<br />
+                                            <small>Paso 2</small>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-3">
+                                        <span class="step_no">3</span>
+                                        <span class="step_descr">
+                                            ¿Cuando?<br />
+                                            <small>Paso 3</small>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-4">
+                                        <span class="step_no">4</span>
+                                        <span class="step_descr">
+                                            ¿Donde?<br />
+                                            <small>paso 4</small>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-5">
+                                        <span class="step_no">5</span>
+                                        <span class="step_descr">
+                                            Confirmar<br />
+                                            <small>Paso 5</small>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="step-1">
+                                <h2 class="StepTitle">Nombre de la regla de acceso</h2>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                                for="nombre">Nombre <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 ">
+                                                <input type="text" id="nombre" required="required"
+                                                    class="form-control  ">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="step-2">
+                                <h2 class="StepTitle">Selecion de personas</h2>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-4 col-sm-4" for="tipo">Seleciones a
+                                                quienes deben ser afectados por las nueva
+                                                regla<span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-8 col-sm-8">
+                                                <select id="tipo" class="form-control" required>
+                                                    <option value="" selected>Lector Biometrico USB</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h2 class="StepTitle">Personas Diponibles</h2>
+                                        <table id="personas_disponibles"
+                                            class="table table-striped table-bordered bulk_action" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h2 class="StepTitle">Personas selecionadas</h2>
+                                        <table id="personas_selecionadas"
+                                            class="table table-striped table-bordered bulk_action" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Nombre</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="step-3">
+                                <h2 class="StepTitle">Seleccione cuando debe utilizarse la regla*</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h2 class="StepTitle">Horario disponibles</h2>
+                                        <table id="horario_disponibles"
+                                            class="table table-striped table-bordered bulk_action" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h2 class="StepTitle">Horario selecionadas</h2>
+                                        <table id="horario_selecionadas"
+                                            class="table table-striped table-bordered bulk_action" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Nombre</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="step-4">
+                                  <h2 class="StepTitle">Seleccionar el lugar donde se debe utilizar la regla*</h2>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h2 class="StepTitle">Areas selecionadas</h2>
+                                        <table id="area_disponibles"
+                                            class="table table-striped table-bordered bulk_action" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>43</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h2 class="StepTitle">Areas selecionadas</h2>
+                                        <table id="area_selecionadas"
+                                            class="table table-striped table-bordered bulk_action" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Nombre</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>43</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="step-5">
+                                <h2 class="StepTitle">Descripcion de Regla: test</h2>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="messages">
+                                            <li>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Personas</h4>
+                                                    <blockquote class="message">
+                                                        Ali stiven
+                                                    </blockquote>
+                                                    <blockquote class="message">
+                                                        Rojer
+                                                    </blockquote>
+                                                    <blockquote class="message">
+                                                        Moises
+                                                    </blockquote>
+                                                    <blockquote class="message">
+                                                        Franz Tito
+                                                    </blockquote>
+
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Horario</h4>
+                                                    <blockquote class="message">
+                                                        24/7
+                                                    </blockquote>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Areas</h4>
+                                                    <blockquote class="message">
+                                                        Piso 1
+                                                    </blockquote>
+                                                    <blockquote class="message">
+                                                        Planta baja
+                                                    </blockquote>
+                                                    <blockquote class="message">
+                                                        Garaje
+                                                    </blockquote>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Dispositivos</h4>
+                                                    <blockquote class="message">
+                                                        Valida para todos
+                                                    </blockquote>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+@section Scripts {
+<!-- Datatables -->
+<script src="~/assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/assets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/assets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="~/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+@* smartWizard *@
+<script src="~/assets/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+
+<script>
+    function init_SmartWizard() {
+
+        if (typeof ($.fn.smartWizard) === 'undefined') { return; }
+        console.log('init_SmartWizard');
+
+        $('#wizard').smartWizard();
+
+        $('#wizard_verticle').smartWizard({
+            transitionEffect: 'slide'
+        });
+
+        $('.buttonNext').addClass('btn btn-success');
+        $('.buttonNext').text('Siguiente');
+
+        $('.buttonPrevious').addClass('btn btn-secondary');
+        $('.buttonPrevious').text('Atras');
+
+        $('.buttonFinish').addClass('btn btn-primary');
+        $('.buttonFinish').addClass('Finalizar');
+
+    };
+
+    $('#personas_disponibles').dataTable();
+    $('#personas_selecionadas').dataTable();
+
+    $('#area_disponibles').dataTable();
+    $('#area_selecionadas').dataTable();
+
+    $('#horario_disponibles').dataTable();
+    $('#horario_selecionadas').dataTable();
+
+
+</script>
+}

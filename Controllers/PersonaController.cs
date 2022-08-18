@@ -18,8 +18,23 @@ public class PersonaController : Controller
     }
     public ActionResult Create()
     {
-       /*  var usuario = _dbContext.Usuario.First();
-        System.Console.WriteLine("respuesta"+usuario.grupo_id);  */
+        /*  var usuario = _dbContext.Usuario.First();
+         System.Console.WriteLine("respuesta"+usuario.grupo_id);  */
         return View("~/Views/Persona/Create.cshtml");
     }
+     // POST: HomeController1/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(HttpPostedFileBase postedFile)
+        {
+            System.Console.WriteLine("store");
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
 }
