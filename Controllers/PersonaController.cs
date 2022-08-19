@@ -1,7 +1,12 @@
-using System.Diagnostics;
+
 using Microsoft.AspNetCore.Mvc;
-using ControlIDMvc.Models;
+using ControlIDMvc.Entities;
 using Microsoft.EntityFrameworkCore;
+using ControlIDMvc.Models.utils;
+
+using Newtonsoft.Json;
+using ControlIDMvc.Controllers.extenciones;
+
 namespace ControlIDMvc.Controllers;
 
 public class PersonaController : Controller
@@ -43,41 +48,51 @@ public class PersonaController : Controller
             return View();
         }
     }
-    [HttpGet]
-    public IActionResult datatable()
+    [HttpPost]
+    public async Task<IActionResult> Datatable([FromBody] DtParameters dtParameters)
     {
-        try
-        {
-            var draw = Request.Form["draw"].FirstOrDefault();
-            var start = Request.Form["start"].FirstOrDefault();
-            var length = Request.Form["length"].FirstOrDefault();
-            var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-            var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-            var searchValue = Request.Form["search[value]"].FirstOrDefault();
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = 0;
-            var customerData = (from tempcustomer in this._dbContext.Persona select tempcustomer);
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
-            {
+        var searchBy = dtParameters.Search?.Value;
 
-            }
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                customerData = customerData.Where(m => m.nombre.Contains(searchValue)
-                                            || m.apellido.Contains(searchValue)
-                                            || m.celular.Contains(searchValue)
-                                            || m.email.Contains(searchValue));
-            }
-            recordsTotal = customerData.Count();
-            var data = customerData.Skip(skip).Take(pageSize).ToList();
-            var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-            return Ok(jsonData);
-        }
-        catch (Exception ex)
+        // if we have an empty search then just order the results by Id ascending
+        var orderCriteria = "Id";
+        var orderAscendingDirection = true;
+
+        if (dtParameters.Order != null)
         {
-            System.Console.WriteLine(ex);
-            throw;
+            // in this example we just default sort on the 1st column
+            orderCriteria = dtParameters.Columns[dtParameters.Order[0].Column].Data;
+            orderAscendingDirection = dtParameters.Order[0].Dir.ToString().ToLower() == "asc";
         }
+
+        var result = _dbContext.Persona.AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchBy))
+        {
+            result = result.Where(r => r.ci != null && r.ci.ToUpper().Contains(searchBy.ToUpper()) ||
+                                       r.nombre != null && r.nombre.ToUpper().Contains(searchBy.ToUpper()) ||
+                                       r.apellido != null && r.apellido.ToUpper().Contains(searchBy.ToUpper()) ||
+                                       r.celular != null && r.celular.ToUpper().Contains(searchBy.ToUpper()) ||
+                                       r.dirrecion != null && r.dirrecion.ToUpper().Contains(searchBy.ToUpper()) ||
+                                       r.email != null && r.email.ToUpper().Contains(searchBy.ToUpper()) ||
+                                       r.observaciones != null && r.observaciones.ToUpper().Contains(searchBy.ToUpper()));
+        }
+
+        result = orderAscendingDirection ? result.OrderByDynamic(orderCriteria, DtOrderDir.Asc) : result.OrderByDynamic(orderCriteria, DtOrderDir.Desc);
+
+        // now just get the count of items (without the skip and take) - eg how many could be returned with filtering
+        var filteredResultsCount = await result.CountAsync();
+        var totalResultsCount = await _dbContext.Persona.CountAsync();
+
+        return Json(new DtResult<Persona>
+        {
+            Draw = dtParameters.Draw,
+            RecordsTotal = totalResultsCount,
+            RecordsFiltered = filteredResultsCount,
+            Data = (IEnumerable<Persona>)await result
+                .Skip(dtParameters.Start)
+                .Take(dtParameters.Length)
+                .ToListAsync()
+        });
     }
 }
+
