@@ -16,13 +16,13 @@ CREATE TABLE
         fecha_nac DATE NOT NULL,
         email VARCHAR(350) NOT NULL,
         celular VARCHAR(350) NOT NULL,
-        dirrecion VARCHAR(350) NOT NULL,
+        dirrecion VARCHAR(350) NULL,
         observaciones VARCHAR(350) NULL default '',
         usuario VARCHAR(350) NOT NULL,
         contraseña TEXT(350) NOT NULL,
         image TEXT NULL,
         image_documento TEXT NULL,
-        creado_por int NOT NULL
+        creado_por int  NULL
     );
 
 DROP TABLE IF EXISTS persona_informacion;

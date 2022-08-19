@@ -89,34 +89,61 @@
 
 <script>
     table = $("#datatable_personas").DataTable({
-        searching: { regex: true },
-        stateSave: true,
-        autoWidth: true,
         // ServerSide Setups
         processing: true,
         serverSide: true,
         // Paging Setups
         paging: true,
+        filter: true,
+        order: [],
         ajax: {
-            url: "/Persona/Datatable",
+            url: "@Url.Content("~/Persona/json")",
             type: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            data: function (d) {
-                return JSON.stringify(d);
-            },
             columns: [
-                { data: "ci" },
-                { data: "nombre" },
-                { data: "apellido" },
-                { data: "celular" },
-                { data: "dirrecion" },
-                { data: "email" },
-                { data: "observaciones" },
-                { data: "celular" },
-                { data: "dirrecion" },
-                { data: "email" },
-                { data: "observaciones" }
+                {
+                    name: "ci",
+                    data: "ci"
+                },
+                {
+                    name: "nombre",
+                    data: "nombre"
+                },
+                {
+                    name: "apellido",
+                    data: "apellido"
+                },
+                {
+                    name: "celular",
+                    data: "celular"
+                },
+                {
+                    name: "observaciones",
+                    data: "observaciones"
+                },
+                {
+                    name: "celular",
+                    data: "celular"
+                },
+                {
+                    name: "observaciones",
+                    data: "observaciones"
+                },
+                {
+                    name: "observaciones",
+                    data: "observaciones"
+                },
+                {
+                    name: "observaciones",
+                    data: "observaciones"
+                },
+                {
+                    name: "observaciones",
+                    data: "observaciones"
+                },
+                {
+                    name: "observaciones",
+                    data: "observaciones"
+                }
             ]
         },
     });

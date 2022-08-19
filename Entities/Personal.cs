@@ -17,7 +17,7 @@ namespace ControlIDMvc.Entities
         public string contraseña { get; set; }
         public string image { get; set; }
         public string image_documento { get; set; }
-        [ForeignKey("id")]
-        public Persona creado_por { get; set; }
+       /*  [ForeignKey("id")]
+        public Persona creado_por { get; set; } */
     }
 }

@@ -1,11 +1,8 @@
 
 using Microsoft.AspNetCore.Mvc;
-using ControlIDMvc.Entities;
+using ControlIDMvc.Models.DatatableModel;
 using Microsoft.EntityFrameworkCore;
-using ControlIDMvc.Models.utils;
-
-using Newtonsoft.Json;
-using ControlIDMvc.Controllers.extenciones;
+using ControlIDMvc.Entities;
 
 namespace ControlIDMvc.Controllers;
 
@@ -19,80 +16,92 @@ public class PersonaController : Controller
 
     public ActionResult Index()
     {
-        var personas = _dbContext.Persona.Include(p => p.creado_por)
-        .ToList();
+        var personas = this._dbContext.Persona.ToList();
         foreach (var persona in personas)
         {
-            System.Console.WriteLine($"persona {persona.creado_por.nombre}");
+          
         }
         return View("~/Views/Persona/Lista.cshtml");
     }
     public ActionResult Create()
     {
-        /*  var usuario = _dbContext.Usuario.First();
-         System.Console.WriteLine("respuesta"+usuario.grupo_id);  */
         return View("~/Views/Persona/Create.cshtml");
     }
     // POST: HomeController1/Create
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Create(IFormFile postedFile)
+    public ActionResult Post(IFormFile postedFile)
     {
-        System.Console.WriteLine("store");
-        try
-        {
-            return RedirectToAction(nameof(Index));
-        }
-        catch
-        {
-            return View();
-        }
+
+        Persona persona = new Persona();
+        persona.nombre = Request.Form["nombre"];
+        persona.ci = Request.Form["ci"];
+        persona.apellido = Request.Form["apellido"];
+        persona.usuario = Request.Form["usuario"];
+        persona.celular = Request.Form["celular"];
+        persona.email = Request.Form["email"];
+        persona.contraseña = Request.Form["contraseña"];
+        persona.dirrecion = Request.Form["observaciones"];
+        persona.observaciones = Request.Form["observaciones"];
+        _dbContext.Persona.Add(persona);
+        _dbContext.SaveChanges();
+        System.Console.WriteLine(_dbContext.SaveChanges());
+        return RedirectToAction(nameof(Index));
+
     }
+    /* propiedades */
+    public string draw;
+    public string start;
+    public string length;
+    public string showColumn;
+    public string showColumnDir;
+    public string searchValue;
+    public int pageSize, skip, recordsTotal;
     [HttpPost]
-    public async Task<IActionResult> Datatable([FromBody] DtParameters dtParameters)
+    public ActionResult Json()
     {
-        var searchBy = dtParameters.Search?.Value;
+        var draw = Request.Form["draw"].FirstOrDefault();
+        var start = Request.Form["start"].FirstOrDefault();
+        var length = Request.Form["length"].FirstOrDefault();
+        var sortColumna = Request.Form["column[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        var sortColumnaDir = Request.Form["order[0][dir]"].FirstOrDefault();
+        var searchValue = Request.Form["search[value]"].FirstOrDefault();
 
-        // if we have an empty search then just order the results by Id ascending
-        var orderCriteria = "Id";
-        var orderAscendingDirection = true;
+        pageSize = length != null ? Convert.ToInt32(length) : 0;
+        skip = start != null ? Convert.ToInt32(start) : 0;
+        recordsTotal = 0;
 
-        if (dtParameters.Order != null)
+        List<PersonaModel> personas = new List<PersonaModel>();
+        using (_dbContext)
         {
-            // in this example we just default sort on the 1st column
-            orderCriteria = dtParameters.Columns[dtParameters.Order[0].Column].Data;
-            orderAscendingDirection = dtParameters.Order[0].Dir.ToString().ToLower() == "asc";
+            /*  var draw=Request.Form.GET*/
+            personas = (from d in _dbContext.Persona
+                        select new PersonaModel
+                        {
+                            id = d.id,
+                            ci = d.ci,
+                            nombre = d.nombre,
+                            apellido = d.apellido,
+                            celular = d.celular,
+                            observaciones = d.observaciones
+                        }).ToList();
+            recordsTotal = personas.Count();
+            personas = personas.Skip(skip).Take(pageSize).ToList();
+            System.Console.WriteLine($"el total de registros es : {personas.Count()}");
         }
-
-        var result = _dbContext.Persona.AsQueryable();
-
-        if (!string.IsNullOrEmpty(searchBy))
+        return Json(new
         {
-            result = result.Where(r => r.ci != null && r.ci.ToUpper().Contains(searchBy.ToUpper()) ||
-                                       r.nombre != null && r.nombre.ToUpper().Contains(searchBy.ToUpper()) ||
-                                       r.apellido != null && r.apellido.ToUpper().Contains(searchBy.ToUpper()) ||
-                                       r.celular != null && r.celular.ToUpper().Contains(searchBy.ToUpper()) ||
-                                       r.dirrecion != null && r.dirrecion.ToUpper().Contains(searchBy.ToUpper()) ||
-                                       r.email != null && r.email.ToUpper().Contains(searchBy.ToUpper()) ||
-                                       r.observaciones != null && r.observaciones.ToUpper().Contains(searchBy.ToUpper()));
-        }
-
-        result = orderAscendingDirection ? result.OrderByDynamic(orderCriteria, DtOrderDir.Asc) : result.OrderByDynamic(orderCriteria, DtOrderDir.Desc);
-
-        // now just get the count of items (without the skip and take) - eg how many could be returned with filtering
-        var filteredResultsCount = await result.CountAsync();
-        var totalResultsCount = await _dbContext.Persona.CountAsync();
-
-        return Json(new DtResult<Persona>
-        {
-            Draw = dtParameters.Draw,
-            RecordsTotal = totalResultsCount,
-            RecordsFiltered = filteredResultsCount,
-            Data = (IEnumerable<Persona>)await result
-                .Skip(dtParameters.Start)
-                .Take(dtParameters.Length)
-                .ToListAsync()
+            draw = draw,
+            recordsFiltered = recordsTotal,
+            recordsTotal = recordsTotal,
+            data = personas
         });
+    }
+    [HttpGet("persona/editar/{id:int}")]
+    public ActionResult Edit(int id)
+    {
+        var persona = _dbContext.Persona.Find(id);
+
+        return View("~/Views/Persona/Edit.cshtml",persona);
     }
 }
 
