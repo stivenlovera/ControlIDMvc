@@ -6,14 +6,19 @@ using ControlIDMvc.Entities;
 
 namespace ControlIDMvc.Controllers;
 
+[Route("persona")]
 public class PersonaController : Controller
 {
+     private readonly ILogger<HomeController> _logger;
+
     private readonly DBContext _dbContext;
-    public PersonaController(DBContext dbContext)
+    public PersonaController(ILogger<HomeController> logger,DBContext dbContext)
     {
         this._dbContext = dbContext;
+        this._logger=logger;
     }
 
+    [HttpGet("")]
     public ActionResult Index()
     {
         var personas = this._dbContext.Persona.ToList();
@@ -23,12 +28,14 @@ public class PersonaController : Controller
         }
         return View("~/Views/Persona/Lista.cshtml");
     }
+    [HttpGet("/create")]
     public ActionResult Create()
     {
         return View("~/Views/Persona/Create.cshtml");
     }
     // POST: HomeController1/Create
     [HttpPost]
+     [HttpGet("store")]
     public ActionResult Post(IFormFile postedFile)
     {
 
@@ -56,7 +63,8 @@ public class PersonaController : Controller
     public string showColumnDir;
     public string searchValue;
     public int pageSize, skip, recordsTotal;
-    [HttpPost]
+
+    [HttpPost("data-table")]
     public ActionResult Json()
     {
         var draw = Request.Form["draw"].FirstOrDefault();
@@ -96,10 +104,14 @@ public class PersonaController : Controller
             data = personas
         });
     }
-    [HttpGet("persona/editar/{id:int}")]
+    [HttpGet("editar/{id:int}")]
     public ActionResult Edit(int id)
     {
         var persona = _dbContext.Persona.Find(id);
+        if (persona==null)
+        {
+            return NotFound();
+        }
 
         return View("~/Views/Persona/Edit.cshtml",persona);
     }

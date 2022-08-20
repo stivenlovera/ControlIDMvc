@@ -86,7 +86,6 @@
 <script src="~/assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script src="~/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
-
 <script>
     table = $("#datatable_personas").DataTable({
         // ServerSide Setups
@@ -97,55 +96,62 @@
         filter: true,
         order: [],
         ajax: {
-            url: "@Url.Content("~/Persona/json")",
+            url: "@Url.Content("~/persona/data-table")",
             type: "POST",
-            columns: [
-                {
-                    name: "ci",
-                    data: "ci"
-                },
-                {
-                    name: "nombre",
-                    data: "nombre"
-                },
-                {
-                    name: "apellido",
-                    data: "apellido"
-                },
-                {
-                    name: "celular",
-                    data: "celular"
-                },
-                {
-                    name: "observaciones",
-                    data: "observaciones"
-                },
-                {
-                    name: "celular",
-                    data: "celular"
-                },
-                {
-                    name: "observaciones",
-                    data: "observaciones"
-                },
-                {
-                    name: "observaciones",
-                    data: "observaciones"
-                },
-                {
-                    name: "observaciones",
-                    data: "observaciones"
-                },
-                {
-                    name: "observaciones",
-                    data: "observaciones"
-                },
-                {
-                    name: "observaciones",
-                    data: "observaciones"
-                }
-            ]
+
         },
+        columns: [
+            {
+                name: "ci",
+                data: "ci"
+            },
+            {
+                name: "nombre",
+                data: "nombre"
+            },
+            {
+                name: "apellido",
+                data: "apellido"
+            },
+            {
+                name: "celular",
+                data: "celular"
+            },
+            {
+                name: "observaciones",
+                data: "observaciones"
+            },
+            {
+                name: "celular",
+                data: "celular"
+            },
+            {
+                name: "observaciones",
+                data: "observaciones"
+            },
+            {
+                name: "observaciones",
+                data: "observaciones"
+            },
+            {
+                name: "observaciones",
+                data: "observaciones"
+            },
+            {
+                name: "observaciones",
+                data: "observaciones"
+            },
+            {
+                name: "id",
+                data: "id",
+                render: function (data, type, row) {
+                    return `
+                    <a class="btn btn-success btn-xs" href="@Url.Content("~/persona/editar")/${data}" role="button"><i class="fa fa-pencil"></i></a>
+                    <button class="btn btn-danger btn-xs" data-id="${data}" role="button"><i class="fa fa-trash"></i></button>
+                    `;
+                }
+            }
+        ]
     });
 </script>
 }
