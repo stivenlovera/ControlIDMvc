@@ -5,7 +5,7 @@ CREATE database
 
 use control_acceso;
 
-DROP TABLE IF EXISTS usuario;
+DROP TABLE IF EXISTS persona;
 
 CREATE TABLE
     persona(
@@ -22,7 +22,7 @@ CREATE TABLE
         contraseña TEXT(350) NOT NULL,
         image TEXT NULL,
         image_documento TEXT NULL,
-        creado_por int  NULL
+        creado_por int NULL
     );
 
 DROP TABLE IF EXISTS persona_informacion;
@@ -103,6 +103,25 @@ CREATE TABLE
         image TEXT NULL,
         image_documento TEXT NULL,
         creado_por int NOT NULL
+    );
+
+DROP TABLE IF EXISTS horario;
+
+CREATE TABLE
+    horario(
+        id int AUTO_INCREMENT primary key,
+        nombre VARCHAR(350) NULL,
+        descripcion TEXT(350) NULL
+    );
+DROP TABLE IF EXISTS dia;
+
+CREATE TABLE
+    dia(
+        id int AUTO_INCREMENT primary key,
+        nombre VARCHAR(350) NULL,
+        hora_inicio TIME NULL,
+        hora_fin TIME NULL,
+        horario_id int NULL
     );
 
 /*

@@ -9,13 +9,13 @@ namespace ControlIDMvc.Controllers;
 [Route("persona")]
 public class PersonaController : Controller
 {
-     private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<HomeController> _logger;
 
     private readonly DBContext _dbContext;
-    public PersonaController(ILogger<HomeController> logger,DBContext dbContext)
+    public PersonaController(ILogger<HomeController> logger, DBContext dbContext)
     {
         this._dbContext = dbContext;
-        this._logger=logger;
+        this._logger = logger;
     }
 
     [HttpGet("")]
@@ -24,7 +24,7 @@ public class PersonaController : Controller
         var personas = this._dbContext.Persona.ToList();
         foreach (var persona in personas)
         {
-          
+
         }
         return View("~/Views/Persona/Lista.cshtml");
     }
@@ -33,12 +33,11 @@ public class PersonaController : Controller
     {
         return View("~/Views/Persona/Create.cshtml");
     }
-    // POST: HomeController1/Create
-    [HttpPost]
-     [HttpGet("store")]
+    // POST: HomeController1/Store
+    [HttpPost("store")]
+    [ValidateAntiForgeryToken]
     public ActionResult Post(IFormFile postedFile)
     {
-
         Persona persona = new Persona();
         persona.nombre = Request.Form["nombre"];
         persona.ci = Request.Form["ci"];
@@ -108,12 +107,12 @@ public class PersonaController : Controller
     public ActionResult Edit(int id)
     {
         var persona = _dbContext.Persona.Find(id);
-        if (persona==null)
+        if (persona == null)
         {
             return NotFound();
         }
 
-        return View("~/Views/Persona/Edit.cshtml",persona);
+        return View("~/Views/Persona/Edit.cshtml", persona);
     }
 }
 

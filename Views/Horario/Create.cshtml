@@ -29,231 +29,290 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="row border pt-2">
-                                    <div class="col-md-2">
-                                        <div class="col">
-                                            <input type="checkbox" name="" id="" value="" class="flat " /> Lunes
-                                        </div>
-                                        <div class="col mt-2">
-                                            <button class="btn btn-success btn-sm">
-                                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" id="lunes" value="" name="lunes" />
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                        <form asp-action="Store" method="post" asp-antiforgery="true">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align" for="nombre">Nombre
+                                            <span class="required">*</span>
                                         </label>
-                                        <div class="col-md-10 col-sm-10">
-                                            <input type="text" id="inicio" required="inicio" class="form-control">
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="nombre" name="nombre" required="required"
+                                                class="form-control" name="nombre">
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
-                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="descripcion">Descripcion
+                                            <span class="descripcion">*</span>
                                         </label>
-                                        <div class="col-md-10 col-sm-10">
-                                            <input type="text" id="fin" required="fin" class="form-control">
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <input type="text" id="descripcion" name="descripcion"
+                                                class="form-control  ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row border pt-2">
+                                        <div class="col-md-2">
+                                            <div class="col">
+                                                <input type="checkbox" name="dia[]" value="lunes" id="lunes_dia" checked />
+                                                Lunes
+                                            </div>
+                                            <div class="col mt-2">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="lunes" value="" name="lunes_hora" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_inicio" class="form-control"
+                                                    name="hora_inicio[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_fin" class="form-control"
+                                                    name="hora_fin[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row border pt-2">
+                                        <div class="col-md-2">
+                                            <div class="col">
+                                                <input type="checkbox" name="dia[]" value="martes" checked/>
+                                                Martes
+                                            </div>
+                                            <div class="col mt-2">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="martes" value="" name="lunes_hora" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_inicio" class="form-control"
+                                                    name="hora_inicio[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_fin" class="form-control"
+                                                    name="hora_fin[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row border pt-2">
+                                        <div class="col-md-2">
+                                            <div class="col">
+                                                <input type="checkbox" name="dia[]" value="miercoles" checked />
+                                                Miercoles
+                                            </div>
+                                            <div class="col mt-2">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="miercoles" value="" name="lunes_hora" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_inicio" class="form-control"
+                                                    name="hora_inicio[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_fin" class="form-control"
+                                                    name="hora_fin[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row border pt-2">
+                                        <div class="col-md-2">
+                                            <div class="col">
+                                                <input type="checkbox" name="dia[]" value="jueves" checked />
+                                                Jueves
+                                            </div>
+                                            <div class="col mt-2">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="jueves" value="" name="lunes_hora" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_inicio" class="form-control"
+                                                    name="hora_inicio[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_fin" class="form-control"
+                                                    name="hora_fin[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row border pt-2">
+                                        <div class="col-md-2">
+                                            <div class="col">
+                                                <input type="checkbox" name="dia[]" value="viernes" checked />
+                                                Viernes
+                                            </div>
+                                            <div class="col mt-2">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="viernes" value="" name="lunes_hora" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_inicio" class="form-control"
+                                                    name="hora_inicio[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_fin" class="form-control"
+                                                    name="hora_fin[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row border pt-2">
+                                        <div class="col-md-2">
+                                            <div class="col">
+                                                <input type="checkbox" name="dia[]" value="sabado" checked />
+                                                Sabado
+                                            </div>
+                                            <div class="col mt-2">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="sabado" value="" name="lunes_hora" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_inicio" class="form-control"
+                                                    name="hora_inicio[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_fin" class="form-control"
+                                                    name="hora_fin[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row border pt-2">
+                                        <div class="col-md-2">
+                                            <div class="col">
+                                                <input type="checkbox" name="dia[]" value="domingo" checked />
+                                                Domingo
+                                            </div>
+                                            <div class="col mt-2">
+                                                <button class="btn btn-success btn-sm">
+                                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" id="domingo" value="" name="lunes_hora" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_inicio" class="form-control"
+                                                    name="hora_inicio[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
+                                            </label>
+                                            <div class="col-md-10 col-sm-10">
+                                                <input type="text" required="hora_fin" class="form-control"
+                                                    name="hora_fin[]">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="row border pt-2">
-                                    <div class="col-md-2">
-                                        <div class="col">
-                                            <input type="checkbox" name="" id="" value="" class="flat " /> Martes
-                                        </div>
-                                        <div class="col mt-2">
-                                            <button class="btn btn-success btn-sm">
-                                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" id="martes" value="" name="martes" />
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
-                                        </label>
-                                        <div class="col-md-10 col-sm-10">
-                                            <input type="text" id="inicio" required="inicio" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
-                                        </label>
-                                        <div class="col-md-10 col-sm-10">
-                                            <input type="text" id="fin" required="fin" class="form-control">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="item form-group">
+                                        <div class="col-md-6 col-sm-6 offset-md-3">
+                                            <button class="btn btn-primary" type="button">Cancelar</button>
+                                            <button class="btn btn-primary" type="reset">Reset</button>
+                                            <button type="submit" class="btn btn-success">Guardar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="row border pt-2">
-                                    <div class="col-md-2">
-                                        <div class="col">
-                                            <input type="checkbox" name="" id="" value="" class="flat " /> Miercoles
-                                        </div>
-                                        <div class="col mt-2">
-                                            <button class="btn btn-success btn-sm">
-                                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" id="miercoles" value="" name="miercoles" />
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
-                                        </label>
-                                        <div class="col-md-10 col-sm-10">
-                                            <input type="text" id="inicio" required="inicio" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
-                                        </label>
-                                        <div class="col-md-10 col-sm-10">
-                                            <input type="text" id="fin" required="fin" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row border pt-2"">
-                                    <div class=" col-md-2">
-                                    <div class="col">
-                                        <input type="checkbox" name="" id="" value="" class="flat " /> Jueves
-                                    </div>
-                                    <div class="col mt-2">
-                                        <button class="btn btn-success btn-sm">
-                                            <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" id="jueves" value="" name="jueves" />
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
-                                    </label>
-                                    <div class="col-md-10 col-sm-10">
-                                        <input type="text" id="inicio" required="inicio" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
-                                    </label>
-                                    <div class="col-md-10 col-sm-10">
-                                        <input type="text" id="fin" required="fin" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="row border pt-2"">
-                                    <div class=" col-md-2">
-                                <div class="col">
-                                    <input type="checkbox" name="" id="" value="" class="flat " /> Viernes
-                                </div>
-                                <div class="col mt-2">
-                                    <button class="btn btn-success btn-sm">
-                                        <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" id="viernes" value="" name="viernes" />
-                            </div>
-                            <div class="col-md-2">
-                                <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
-                                </label>
-                                <div class="col-md-10 col-sm-10">
-                                    <input type="text" id="inicio" required="inicio" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
-                                </label>
-                                <div class="col-md-10 col-sm-10">
-                                    <input type="text" id="fin" required="fin" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="row border pt-2"">
-                                    <div class=" col-md-2">
-                            <div class="col">
-                                <input type="checkbox" name="" id="" value="" class="flat " /> Sabado
-                            </div>
-                            <div class="col mt-2">
-                                <button class="btn btn-success btn-sm">
-                                    <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <input type="text" id="sabado" value="" name="sabado" />
-                        </div>
-                        <div class="col-md-2">
-                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
-                            </label>
-                            <div class="col-md-10 col-sm-10">
-                                <input type="text" id="inicio" required="inicio" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
-                            </label>
-                            <div class="col-md-10 col-sm-10">
-                                <input type="text" id="fin" required="fin" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="row border pt-2"">
-                                    <div class=" col-md-2">
-                        <div class="col">
-                            <input type="checkbox" name="" id="" value="" class="flat " /> Domingo
-                        </div>
-                        <div class="col mt-2">
-                            <button class="btn btn-success btn-sm">
-                                <i class="fa fa-arrows-v cursor-pointer"></i> copiar a todos
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" id="domingo" value="" name="domingo" />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
-                        </label>
-                        <div class="col-md-10 col-sm-10">
-                            <input type="text" id="inicio" required="inicio" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
-                        </label>
-                        <div class="col-md-10 col-sm-10">
-                            <input type="text" id="fin" required="fin" class="form-control">
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-</div>
-</div>
-</div>
+
 @section Scripts {
 
 <script src="~/assets/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
@@ -345,5 +404,17 @@
             }
         });
     }
+</script>
+<script>
+    $(document).on('click', 'input[type=checkbox]', function () {
+        if ($(this).is(':checked')) {
+            $(this).parent().parent().next().next().find("div").find("input").prop("disabled", false);
+            $(this).parent().parent().next().next().next().find("div").find("input").prop("disabled", false);
+        }
+        else {
+            $(this).parent().parent().next().next().find("div").find("input").prop("disabled", true);
+            $(this).parent().parent().next().next().next().find("div").find("input").prop("disabled", true);
+        }
+    });
 </script>
 }
