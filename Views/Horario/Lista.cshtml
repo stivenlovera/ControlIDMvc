@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table id="datatable-checkbox" class="table table-striped table-bordered bulk_action"
+                                <table id="datatable_horario" class="table table-striped table-bordered bulk_action"
                                     style="width:100%">
                                     <thead>
                                         <tr>
@@ -50,28 +50,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th>horario oficina</th>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <th>horario oficina</th>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td>00:12</td>
-                                            <td></td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -82,7 +61,6 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
 <!-- Datatables -->
 
@@ -115,5 +93,75 @@
             grid: true
         });
     }
+</script>
+
+<script>
+    table = $("#datatable_horario").DataTable({
+        // ServerSide Setups
+        processing: true,
+        serverSide: true,
+        // Paging Setups
+        paging: true,
+        filter: true,
+        order: [],
+        ajax: {
+            url: "@Url.Content("~/horario/data-table")",
+            type: "POST",
+
+        },
+        columns: [
+            {
+                name: "nombre",
+                width: "11%",
+                data: "nombre"
+            },
+              {
+                name: "lunes",
+                width: "11%",
+                data: "lunes"
+            },
+              {
+                name: "martes",
+                width: "11%",
+                data: "martes"
+            },
+              {
+                name: "miercoles",
+                width: "11%",
+                data: "miercoles"
+            },
+              {
+                name: "jueves",
+                width: "11%",
+                data: "jueves"
+            },
+              {
+                name: "viernes",
+                width: "11%",
+                data: "viernes"
+            },
+              {
+                name: "sabado",
+                width: "11%",
+                data: "sabado"
+            },
+              {
+                name: "domingo",
+                width: "11%",
+                data: "domingo"
+            },
+            {
+                name: "id",
+                width: "10%",
+                data: "id",
+                render: function (data, type, row) {
+                    return `
+                    <a class="btn btn-success btn-xs" href="@Url.Content("~/persona/editar")/${data}" role="button"><i class="fa fa-pencil"></i></a>
+                    <button class="btn btn-danger btn-xs" data-id="${data}" role="button"><i class="fa fa-trash"></i></button>
+                    `;
+                }
+            }
+        ]
+    });
 </script>
 }

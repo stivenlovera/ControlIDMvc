@@ -6,10 +6,11 @@ namespace ControlIDMvc.Entities
     {
         [Key]
         [Required]
-         [Column("id")]
+        [Column("id")]
         public int id { get; set; }
         public string nombre { get; set; }
         public string descripcion { get; set; }
+        [ForeignKey("horario_id")]
         public List<Dia> dias { get; set; }
     }
 }

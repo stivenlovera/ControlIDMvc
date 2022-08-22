@@ -1,8 +1,11 @@
 global using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
 namespace ControlIDMvc.Entities
 {
     public class Usuario
     {
+        [Key]
         public int id { get; set; }
         public string ci { get; set; }
         public string num_tarjeta { get; set; }
@@ -22,7 +25,7 @@ namespace ControlIDMvc.Entities
         public Departamento departamento_id { get; set; }
         [ForeignKey("id")]
         public Grupo grupo_id { get; set; }
-        [ForeignKey("id")]
+        [NotMapped]
         public virtual Usuario creado_por { get; set; }
     }
 }

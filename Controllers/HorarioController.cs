@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ControlIDMvc.Models.DatatableModel;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.ModelForm;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Controllers
 {
@@ -24,11 +25,103 @@ namespace ControlIDMvc.Controllers
         {
             return View("~/Views/Horario/Create.cshtml");
         }
+
+        /* propiedades */
+        public string draw;
+        public string start;
+        public string length;
+        public string showColumn;
+        public string showColumnDir;
+        public string searchValue;
+        public int pageSize, skip, recordsTotal;
+        [HttpPost("data-table")]
+        public async Task<ActionResult<object>> Datatable()
+        {
+            var draw = Request.Form["draw"].FirstOrDefault();
+            var start = Request.Form["start"].FirstOrDefault();
+            var length = Request.Form["length"].FirstOrDefault();
+            var sortColumna = Request.Form["column[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            var sortColumnaDir = Request.Form["order[0][dir]"].FirstOrDefault();
+            var searchValue = Request.Form["search[value]"].FirstOrDefault();
+
+            pageSize = length != null ? Convert.ToInt32(length) : 0;
+            skip = start != null ? Convert.ToInt32(start) : 0;
+            recordsTotal = 0;
+
+            List<DatatableHorario> horarios = new List<DatatableHorario>();
+            var horarios_aux = await _dbContext.Horario.Include(h => h.dias).ToListAsync();
+            foreach (var item in horarios_aux)
+            {
+                DatatableHorario horario = new DatatableHorario();
+                horario.nombre = item.nombre;
+                horario.id = item.id;
+                foreach (var dia in item.dias)
+                {
+                    switch (dia.nombre)
+                    {
+                        case "lunes":
+                            horario.lunes = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            break;
+                        case "martes":
+                            horario.martes = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            break;
+                        case "miercoles":
+                            horario.miercoles = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            break;
+                        case "jueves":
+                            horario.jueves = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            break;
+                        case "viernes":
+                            horario.viernes = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            break;
+                        case "sabado":
+                            horario.sabado = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            break;
+                        case "domingo":
+                            horario.domingo = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            break;
+                        default:
+
+                            break;
+                    }
+                    horarios.Add(horario);
+                }
+            }
+
+            /* using (_dbContext)
+            {
+                
+                horarios = (from d in _dbContext.Horario
+                            select new DatatableHorario
+                            {
+                                id = d.id,
+                                nombre = d.nombre,
+                                lunes = "00:00 - 00:00",
+                                martes = "00:00 - 00:00",
+                                miercoles = "00:00 - 00:00",
+                                jueves = "00:00 - 00:00",
+                                viernes = "00:00 - 00:00",
+                                sabado = "00:00 - 00:00",
+                                domingo = "00:00 - 00:00"
+                            }).ToList();
+                recordsTotal = horarios.Count();
+                horarios = horarios.Skip(skip).Take(pageSize).ToList();
+                System.Console.WriteLine($"el total de registros es : {horarios.Count()}");
+            } */
+            recordsTotal = horarios.Count();
+            horarios = horarios.Skip(skip).Take(pageSize).ToList();
+            return Json(new
+            {
+                draw = draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal = recordsTotal,
+                data = horarios
+            });
+        }
         [HttpPost("store")]
         [ValidateAntiForgeryToken]
         public ActionResult Store([FromForm] HorarioForm horarioForm)
         {
-            System.Console.WriteLine("test");
             var request = horarioForm.hora_fin;
             List<Dia> dia = new List<Dia>();
             for (int i = 0; i < horarioForm.dia.Count; i++)

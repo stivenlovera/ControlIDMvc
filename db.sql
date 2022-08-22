@@ -122,6 +122,7 @@ CREATE TABLE
         hora_inicio TIME NULL,
         hora_fin TIME NULL,
         horario_id int NULL
+        
     );
 
 /*
