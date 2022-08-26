@@ -1,4 +1,4 @@
-var personas_disponibles = $("#personas_disponibles").DataTable({
+var personas_disponibles = $("#horario_disponibles").DataTable({
     // ServerSide Setups
     processing: true,
     serverSide: true,
@@ -7,7 +7,7 @@ var personas_disponibles = $("#personas_disponibles").DataTable({
     filter: true,
     order: [],
     ajax: {
-        url: `/persona/data-table`,
+        url: `/horario/data-table`,
         type: "POST",
     },
     columns: [
@@ -27,11 +27,4 @@ var personas_disponibles = $("#personas_disponibles").DataTable({
             }
         }
     ]
-});
-
-var personas_selecionadas = $('#personas_selecionadas').dataTable();
-
-$(document).on('click', '.añadir', function () {
-    //console.log($(this))
-    console.log(personas_disponibles.row($(this).parent().parent()).data());
 });

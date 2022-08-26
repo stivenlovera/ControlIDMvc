@@ -119,8 +119,8 @@ CREATE TABLE
     dia(
         id int AUTO_INCREMENT primary key,
         nombre VARCHAR(350) NULL,
-        hora_inicio TIME NULL,
-        hora_fin TIME NULL,
+        hora_inicio DATE NULL,
+        hora_fin DATE NULL,
         horario_id int NULL
         
     );

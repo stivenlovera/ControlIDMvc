@@ -24,8 +24,8 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-
-                        <form asp-action="Post" method="post" asp-antiforgery="true" enctype="multipart/form-data">
+                        <form asp-action="Post" asp-antiforgery="true" id="formulario_activacion"
+                            enctype="multipart/form-data">
                             @Html.AntiForgeryToken()
                             <div class="col-md-3 col-sm-3 profile_left">
                                 <!-- foto -->
@@ -166,8 +166,8 @@
                                                             for="contraseña">Contraseña <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
-                                                            <input type="text" id="contraseña" name="contraseña" required="contraseña"
-                                                                class="form-control ">
+                                                            <input type="text" id="contraseña" name="contraseña"
+                                                                required="contraseña" class="form-control ">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -178,7 +178,8 @@
                                                                 class="required">*</span>
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
-                                                            <input type="text" id="contraseña_repetido" name="contraseña_repetido"
+                                                            <input type="text" id="contraseña_repetido"
+                                                                name="contraseña_repetido"
                                                                 required="contraseña_repetido" class="form-control ">
                                                         </div>
                                                     </div>
@@ -285,7 +286,7 @@
                                                     <div class="col-md-10 col-sm-10">
                                                         <select id="heard" class="form-control">
                                                             <option value="" selected>Lector Biometrico USB</option>
-                                                            </select>
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-9 col-sm-9">
                                                         <button type="button" class="btn btn-success btn-xs">Registrar
@@ -295,8 +296,7 @@
                                                 </div>
                                                 <div class="item form-group">
                                                     <label class="col-form-label col-md-12 col-sm-12"
-                                                        for="nombre">AÑADIR
-                                                        MANUAL
+                                                        for="nombre">AÑADIR MANUAL
                                                     </label>
                                                 </div>
                                                 <div class="item form-group">
@@ -315,13 +315,13 @@
                                                             placeholder="">
                                                     </div>
                                                     <div class="col-md-9 col-sm-9">
-                                                        <button type="button"
-                                                            class="btn btn-success btn-xs">Añadir</button>
+                                                        <button type="button" class="btn btn-success btn-xs"
+                                                            id="añadir_tarjeta">Añadir</button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!-- start user projects -->
-                                            <table id="datatable" class="table table-striped table-bordered bulk_action"
+                                            <table id="tarjetas" class="table table-striped table-bordered bulk_action"
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>
@@ -330,18 +330,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>43</td>
-                                                        <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>43</td>
-                                                        <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>43</td>
-                                                        <td></td>
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                             <!-- end user projects -->
@@ -692,7 +680,7 @@
                                     <div class="col-md-6 col-sm-6 offset-md-3">
                                         <button class="btn btn-primary" type="button">Cancelar</button>
                                         <button class="btn btn-primary" type="reset">Reset</button>
-                                        <button type="submit" class="btn btn-success">Guardar</button>
+                                        <button type="button" class="btn btn-success" id="save_persona">Guardar</button>
                                     </div>
                                 </div>
                             </div>
@@ -703,3 +691,18 @@
         </div>
     </div>
 </div>
+@section Scripts {
+<!-- Datatables -->
+
+<script src="~/assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/assets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="~/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="~/js/persona/create/datatable_tarjetas.js"></script>
+<script src="~/js/persona/store/store.js"></script>
+}

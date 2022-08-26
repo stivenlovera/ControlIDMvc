@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using ControlIDMvc.Models.DatatableModel;
 using Microsoft.EntityFrameworkCore;
 using ControlIDMvc.Entities;
+using Microsoft.AspNetCore.Cors;
+using ControlIDMvc.Services;
+using ControlIDMvc.Querys;
+using ControlIDMvc.Services.QueryControlId;
 
 namespace ControlIDMvc.Controllers;
 
@@ -10,108 +14,65 @@ namespace ControlIDMvc.Controllers;
 public class PersonaController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly HttpClientService _httpClientService;
+    private PersonaQuery _personaQuery;
+    private readonly LoginControlId _LoginControlId;
 
-    private readonly DBContext _dbContext;
-    public PersonaController(ILogger<HomeController> logger, DBContext dbContext)
+    public PersonaController(
+        ILogger<HomeController> logger,
+        HttpClientService httpClientService,
+        PersonaQuery personaQuery,
+        LoginControlId loginControlId
+        )
     {
-        this._dbContext = dbContext;
+        this._httpClientService = httpClientService;
+        this._personaQuery = personaQuery;
+        this._LoginControlId = loginControlId;
         this._logger = logger;
     }
 
-    [HttpGet("")]
-    public ActionResult Index()
+    [HttpGet]
+    public async Task<ActionResult> Index()
     {
-        var personas = this._dbContext.Persona.ToList();
-        foreach (var persona in personas)
-        {
-
-        }
+        var personas = await this._personaQuery.GetAll();
         return View("~/Views/Persona/Lista.cshtml");
     }
-    [HttpGet("/create")]
+
+    [HttpGet("create")]
     public ActionResult Create()
     {
         return View("~/Views/Persona/Create.cshtml");
     }
-    // POST: HomeController1/Store
+
     [HttpPost("store")]
     [ValidateAntiForgeryToken]
-    public ActionResult Post(IFormFile postedFile)
+    public async Task<ActionResult> Post(Persona PersonaCreate)
     {
-        Persona persona = new Persona();
-        persona.nombre = Request.Form["nombre"];
-        persona.ci = Request.Form["ci"];
-        persona.apellido = Request.Form["apellido"];
-        persona.usuario = Request.Form["usuario"];
-        persona.celular = Request.Form["celular"];
-        persona.email = Request.Form["email"];
-        persona.contraseña = Request.Form["contraseña"];
-        persona.dirrecion = Request.Form["observaciones"];
-        persona.observaciones = Request.Form["observaciones"];
-        _dbContext.Persona.Add(persona);
-        _dbContext.SaveChanges();
-        System.Console.WriteLine(_dbContext.SaveChanges());
-        return RedirectToAction(nameof(Index));
+        var personas = await this._personaQuery.Store(PersonaCreate);
+        /*proveedor  controlador */
+        string controlador = "192.168.88.129";
+        string uri = "login.fcgi";
 
+        object cuerpo = _LoginControlId.Login("admin", "admin");
+        await this._httpClientService.Run(controlador, uri, cuerpo);
+        return RedirectToAction(nameof(Index));
     }
-    /* propiedades */
-    public string draw;
-    public string start;
-    public string length;
-    public string showColumn;
-    public string showColumnDir;
-    public string searchValue;
-    public int pageSize, skip, recordsTotal;
 
     [HttpPost("data-table")]
-    public ActionResult Json()
+    public ActionResult DataTable()
     {
-        var draw = Request.Form["draw"].FirstOrDefault();
-        var start = Request.Form["start"].FirstOrDefault();
-        var length = Request.Form["length"].FirstOrDefault();
-        var sortColumna = Request.Form["column[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-        var sortColumnaDir = Request.Form["order[0][dir]"].FirstOrDefault();
-        var searchValue = Request.Form["search[value]"].FirstOrDefault();
-
-        pageSize = length != null ? Convert.ToInt32(length) : 0;
-        skip = start != null ? Convert.ToInt32(start) : 0;
-        recordsTotal = 0;
-
-        List<PersonaModel> personas = new List<PersonaModel>();
-        using (_dbContext)
-        {
-            /*  var draw=Request.Form.GET*/
-            personas = (from d in _dbContext.Persona
-                        select new PersonaModel
-                        {
-                            id = d.id,
-                            ci = d.ci,
-                            nombre = d.nombre,
-                            apellido = d.apellido,
-                            celular = d.celular,
-                            observaciones = d.observaciones
-                        }).ToList();
-            recordsTotal = personas.Count();
-            personas = personas.Skip(skip).Take(pageSize).ToList();
-            System.Console.WriteLine($"el total de registros es : {personas.Count()}");
-        }
-        return Json(new
-        {
-            draw = draw,
-            recordsFiltered = recordsTotal,
-            recordsTotal = recordsTotal,
-            data = personas
-        });
+        var dataTable = this._personaQuery.DataTable(Request);
+        return Json(dataTable);
     }
+
     [HttpGet("editar/{id:int}")]
-    public ActionResult Edit(int id)
+    public async Task<ActionResult> Edit(int id)
     {
-        var persona = _dbContext.Persona.Find(id);
+        var persona = await this._personaQuery.GetOne(id);
         if (persona == null)
         {
             return NotFound();
         }
-
         return View("~/Views/Persona/Edit.cshtml", persona);
     }
 }

@@ -15,7 +15,7 @@ namespace ControlIDMvc.Controllers
         {
             this._dbContext = dbContext;
         }
-        [HttpGet("")]
+        [HttpGet]
         public ActionResult Index()
         {
             return View("~/Views/Horario/Lista.cshtml");
