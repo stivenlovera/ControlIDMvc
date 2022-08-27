@@ -30,6 +30,7 @@ namespace ControlIDMvc
             
             Services.Services.AddTransient<LoginControlIdQuery>();
             Services.Services.AddTransient<UsuarioControlIdQuery>();
+            Services.Services.AddTransient<CardControlIdQuery>();
 
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)

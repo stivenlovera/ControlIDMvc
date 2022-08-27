@@ -5,37 +5,29 @@ using System.Threading.Tasks;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Services.BodyControlId;
 using ControlIDMvc.Services.ControlId;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ControlIDMvc.Services.QueryControlId
 {
-    public class UsuarioControlIdQuery
+    public class CardControlIdQuery
     {
         public string ApiUrl { get; set; }
-        public UsuarioControlIdQuery()
+        public BodyCreateObject CreateCards(List<Persona> personas,List<int> users_id)
         {
-        }
-        public BodyCreateObject CreateUser(List<Persona> personas)
-        {
-            usersCreateDto user = new usersCreateDto();
+            cardsCreateDto user = new cardsCreateDto();
             foreach (var persona in personas)
             {
-                user.name = persona.nombre;
-                user.password = "";
-                user.registration = "";
-                user.salt = "";
+                user.user_id = 0;
+                user.value =0;
             }
-            List<usersCreateDto> users = new List<usersCreateDto>();
-            users.Add(user);
+            List<cardsCreateDto> cards = new List<cardsCreateDto>();
+            cards.Add(user);
 
             BodyCreateObject body = new BodyCreateObject()
             {
                 objeto = "users",
-                values = users
+                values = cards
             };
             return body;
         }
     }
-
 }

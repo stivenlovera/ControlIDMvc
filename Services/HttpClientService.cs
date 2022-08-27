@@ -18,7 +18,8 @@ namespace ControlIDMvc.Services
             try
             {
                 var stringContent = new StringContent(JsonConvert.SerializeObject(str), UnicodeEncoding.UTF8, "application/json"); // use MediaTypeNames.Application.Json in Core 3.0+ and Standard 2.1+
-                System.Console.WriteLine($"http://{host}/{url}?session={this.session}");   
+                System.Console.WriteLine($"http://{host}/{url}?session={this.session}");
+                Console.WriteLine(JsonConvert.SerializeObject(str, Formatting.Indented));
                 HttpResponseMessage response = await client.PostAsync($"http://{host}/{url}?session={this.session}", stringContent);
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
@@ -38,10 +39,11 @@ namespace ControlIDMvc.Services
         {
             try
             {
-                var stringContent = new StringContent(JsonConvert.SerializeObject(str), UnicodeEncoding.UTF8, "application/json"); // use MediaTypeNames.Application.Json in Core 3.0+ and Standard 2.1+
-                System.Console.WriteLine($"http://{host}/{url}?session={this.session}");   
+                var stringContent = new StringContent(JsonConvert.SerializeObject(str, Formatting.Indented), UnicodeEncoding.UTF8, "application/json"); // use MediaTypeNames.Application.Json in Core 3.0+ and Standard 2.1+
+                System.Console.WriteLine($"http://{host}/{url}?session={this.session}");
+                Console.WriteLine(JsonConvert.SerializeObject(str, Formatting.Indented));
                 HttpResponseMessage response = await client.PostAsync($"http://{host}/{url}?session={this.session}", stringContent);
-                response.EnsureSuccessStatusCode(); 
+                response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 JObject json = JObject.Parse(responseBody);
                 Console.WriteLine(responseBody + "1" + response.StatusCode.ToString());
@@ -57,6 +59,6 @@ namespace ControlIDMvc.Services
     }
     public class LoginToken
     {
-     public string session { get; set; }
+        public string session { get; set; }
     }
 }

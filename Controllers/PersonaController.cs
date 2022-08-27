@@ -8,6 +8,7 @@ using ControlIDMvc.Services;
 using ControlIDMvc.Querys;
 using ControlIDMvc.Services.QueryControlId;
 using ControlIDMvc.Services.ControlId;
+using ControlIDMvc.Services.BodyControlId;
 
 namespace ControlIDMvc.Controllers;
 
@@ -24,22 +25,26 @@ public class PersonaController : Controller
     private PersonaQuery _personaQuery;
     private readonly LoginControlIdQuery _loginControlIdQuery;
     private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
+    private readonly CardControlIdQuery _cardControlIdQuery;
 
     public PersonaController(
         ILogger<HomeController> logger,
         HttpClientService httpClientService,
         PersonaQuery personaQuery,
         LoginControlIdQuery loginControlIdQuery,
-        UsuarioControlIdQuery usuarioControlIdQuery
+        UsuarioControlIdQuery usuarioControlIdQuery,
+        CardControlIdQuery cardControlIdQuery
         )
     {
         this._httpClientService = httpClientService;
         this._personaQuery = personaQuery;
         this._usuarioControlIdQuery = usuarioControlIdQuery;
+        this._cardControlIdQuery = cardControlIdQuery;
         this._logger = logger;
 
         this._loginControlIdQuery = loginControlIdQuery;
         this._loginControlIdQuery.ApiUrl = "login.fcgi";
+        this._usuarioControlIdQuery.ApiUrl = "create_objects.fcgi";
         this._usuarioControlIdQuery.ApiUrl = "create_objects.fcgi";
     }
 
@@ -60,15 +65,19 @@ public class PersonaController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Post(Persona PersonaCreate)
     {
-        object cuerpo = _loginControlIdQuery.Login(this.user, this.password);
+        BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
         string Token = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
-        this._httpClientService.session=Token;
-        
+        this._httpClientService.session = Token;
+
         List<Persona> usuarios = new List<Persona>();
         Persona usuario = new Persona();
         usuarios.Add(PersonaCreate);
-        var addUser = this._usuarioControlIdQuery.CreateUser(usuarios);
-        string responseUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, addUser);
+
+        BodyCreateObject addUsers = this._usuarioControlIdQuery.CreateUser(usuarios);
+        string responseUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, addUsers);
+
+        BodyCreateObject addCards = this._cardControlIdQuery.CreateCards(usuarios,new List<int>(){52,85});
+        string responseCars = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, addCards);
 
         var personas = await this._personaQuery.Store(PersonaCreate);
         return RedirectToAction(nameof(Index));
