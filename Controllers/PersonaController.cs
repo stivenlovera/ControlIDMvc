@@ -7,28 +7,40 @@ using Microsoft.AspNetCore.Cors;
 using ControlIDMvc.Services;
 using ControlIDMvc.Querys;
 using ControlIDMvc.Services.QueryControlId;
+using ControlIDMvc.Services.ControlId;
 
 namespace ControlIDMvc.Controllers;
 
 [Route("persona")]
 public class PersonaController : Controller
 {
+    /* propiedades */
+    public string controlador = "192.168.88.129";
+    public string uri = "login.fcgi";
+    public string user = "admin";
+    public string password = "admin";
     private readonly ILogger<HomeController> _logger;
     private readonly HttpClientService _httpClientService;
     private PersonaQuery _personaQuery;
-    private readonly LoginControlId _LoginControlId;
+    private readonly LoginControlIdQuery _loginControlIdQuery;
+    private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
 
     public PersonaController(
         ILogger<HomeController> logger,
         HttpClientService httpClientService,
         PersonaQuery personaQuery,
-        LoginControlId loginControlId
+        LoginControlIdQuery loginControlIdQuery,
+        UsuarioControlIdQuery usuarioControlIdQuery
         )
     {
         this._httpClientService = httpClientService;
         this._personaQuery = personaQuery;
-        this._LoginControlId = loginControlId;
+        this._usuarioControlIdQuery = usuarioControlIdQuery;
         this._logger = logger;
+
+        this._loginControlIdQuery = loginControlIdQuery;
+        this._loginControlIdQuery.ApiUrl = "login.fcgi";
+        this._usuarioControlIdQuery.ApiUrl = "create_objects.fcgi";
     }
 
     [HttpGet]
@@ -48,13 +60,17 @@ public class PersonaController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Post(Persona PersonaCreate)
     {
-        var personas = await this._personaQuery.Store(PersonaCreate);
-        /*proveedor  controlador */
-        string controlador = "192.168.88.129";
-        string uri = "login.fcgi";
+        object cuerpo = _loginControlIdQuery.Login(this.user, this.password);
+        string Token = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
+        this._httpClientService.session=Token;
+        
+        List<Persona> usuarios = new List<Persona>();
+        Persona usuario = new Persona();
+        usuarios.Add(PersonaCreate);
+        var addUser = this._usuarioControlIdQuery.CreateUser(usuarios);
+        string responseUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, addUser);
 
-        object cuerpo = _LoginControlId.Login("admin", "admin");
-        await this._httpClientService.Run(controlador, uri, cuerpo);
+        var personas = await this._personaQuery.Store(PersonaCreate);
         return RedirectToAction(nameof(Index));
     }
 
@@ -75,5 +91,6 @@ public class PersonaController : Controller
         }
         return View("~/Views/Persona/Edit.cshtml", persona);
     }
+
 }
 

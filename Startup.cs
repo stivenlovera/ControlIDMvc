@@ -27,7 +27,9 @@ namespace ControlIDMvc
             Services.Services.AddHttpClient();
             Services.Services.AddTransient<HttpClientService>();
             Services.Services.AddTransient<PersonaQuery>();
-            Services.Services.AddTransient<LoginControlId>();
+            
+            Services.Services.AddTransient<LoginControlIdQuery>();
+            Services.Services.AddTransient<UsuarioControlIdQuery>();
 
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)
