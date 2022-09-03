@@ -22,7 +22,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 foreach (var tarjeta in persona.Cards)
                 {
                     card.user_id = users_id[i];
-                    card.value = tarjeta;
+                    card.value = Int32.Parse(tarjeta);
                     i++;
                 }
 

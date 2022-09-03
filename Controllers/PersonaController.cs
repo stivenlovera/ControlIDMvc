@@ -76,6 +76,8 @@ public class PersonaController : Controller
         {
             return NotFound();
         }
+        var aux=Request.Form["cards"][0];
+
         BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
         Respose login = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
         this._httpClientService.session = login.data;
@@ -92,7 +94,7 @@ public class PersonaController : Controller
                 personaCreateDto.Sincronizacion = "si";
 
                 var storePersona = await this._personaQuery.Store(personaCreateDto);
-                var aux=Request.Form["cards"];
+              
                 if (personaCreateDto.Cards.Count > 0)
                 {
                     BodyCreateObject AddCards = this._cardControlIdQuery.CreateCards(personas, responseUser.ids);
@@ -104,7 +106,7 @@ public class PersonaController : Controller
                         TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
                         tarjetaCreateDto.Sincronizacion = "si";
                         tarjetaCreateDto.usuario_id = storePersona.Id;
-                        tarjetaCreateDto.tarjeta = card;
+                        tarjetaCreateDto.tarjeta = Int32.Parse(card);
                         var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
                     }
                 }
@@ -119,7 +121,7 @@ public class PersonaController : Controller
                 TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
                 tarjetaCreateDto.Sincronizacion = "no";
                 tarjetaCreateDto.usuario_id = storePersona.Id;
-                tarjetaCreateDto.tarjeta = card;
+                tarjetaCreateDto.tarjeta = Int32.Parse(card);
                 var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
             }
         }
