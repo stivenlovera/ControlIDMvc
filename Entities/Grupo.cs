@@ -2,11 +2,11 @@ namespace ControlIDMvc.Entities
 {
     public class Grupo
     {
-        public int id { get; set; }
-        public string nombre { get; set; }
-        public string descripcion { get; set; }
-        public Proyecto proyecto { get; set; }
-        public Persona creado_por { get; set; }
-        public string estado { get; set; } = "activo";
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public Proyecto Proyecto { get; set; }
+        public Persona Creado_por { get; set; }
+        public string Estado { get; set; } = "activo";
     }
 }

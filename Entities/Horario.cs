@@ -5,12 +5,9 @@ namespace ControlIDMvc.Entities
     public class Horario
     {
         [Key]
-        [Required]
-        [Column("id")]
-        public int id { get; set; }
-        public string nombre { get; set; }
-        public string descripcion { get; set; }
-        [ForeignKey("horario_id")]
-        public List<Dia> dias { get; set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public List<Dia> Dias { get; set; }
     }
 }

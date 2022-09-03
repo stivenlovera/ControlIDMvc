@@ -13,6 +13,7 @@ function load_data(area, codigo) {
     tarjetas.row.add([
         `${area},${codigo}`,
         `
+                <input name="cards" type="text" value="${area},${codigo}" hidden >
                 <button class="btn btn-danger btn-xs remove_tarjeta" role="button"><i class="fa fa fa-trash"></i></button>
             `,
     ]).draw(false);

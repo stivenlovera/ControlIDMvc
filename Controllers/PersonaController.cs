@@ -1,14 +1,15 @@
 
 using Microsoft.AspNetCore.Mvc;
-using ControlIDMvc.Models.DatatableModel;
-using Microsoft.EntityFrameworkCore;
-using ControlIDMvc.Entities;
-using Microsoft.AspNetCore.Cors;
-using ControlIDMvc.Services;
+using ControlIDMvc.ServicesCI;
 using ControlIDMvc.Querys;
-using ControlIDMvc.Services.QueryControlId;
-using ControlIDMvc.Services.ControlId;
-using ControlIDMvc.Services.BodyControlId;
+using ControlIDMvc.ServicesCI.UtilidadesCI;
+
+using ControlIDMvc.ServicesCI.QueryCI;
+using ControlIDMvc.ServicesCI.Dtos.usersDto;
+using Newtonsoft.Json;
+using ControlIDMvc.Dtos;
+using ControlIDMvc.ServicesCI.Dtos.cardsDto;
+using ControlIDMvc.Dtos.Tarjeta;
 
 namespace ControlIDMvc.Controllers;
 
@@ -23,6 +24,7 @@ public class PersonaController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly HttpClientService _httpClientService;
     private PersonaQuery _personaQuery;
+    private readonly TarjetaQuery _tarjetaQuery;
     private readonly LoginControlIdQuery _loginControlIdQuery;
     private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
     private readonly CardControlIdQuery _cardControlIdQuery;
@@ -31,13 +33,17 @@ public class PersonaController : Controller
         ILogger<HomeController> logger,
         HttpClientService httpClientService,
         PersonaQuery personaQuery,
+        TarjetaQuery tarjetaQuery,
         LoginControlIdQuery loginControlIdQuery,
         UsuarioControlIdQuery usuarioControlIdQuery,
         CardControlIdQuery cardControlIdQuery
         )
     {
         this._httpClientService = httpClientService;
+
         this._personaQuery = personaQuery;
+        this._tarjetaQuery = tarjetaQuery;
+
         this._usuarioControlIdQuery = usuarioControlIdQuery;
         this._cardControlIdQuery = cardControlIdQuery;
         this._logger = logger;
@@ -45,7 +51,7 @@ public class PersonaController : Controller
         this._loginControlIdQuery = loginControlIdQuery;
         this._loginControlIdQuery.ApiUrl = "login.fcgi";
         this._usuarioControlIdQuery.ApiUrl = "create_objects.fcgi";
-        this._usuarioControlIdQuery.ApiUrl = "create_objects.fcgi";
+        this._cardControlIdQuery.ApiUrl = "create_objects.fcgi";
     }
 
     [HttpGet]
@@ -63,26 +69,62 @@ public class PersonaController : Controller
 
     [HttpPost("store")]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Post(Persona PersonaCreate)
+    public async Task<ActionResult> Post(PersonaCreateDto personaCreateDto)
     {
+        var existCI = await this._personaQuery.ValidarUsuario(personaCreateDto.Ci);
+        if (!existCI)
+        {
+            return NotFound();
+        }
         BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
-        string Token = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
-        this._httpClientService.session = Token;
+        Respose login = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
+        this._httpClientService.session = login.data;
+        if (login.estado)
+        {
+            List<PersonaCreateDto> personas = new List<PersonaCreateDto>();
+            personas.Add(personaCreateDto);
 
-        List<Persona> usuarios = new List<Persona>();
-        Persona usuario = new Persona();
-        usuarios.Add(PersonaCreate);
+            BodyCreateObject AddUsers = this._usuarioControlIdQuery.CreateUser(personas);
+            Respose responseAddUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, AddUsers);
+            if (responseAddUsers.estado)
+            {
+                usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
+                personaCreateDto.Sincronizacion = "si";
 
-        BodyCreateObject addUsers = this._usuarioControlIdQuery.CreateUser(usuarios);
-        string responseUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, addUsers);
+                var storePersona = await this._personaQuery.Store(personaCreateDto);
+                var aux=Request.Form["cards"];
+                if (personaCreateDto.Cards.Count > 0)
+                {
+                    BodyCreateObject AddCards = this._cardControlIdQuery.CreateCards(personas, responseUser.ids);
+                    Respose responseAddCards = await this._httpClientService.Run(controlador, this._cardControlIdQuery.ApiUrl, AddCards);
+                    cardsResponseDto responseCards = JsonConvert.DeserializeObject<cardsResponseDto>(responseAddCards.data);
 
-        BodyCreateObject addCards = this._cardControlIdQuery.CreateCards(usuarios,new List<int>(){52,85});
-        string responseCars = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, addCards);
-
-        var personas = await this._personaQuery.Store(PersonaCreate);
+                    foreach (var card in personaCreateDto.Cards)
+                    {
+                        TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
+                        tarjetaCreateDto.Sincronizacion = "si";
+                        tarjetaCreateDto.usuario_id = storePersona.Id;
+                        tarjetaCreateDto.tarjeta = card;
+                        var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
+                    }
+                }
+            }
+        }
+        else
+        {
+            personaCreateDto.Sincronizacion = "no";
+            var storePersona = await this._personaQuery.Store(personaCreateDto);
+            foreach (var card in personaCreateDto.Cards)
+            {
+                TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
+                tarjetaCreateDto.Sincronizacion = "no";
+                tarjetaCreateDto.usuario_id = storePersona.Id;
+                tarjetaCreateDto.tarjeta = card;
+                var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
+            }
+        }
         return RedirectToAction(nameof(Index));
     }
-
     [HttpPost("data-table")]
     public ActionResult DataTable()
     {
@@ -100,6 +142,5 @@ public class PersonaController : Controller
         }
         return View("~/Views/Persona/Edit.cshtml", persona);
     }
-
 }
 

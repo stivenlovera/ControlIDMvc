@@ -1,4 +1,4 @@
-$(document).on('click', '#save_persona', function () {
+/* $(document).on('click', '#save_persona', function () {
     $.ajax({
         type: "POST",
         url: `/persona/store`,
@@ -9,4 +9,4 @@ $(document).on('click', '#save_persona', function () {
         },
         
     });
-});
+}); */

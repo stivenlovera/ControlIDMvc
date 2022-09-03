@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace ControlIDMvc.Services.BodyControlId
+namespace ControlIDMvc.ServicesCI.UtilidadesCI
 {
     public class BodyLogin
     {

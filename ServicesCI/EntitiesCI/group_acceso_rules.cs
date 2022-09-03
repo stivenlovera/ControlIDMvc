@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ControlIDMvc.Services.EntityControlId
+namespace ControlIDMvc.ServicesCI.EntitiesCI
 {
     public class group_access_rules
     {

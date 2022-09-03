@@ -1,8 +1,8 @@
 using System.Runtime.CompilerServices;
-using ControlIDMvc.Services.BodyControlId;
+using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Newtonsoft.Json;
 
-namespace ControlIDMvc.Services.QueryControlId
+namespace ControlIDMvc.ServicesCI.QueryCI
 {
     public class LoginControlIdQuery
     {
@@ -19,17 +19,6 @@ namespace ControlIDMvc.Services.QueryControlId
                 password = contraseña
             };
             return body;
-            /*  return new
-             {
-                 login = usuario,
-                 password = contraseña
-             }; */
-            /* JObject response = new JObject{
-                new JProperty("object",usuario),
-                new JProperty("values",contraseña)
-                
-            };
-            return response.First; */
         }
     }
 }

@@ -49,36 +49,36 @@ namespace ControlIDMvc.Controllers
             recordsTotal = 0;
 
             List<DatatableHorario> horarios = new List<DatatableHorario>();
-            var horarios_aux = await _dbContext.Horario.Include(h => h.dias).ToListAsync();
+            var horarios_aux = await _dbContext.Horario.Include(h => h.Dias).ToListAsync();
             foreach (var item in horarios_aux)
             {
                 DatatableHorario horario = new DatatableHorario();
-                horario.nombre = item.nombre;
-                horario.id = item.id;
-                foreach (var dia in item.dias)
+                horario.nombre = item.Nombre;
+                horario.id = item.Id;
+                foreach (var dia in item.Dias)
                 {
-                    switch (dia.nombre)
+                    switch (dia.Nombre)
                     {
                         case "lunes":
-                            horario.lunes = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            horario.lunes = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
                             break;
                         case "martes":
-                            horario.martes = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            horario.martes = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
                             break;
                         case "miercoles":
-                            horario.miercoles = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            horario.miercoles = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
                             break;
                         case "jueves":
-                            horario.jueves = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            horario.jueves = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
                             break;
                         case "viernes":
-                            horario.viernes = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            horario.viernes = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
                             break;
                         case "sabado":
-                            horario.sabado = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            horario.sabado = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
                             break;
                         case "domingo":
-                            horario.domingo = $"{dia.hora_inicio.ToString("HH:mm")} - {dia.hora_fin.ToString("HH:mm")}";
+                            horario.domingo = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
                             break;
                         default:
 
@@ -129,15 +129,15 @@ namespace ControlIDMvc.Controllers
                 dia.Add(
                     new Dia()
                     {
-                        nombre = horarioForm.dia[i],
-                        hora_fin = horarioForm.hora_fin[i],
-                        hora_inicio = horarioForm.hora_inicio[i],
+                        Nombre = horarioForm.dia[i],
+                        HoraFin = horarioForm.hora_fin[i],
+                        HoraInicio = horarioForm.hora_inicio[i],
                     });
             }
             Horario horario = new Horario();
-            horario.nombre = horarioForm.nombre;
-            horario.descripcion = horarioForm.descripcion;
-            horario.dias = dia;
+            horario.Nombre = horarioForm.nombre;
+            horario.Descripcion = horarioForm.descripcion;
+            horario.Dias = dia;
             _dbContext.Add(horario);
             _dbContext.SaveChanges();
             System.Console.WriteLine(_dbContext.SaveChanges());

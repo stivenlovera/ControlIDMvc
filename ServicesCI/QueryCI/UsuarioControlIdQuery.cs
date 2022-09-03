@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ControlIDMvc.Entities;
-using ControlIDMvc.Services.BodyControlId;
-using ControlIDMvc.Services.ControlId;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using ControlIDMvc.ServicesCI.UtilidadesCI;
+using ControlIDMvc.ServicesCI.Dtos.usersDto;
+using ControlIDMvc.Dtos;
 
-namespace ControlIDMvc.Services.QueryControlId
+namespace ControlIDMvc.ServicesCI.QueryCI
 {
     public class UsuarioControlIdQuery
     {
@@ -16,12 +11,12 @@ namespace ControlIDMvc.Services.QueryControlId
         public UsuarioControlIdQuery()
         {
         }
-        public BodyCreateObject CreateUser(List<Persona> personas)
+        public BodyCreateObject CreateUser(List<PersonaCreateDto> personas)
         {
             usersCreateDto user = new usersCreateDto();
             foreach (var persona in personas)
             {
-                user.name = persona.nombre;
+                user.name = persona.Nombre;
                 user.password = "";
                 user.registration = "";
                 user.salt = "";
@@ -36,6 +31,7 @@ namespace ControlIDMvc.Services.QueryControlId
             };
             return body;
         }
+        
     }
 
 }

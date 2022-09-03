@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ControlIDMvc.Services.ControlId;
 using Newtonsoft.Json;
 
-namespace ControlIDMvc.Services.BodyControlId
+namespace ControlIDMvc.ServicesCI.UtilidadesCI
 {
     public class BodyCreateObject
     {
@@ -14,7 +9,5 @@ namespace ControlIDMvc.Services.BodyControlId
         public dynamic values { get; set; }
         //public dynamic where { get; set; }
     }
-    
-
 
 }

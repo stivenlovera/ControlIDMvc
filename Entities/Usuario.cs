@@ -6,26 +6,22 @@ namespace ControlIDMvc.Entities
     public class Usuario
     {
         [Key]
-        public int id { get; set; }
-        public string ci { get; set; }
-        public string num_tarjeta { get; set; }
-        public string contraseña_tarjeta { get; set; } = "";
-        public string nombre { get; set; }
-        public string image { get; set; } = "usuario-default.webp";
-        public DateTime fecha_nac { get; set; }
-        public string apellido { get; set; }
-        public string email { get; set; }
-        public string celular { get; set; }
+        public int Id { get; set; }
+        public string Ci { get; set; }
+        public string NumTarjeta { get; set; }
+        public string ContraseñaTarjeta { get; set; } = "";
+        public string Nombre { get; set; }
+        public string Image { get; set; } = "usuario-default.webp";
+        public DateTime Fecha_nac { get; set; }
+        public string Apellido { get; set; }
+        public string Email { get; set; }
+        public string Celular { get; set; }
         public string nota { get; set; }
         public string dirrecion { get; set; }
-        public string estado { get; set; } = "activo";
-        [ForeignKey("id")]
+        public string Estado { get; set; } = "activo";
         public Proyecto proyecto_id { get; set; }
-        [ForeignKey("id")]
         public Departamento departamento_id { get; set; }
-        [ForeignKey("id")]
         public Grupo grupo_id { get; set; }
-        [NotMapped]
         public virtual Usuario creado_por { get; set; }
     }
 }

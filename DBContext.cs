@@ -9,6 +9,7 @@ namespace ControlIDMvc
 
         }
         public DbSet<Persona> Persona { get; set; }
+        public DbSet<Tarjeta> Tarjeta { get; set; }
         public DbSet<Horario> Horario { get; set; }
         public DbSet<Dia> Dia { get; set; }
         public DbSet<Proyecto> Proyecto { get; set; }

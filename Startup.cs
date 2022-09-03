@@ -1,6 +1,6 @@
 using ControlIDMvc.Querys;
-using ControlIDMvc.Services;
-using ControlIDMvc.Services.QueryControlId;
+using ControlIDMvc.ServicesCI;
+using ControlIDMvc.ServicesCI.QueryCI;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc
@@ -26,12 +26,15 @@ namespace ControlIDMvc
             Services.Services.AddHttpContextAccessor();
             Services.Services.AddHttpClient();
             Services.Services.AddTransient<HttpClientService>();
+            /*sistema*/
             Services.Services.AddTransient<PersonaQuery>();
-            
+            Services.Services.AddTransient<TarjetaQuery>();
+
+            /*Controlador*/
             Services.Services.AddTransient<LoginControlIdQuery>();
             Services.Services.AddTransient<UsuarioControlIdQuery>();
             Services.Services.AddTransient<CardControlIdQuery>();
-
+            Services.Services.AddAutoMapper(typeof(Startup));
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {

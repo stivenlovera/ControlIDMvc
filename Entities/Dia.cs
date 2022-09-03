@@ -5,12 +5,11 @@ namespace ControlIDMvc.Entities
     public class Dia
     {
         [Key]
-        [Column("id")]
-        public int id { get; set; }
-        public string nombre { get; set; }
-        public DateTime hora_inicio { get; set; }
-        public DateTime hora_fin { get; set; }
-        [Column("horario_id")]
-        public Horario horario { get; set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public DateTime HoraInicio { get; set; }
+        public DateTime HoraFin { get; set; }
+        public int HorarioId { get; set; }
+        public Horario Horario { get; set; }
     }
 }
