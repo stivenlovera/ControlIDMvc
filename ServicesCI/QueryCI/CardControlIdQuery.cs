@@ -19,10 +19,13 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             foreach (var persona in personas)
             {
                 int i = 0;
-                foreach (var tarjeta in persona.Cards)
+                foreach (var area in persona.Area)
                 {
                     card.user_id = users_id[i];
-                    card.value = Int32.Parse(tarjeta);
+                    int area_convert = Int32.Parse(area);
+                    int area_codigo = Int32.Parse(persona.Codigo[i]);
+                    /*calculo*/
+                   card.value = (area_convert * Convert.ToInt64((Math.Pow(2, 32))))+ area_codigo;
                     i++;
                 }
 

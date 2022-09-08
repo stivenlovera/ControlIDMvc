@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20220903164329_Init")]
-    partial class Init
+    [Migration("20220903211922_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -216,7 +216,10 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Sincronizacion")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("tarjeta")
+                    b.Property<int>("area")
+                        .HasColumnType("int");
+
+                    b.Property<int>("codigo")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

@@ -29,11 +29,14 @@ namespace ControlIDMvc
             /*sistema*/
             Services.Services.AddTransient<PersonaQuery>();
             Services.Services.AddTransient<TarjetaQuery>();
+            Services.Services.AddTransient<HorarioQuery>();
 
             /*Controlador*/
             Services.Services.AddTransient<LoginControlIdQuery>();
             Services.Services.AddTransient<UsuarioControlIdQuery>();
             Services.Services.AddTransient<CardControlIdQuery>();
+            Services.Services.AddTransient<HorarioControlIdQuery>();
+            
             Services.Services.AddAutoMapper(typeof(Startup));
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)

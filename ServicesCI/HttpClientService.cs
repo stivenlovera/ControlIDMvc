@@ -10,7 +10,7 @@ namespace ControlIDMvc.ServicesCI
     {
         public string session { get; set; }
         static readonly HttpClient client = new HttpClient();
-        public async Task<Respose> Run(string host, string url, object str)
+        public async Task<Response> Run(string host, string url, object str)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace ControlIDMvc.ServicesCI
                 string responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(responseBody + "1" + response.StatusCode.ToString());
 
-                 return new Respose()
+                 return new Response()
                 {
                     estado = true,
                     data = responseBody
@@ -32,14 +32,14 @@ namespace ControlIDMvc.ServicesCI
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
-                return new Respose()
+                return new Response()
                 {
                     estado = false,
                     data = "error"
                 };
             }
         }
-        public async Task<Respose> LoginRun(string host, string url, object str)
+        public async Task<Response> LoginRun(string host, string url, object str)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace ControlIDMvc.ServicesCI
                 string responseBody = await response.Content.ReadAsStringAsync();
                 JObject json = JObject.Parse(responseBody);
                 Console.WriteLine(responseBody + "1" + response.StatusCode.ToString());
-                return new Respose()
+                return new Response()
                 {
                     estado = true,
                     data = json.GetValue("session").ToString()
@@ -60,7 +60,7 @@ namespace ControlIDMvc.ServicesCI
             catch (HttpRequestException e)
             {
                 System.Console.WriteLine(e);
-                return new Respose()
+                return new Response()
                 {
                     estado = false,
                     data = "error"
@@ -68,7 +68,7 @@ namespace ControlIDMvc.ServicesCI
             }
         }
     }
-    public class Respose
+    public class Response
     {
         public bool estado { get; set; }
         public string data { get; set; }

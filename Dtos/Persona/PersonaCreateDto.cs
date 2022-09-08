@@ -17,6 +17,7 @@ namespace ControlIDMvc.Dtos
         public string Contraseña { get; set; }
         public string Sincronizacion { get; set; }
         [JsonProperty(PropertyName = "cards")]
-        public List<string> Cards { get; set; }
+        public List<string> Area { get; set; } 
+        public List<string> Codigo { get; set; }
     }
 }

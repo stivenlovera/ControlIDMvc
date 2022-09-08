@@ -39,7 +39,6 @@ namespace ControlIDMvc.Querys
         public string searchValue;
         public int pageSize, skip, recordsTotal;
 
-        [HttpPost("data-table")]
         public object DataTable(HttpRequest httpRequest)
         {
             var draw = httpRequest.Form["draw"].FirstOrDefault();

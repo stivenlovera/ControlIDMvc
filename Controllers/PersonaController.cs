@@ -76,10 +76,9 @@ public class PersonaController : Controller
         {
             return NotFound();
         }
-        var aux=Request.Form["cards"][0];
 
         BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
-        Respose login = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
+        Response login = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
         this._httpClientService.session = login.data;
         if (login.estado)
         {
@@ -87,27 +86,30 @@ public class PersonaController : Controller
             personas.Add(personaCreateDto);
 
             BodyCreateObject AddUsers = this._usuarioControlIdQuery.CreateUser(personas);
-            Respose responseAddUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, AddUsers);
+            Response responseAddUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, AddUsers);
             if (responseAddUsers.estado)
             {
                 usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
                 personaCreateDto.Sincronizacion = "si";
 
                 var storePersona = await this._personaQuery.Store(personaCreateDto);
-              
-                if (personaCreateDto.Cards.Count > 0)
+
+                if (personaCreateDto.Area!= null)
                 {
                     BodyCreateObject AddCards = this._cardControlIdQuery.CreateCards(personas, responseUser.ids);
-                    Respose responseAddCards = await this._httpClientService.Run(controlador, this._cardControlIdQuery.ApiUrl, AddCards);
+                    Response responseAddCards = await this._httpClientService.Run(controlador, this._cardControlIdQuery.ApiUrl, AddCards);
                     cardsResponseDto responseCards = JsonConvert.DeserializeObject<cardsResponseDto>(responseAddCards.data);
 
-                    foreach (var card in personaCreateDto.Cards)
+                    int i = 0;
+                    foreach (var area in personaCreateDto.Area)
                     {
                         TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
                         tarjetaCreateDto.Sincronizacion = "si";
-                        tarjetaCreateDto.usuario_id = storePersona.Id;
-                        tarjetaCreateDto.tarjeta = Int32.Parse(card);
+                        tarjetaCreateDto.PersonaId = storePersona.Id;
+                        tarjetaCreateDto.Area = Int32.Parse(area);
+                        tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
                         var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
+                        i++;
                     }
                 }
             }
@@ -116,12 +118,13 @@ public class PersonaController : Controller
         {
             personaCreateDto.Sincronizacion = "no";
             var storePersona = await this._personaQuery.Store(personaCreateDto);
-            foreach (var card in personaCreateDto.Cards)
+            int i = 0;
+            foreach (var card in personaCreateDto.Area)
             {
                 TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
                 tarjetaCreateDto.Sincronizacion = "no";
-                tarjetaCreateDto.usuario_id = storePersona.Id;
-                tarjetaCreateDto.tarjeta = Int32.Parse(card);
+                tarjetaCreateDto.PersonaId = storePersona.Id;
+                tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
                 var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
             }
         }

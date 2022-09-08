@@ -214,7 +214,10 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Sincronizacion")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("tarjeta")
+                    b.Property<int>("area")
+                        .HasColumnType("int");
+
+                    b.Property<int>("codigo")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

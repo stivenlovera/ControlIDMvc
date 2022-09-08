@@ -4,8 +4,9 @@ namespace ControlIDMvc.Dtos.Tarjeta
 {
     public class TarjetaCreateDto
     {
-        public int tarjeta { get; set; }
-        public int usuario_id { get; set; }
+        public int Area { get; set; }
+        public int Codigo { get; set; }
+        public int PersonaId { get; set; }
         public string Sincronizacion { get; set; }
     }
 }
