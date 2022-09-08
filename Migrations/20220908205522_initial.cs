@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ControlIDMvc.Migrations
 {
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,11 +76,9 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Contraseña = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Image = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Sincronizacion = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Image_documento = table.Column<string>(type: "longtext", nullable: true)
+                    ControlId = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -141,6 +139,60 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "ImagenDocumento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Size = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Path = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Caption = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PersonaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImagenDocumento", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImagenDocumento_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ImagenPerfil",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Size = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Path = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Caption = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PersonaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImagenPerfil", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImagenPerfil_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Tarjeta",
                 columns: table => new
                 {
@@ -149,6 +201,8 @@ namespace ControlIDMvc.Migrations
                     area = table.Column<int>(type: "int", nullable: false),
                     codigo = table.Column<int>(type: "int", nullable: false),
                     PersonaId = table.Column<int>(type: "int", nullable: false),
+                    ControlId = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Sincronizacion = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -271,6 +325,16 @@ namespace ControlIDMvc.Migrations
                 column: "ProyectoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImagenDocumento_PersonaId",
+                table: "ImagenDocumento",
+                column: "PersonaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImagenPerfil_PersonaId",
+                table: "ImagenPerfil",
+                column: "PersonaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tarjeta_PersonaId",
                 table: "Tarjeta",
                 column: "PersonaId");
@@ -300,6 +364,12 @@ namespace ControlIDMvc.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Dia");
+
+            migrationBuilder.DropTable(
+                name: "ImagenDocumento");
+
+            migrationBuilder.DropTable(
+                name: "ImagenPerfil");
 
             migrationBuilder.DropTable(
                 name: "Tarjeta");

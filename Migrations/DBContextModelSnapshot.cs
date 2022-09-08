@@ -117,6 +117,62 @@ namespace ControlIDMvc.Migrations
                     b.ToTable("Horario");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.ImagenDocumento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonaId");
+
+                    b.ToTable("ImagenDocumento");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.ImagenPerfil", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonaId");
+
+                    b.ToTable("ImagenPerfil");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
                 {
                     b.Property<int>("Id")
@@ -135,6 +191,9 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Contraseña")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("ControlId")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Dirrecion")
                         .HasColumnType("longtext");
 
@@ -143,12 +202,6 @@ namespace ControlIDMvc.Migrations
 
                     b.Property<DateTime>("Fecha_nac")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Image_documento")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("longtext");
@@ -207,6 +260,9 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("ControlId")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
@@ -320,6 +376,28 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Proyecto");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.ImagenDocumento", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
+                        .WithMany("documentos")
+                        .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Persona");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.ImagenPerfil", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
+                        .WithMany("perfiles")
+                        .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Persona");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Tarjeta", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
@@ -366,6 +444,10 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
                 {
                     b.Navigation("card");
+
+                    b.Navigation("documentos");
+
+                    b.Navigation("perfiles");
                 });
 #pragma warning restore 612, 618
         }

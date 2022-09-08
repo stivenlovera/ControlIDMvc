@@ -71,64 +71,68 @@ public class PersonaController : Controller
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Post(PersonaCreateDto personaCreateDto)
     {
-        var existCI = await this._personaQuery.ValidarUsuario(personaCreateDto.Ci);
-        if (!existCI)
+        if (ModelState.IsValid)
         {
-            return NotFound();
-        }
-
-        BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
-        Response login = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
-        this._httpClientService.session = login.data;
-        if (login.estado)
-        {
-            List<PersonaCreateDto> personas = new List<PersonaCreateDto>();
-            personas.Add(personaCreateDto);
-
-            BodyCreateObject AddUsers = this._usuarioControlIdQuery.CreateUser(personas);
-            Response responseAddUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, AddUsers);
-            if (responseAddUsers.estado)
+            BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
+            Response login = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
+            this._httpClientService.session = login.data;
+            if (login.estado)
             {
-                usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
-                personaCreateDto.Sincronizacion = "si";
+                List<PersonaCreateDto> personas = new List<PersonaCreateDto>();
+                personas.Add(personaCreateDto);
 
-                var storePersona = await this._personaQuery.Store(personaCreateDto);
-
-                if (personaCreateDto.Area!= null)
+                BodyCreateObject AddUsers = this._usuarioControlIdQuery.CreateUser(personas);
+                Response responseAddUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, AddUsers);
+                if (responseAddUsers.estado)
                 {
-                    BodyCreateObject AddCards = this._cardControlIdQuery.CreateCards(personas, responseUser.ids);
-                    Response responseAddCards = await this._httpClientService.Run(controlador, this._cardControlIdQuery.ApiUrl, AddCards);
-                    cardsResponseDto responseCards = JsonConvert.DeserializeObject<cardsResponseDto>(responseAddCards.data);
+                    usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
+                    personaCreateDto.Sincronizacion = "si";
+                    personaCreateDto.ControlId = responseUser.ids[0].ToString();
 
+                    var storePersona = await this._personaQuery.Store(personaCreateDto);
+
+                    if (personaCreateDto.Area != null)
+                    {
+                        BodyCreateObject AddCards = this._cardControlIdQuery.CreateCards(personas, responseUser.ids);
+                        Response responseAddCards = await this._httpClientService.Run(controlador, this._cardControlIdQuery.ApiUrl, AddCards);
+                        cardsResponseDto responseCards = JsonConvert.DeserializeObject<cardsResponseDto>(responseAddCards.data);
+
+                        int i = 0;
+                        foreach (var area in personaCreateDto.Area)
+                        {
+                            TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
+                            tarjetaCreateDto.Sincronizacion = "si";
+                            tarjetaCreateDto.PersonaId = storePersona.Id;
+                            tarjetaCreateDto.Area = Int32.Parse(area);
+                            tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
+                            var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
+                            i++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                personaCreateDto.Sincronizacion = "no";
+                var storePersona = await this._personaQuery.Store(personaCreateDto);
+                if (personaCreateDto.Area != null)
+                {
                     int i = 0;
                     foreach (var area in personaCreateDto.Area)
                     {
                         TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
-                        tarjetaCreateDto.Sincronizacion = "si";
+                        tarjetaCreateDto.Sincronizacion = "no";
                         tarjetaCreateDto.PersonaId = storePersona.Id;
                         tarjetaCreateDto.Area = Int32.Parse(area);
                         tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
                         var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
-                        i++;
                     }
                 }
             }
+            return RedirectToAction(nameof(Index));
         }
-        else
-        {
-            personaCreateDto.Sincronizacion = "no";
-            var storePersona = await this._personaQuery.Store(personaCreateDto);
-            int i = 0;
-            foreach (var card in personaCreateDto.Area)
-            {
-                TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
-                tarjetaCreateDto.Sincronizacion = "no";
-                tarjetaCreateDto.PersonaId = storePersona.Id;
-                tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
-                var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
-            }
-        }
-        return RedirectToAction(nameof(Index));
+        return View("~/Views/Persona/Create.cshtml");
+
     }
     [HttpPost("data-table")]
     public ActionResult DataTable()

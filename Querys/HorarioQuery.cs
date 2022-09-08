@@ -92,12 +92,14 @@ namespace ControlIDMvc.Querys
             List<Dia> dia = new List<Dia>();
             for (int i = 0; i < horarioForm.dia.Count; i++)
             {
+                DateTime hora_inicio = Convert.ToDateTime(horarioForm.hora_inicio[i]);
+                DateTime hora_fin = Convert.ToDateTime(horarioForm.hora_fin[i]);
                 dia.Add(
                     new Dia()
                     {
                         Nombre = horarioForm.dia[i],
-                        HoraFin = horarioForm.hora_fin[i],
-                        HoraInicio = horarioForm.hora_inicio[i],
+                        HoraFin = hora_fin,
+                        HoraInicio = hora_inicio,
                     });
             }
             Horario horario = new Horario();

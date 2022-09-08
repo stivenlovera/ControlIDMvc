@@ -1,6 +1,8 @@
+using ControlIDMvc.Entities;
 using ControlIDMvc.Querys;
 using ControlIDMvc.ServicesCI;
 using ControlIDMvc.ServicesCI.QueryCI;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc
@@ -14,6 +16,7 @@ namespace ControlIDMvc
         }
         public void ConfigureServices(WebApplicationBuilder Services)
         {
+
             // Add services to the container.
             Services.Services.AddControllersWithViews();
             //conect database

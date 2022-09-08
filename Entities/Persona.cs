@@ -15,9 +15,10 @@ namespace ControlIDMvc.Entities
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
         public string Contraseña { get; set; }
-        public string Image { get; set; }
         public string Sincronizacion { get; set; }
-        public string Image_documento { get; set; }
+        public string ControlId { get; set; }
         public List<Tarjeta> card { get; set; }
+        public List<ImagenDocumento> documentos { get; set; }
+        public List<ImagenPerfil> perfiles { get; set; }
     }
 }
