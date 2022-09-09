@@ -81,17 +81,20 @@ namespace ControlIDMvc.Controllers
                     time_zonesResponseDto responseHorario = JsonConvert.DeserializeObject<time_zonesResponseDto>(responseAddHorario.data);
 
                     List<time_spansCreateDto> dias = new List<time_spansCreateDto>();
-                    
+
                     int i = 0;
                     foreach (var dia in horarioForm.dia)
                     {
                         //System.Console.WriteLine(Convert.ToInt32(horarioForm.hora_inicio[i].Minute));
-                        var hora_inicio= Convert.ToDateTime(horarioForm.hora_inicio[i]);
-                        var hora_fin= Convert.ToDateTime(horarioForm.hora_fin[i]);
+                        var hora_inicio = Convert.ToDateTime(horarioForm.hora_inicio[i]);
+                        var hora_fin = Convert.ToDateTime(horarioForm.hora_fin[i]);
+
+                        var cal_hora_inicio = Convert.ToInt32(hora_inicio.Hour) * Convert.ToInt32(hora_inicio.Minute) /* * Convert.ToInt32(hora_inicio.Second) */;
+                        var cal_hora_fin = Convert.ToInt32(hora_fin.Hour) * Convert.ToInt32(hora_fin.Minute) /* * Convert.ToInt32(hora_fin.Second); */;
                         time_spansCreateDto time_SpansCreateDto = new time_spansCreateDto
                         {
-                            start = (Convert.ToInt32(hora_inicio.Minute)*Convert.ToInt32(hora_inicio.Second)*Convert.ToInt32(hora_inicio.Hour)),
-                            end = (Convert.ToInt32(hora_fin.Minute)*Convert.ToInt32(hora_fin.Second)*Convert.ToInt32(hora_fin.Hour)),
+                            start = cal_hora_inicio,
+                            end = cal_hora_fin,
                             sun = dia == "sabado" ? 1 : 0,
                             mon = dia == "lunes" ? 1 : 0,
                             tue = dia == "martes" ? 1 : 0,
@@ -109,7 +112,7 @@ namespace ControlIDMvc.Controllers
                     }
                     BodyCreateObject AddHorarioDias = this._horarioControlIdQuery.CreateDias(dias, responseHorario.ids[0]);
                     Response responseAddHorarioDias = await this._httpClientService.Run(controlador, this._horarioControlIdQuery.ApiUrl, AddHorario);
-                    
+
                     if (responseAddHorario.estado)
                     {
                         var storePersona = await this._horarioQuery.store(horarioForm);

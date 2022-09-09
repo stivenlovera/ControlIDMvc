@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20220908205522_initial")]
-    partial class initial
+    [Migration("20220909003518_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
