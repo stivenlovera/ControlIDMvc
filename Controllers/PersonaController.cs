@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using ControlIDMvc.Dtos;
 using ControlIDMvc.ServicesCI.Dtos.cardsDto;
 using ControlIDMvc.Dtos.Tarjeta;
+using ControlIDMvc.Dtos.Persona;
 
 namespace ControlIDMvc.Controllers;
 
@@ -18,7 +19,6 @@ public class PersonaController : Controller
 {
     /* propiedades */
     public string controlador = "192.168.88.129";
-    public string uri = "login.fcgi";
     public string user = "admin";
     public string password = "admin";
     private readonly ILogger<HomeController> _logger;
@@ -28,7 +28,7 @@ public class PersonaController : Controller
     private readonly LoginControlIdQuery _loginControlIdQuery;
     private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
     private readonly CardControlIdQuery _cardControlIdQuery;
-
+    ApiRutas _ApiRutas;
     public PersonaController(
         ILogger<HomeController> logger,
         HttpClientService httpClientService,
@@ -49,9 +49,7 @@ public class PersonaController : Controller
         this._logger = logger;
 
         this._loginControlIdQuery = loginControlIdQuery;
-        this._loginControlIdQuery.ApiUrl = "login.fcgi";
-        this._usuarioControlIdQuery.ApiUrl = "create_objects.fcgi";
-        this._cardControlIdQuery.ApiUrl = "create_objects.fcgi";
+        this._ApiRutas = new ApiRutas();
     }
 
     [HttpGet]
@@ -66,6 +64,13 @@ public class PersonaController : Controller
     {
         return View("~/Views/Persona/Create.cshtml");
     }
+    private async Task<Boolean> loginControlId()
+    {
+        BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
+        Response login = await this._httpClientService.LoginRun(this.controlador, this._ApiRutas.ApiUrlLogin, cuerpo);
+        this._httpClientService.session = login.data;
+        return login.estado;
+    }
 
     [HttpPost("store")]
     [ValidateAntiForgeryToken]
@@ -73,66 +78,94 @@ public class PersonaController : Controller
     {
         if (ModelState.IsValid)
         {
-            BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
-            Response login = await this._httpClientService.LoginRun(controlador, this._loginControlIdQuery.ApiUrl, cuerpo);
-            this._httpClientService.session = login.data;
-            if (login.estado)
+            if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
             {
-                List<PersonaCreateDto> personas = new List<PersonaCreateDto>();
-                personas.Add(personaCreateDto);
-
-                BodyCreateObject AddUsers = this._usuarioControlIdQuery.CreateUser(personas);
-                Response responseAddUsers = await this._httpClientService.Run(controlador, this._usuarioControlIdQuery.ApiUrl, AddUsers);
-                if (responseAddUsers.estado)
+                if (await this.loginControlId())
                 {
-                    usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
-                    personaCreateDto.Sincronizacion = "si";
-                    personaCreateDto.ControlId = responseUser.ids[0].ToString();
-
-                    var storePersona = await this._personaQuery.Store(personaCreateDto);
-
-                    if (personaCreateDto.Area != null)
+                    ViewData["Verificar CI"] = "Carnet de identidad ya se encuentra registrada";
+                    List<usersCreateDto> personas = new List<usersCreateDto>();
+                    personas.Add(new usersCreateDto
                     {
-                        BodyCreateObject AddCards = this._cardControlIdQuery.CreateCards(personas, responseUser.ids);
-                        Response responseAddCards = await this._httpClientService.Run(controlador, this._cardControlIdQuery.ApiUrl, AddCards);
-                        cardsResponseDto responseCards = JsonConvert.DeserializeObject<cardsResponseDto>(responseAddCards.data);
+                        name = personaCreateDto.Nombre,
+                        password = "",
+                        registration = "",
+                        salt = ""
+                    });
 
-                        int i = 0;
-                        foreach (var area in personaCreateDto.Area)
+                    BodyCreateObject AddUsers = this._usuarioControlIdQuery.CreateUser(personas);
+                    Response responseAddUsers = await this._httpClientService.Run(this.controlador, this._ApiRutas.ApiUrlCreate, AddUsers);
+                    if (responseAddUsers.estado)
+                    {
+                        usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
+                        personaCreateDto.ControlId = responseUser.ids[0].ToString();
+
+                        var storePersona = await this._personaQuery.Store(personaCreateDto);
+
+                        if (personaCreateDto.Area != null)
                         {
-                            TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
-                            tarjetaCreateDto.Sincronizacion = "si";
-                            tarjetaCreateDto.PersonaId = storePersona.Id;
-                            tarjetaCreateDto.Area = Int32.Parse(area);
-                            tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
-                            var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
-                            i++;
+                            /*tarjeta*/
+                            List<cardsCreateDto> tarjetas = new List<cardsCreateDto>();
+                            int index = 0;
+                            foreach (var area in personaCreateDto.Area)
+                            {
+                                int area_convert = Int32.Parse(area);
+                                int area_codigo = Int32.Parse(personaCreateDto.Codigo[index]);
+                                long calculo = (area_convert * Convert.ToInt64((Math.Pow(2, 32)))) + area_codigo;
+                                tarjetas.Add(
+                                    new cardsCreateDto
+                                    {
+                                        user_id = Convert.ToInt32(storePersona.ControlId),
+                                        value = calculo
+                                    }
+                                );
+                            }
+                            BodyCreateObject AddCards = this._cardControlIdQuery.CreateCards(tarjetas);
+                            Response responseAddCards = await this._httpClientService.Run(this.controlador, this._ApiRutas.ApiUrlCreate, AddCards);
+                            if (responseAddCards.estado)
+                            {
+                                cardsResponseDto responseCards = JsonConvert.DeserializeObject<cardsResponseDto>(responseAddCards.data);
+
+                                int i = 0;
+                                foreach (var id in responseCards.ids)
+                                {
+                                    TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
+                                    tarjetaCreateDto.PersonaId = storePersona.Id;
+                                    tarjetaCreateDto.Area = Int32.Parse(personaCreateDto.Area[i]);
+                                    tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
+                                    var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
+                                    i++;
+                                }
+                            }
                         }
                     }
                 }
+                else
+                {
+                    ViewData["ErrorConexion"] = "Error de conexion con el dipositivo";
+                    /*  var storePersona = await this._personaQuery.Store(personaCreateDto);
+                     if (personaCreateDto.Area != null)
+                     {
+                         int i = 0;
+                         foreach (var area in personaCreateDto.Area)
+                         {
+                             TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
+                             tarjetaCreateDto.PersonaId = storePersona.Id;
+                             tarjetaCreateDto.Area = Int32.Parse(area);
+                             tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
+                             var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
+                         }
+                     } */
+                    return View("~/Views/Persona/Create.cshtml", personaCreateDto);
+                }
+                return RedirectToAction(nameof(Index));
             }
             else
             {
-                personaCreateDto.Sincronizacion = "no";
-                var storePersona = await this._personaQuery.Store(personaCreateDto);
-                if (personaCreateDto.Area != null)
-                {
-                    int i = 0;
-                    foreach (var area in personaCreateDto.Area)
-                    {
-                        TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
-                        tarjetaCreateDto.Sincronizacion = "no";
-                        tarjetaCreateDto.PersonaId = storePersona.Id;
-                        tarjetaCreateDto.Area = Int32.Parse(area);
-                        tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
-                        var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
-                    }
-                }
+                ViewData["Error"] = "CI ya fue registrado";
+                return View("~/Views/Persona/Create.cshtml", personaCreateDto);
             }
-            return RedirectToAction(nameof(Index));
         }
-        return View("~/Views/Persona/Create.cshtml");
-
+        return View("~/Views/Persona/Create.cshtml", personaCreateDto);
     }
     [HttpPost("data-table")]
     public ActionResult DataTable()
@@ -150,6 +183,65 @@ public class PersonaController : Controller
             return NotFound();
         }
         return View("~/Views/Persona/Edit.cshtml", persona);
+    }
+    [HttpGet("update/{id:int}")]
+    public async Task<ActionResult> Update(int id, PersonaUpdateDto personaCreateDto)
+    {
+        if (ModelState.IsValid)
+        {
+            if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
+            {
+
+            }
+            else
+            {
+                ViewData["Error"] = "CI ya fue registrado";
+                return View("~/Views/Persona/Edit.cshtml", personaCreateDto);
+            }
+        }
+        return View("~/Views/Persona/Edit.cshtml", personaCreateDto);
+    }
+    [HttpPost("buscar")]
+    public async Task<ActionResult> buscar(PersonaCreateDto personaCreateDto)
+    {
+        var personas = await this._personaQuery.GetAllLikeId(Convert.ToInt32(personaCreateDto.Ci));
+
+        List<object> lista_personas = new List<object>();
+
+        foreach (var persona in personas)
+        {
+            var fecha_inicio = this.UnixTimeStampToDateTime(persona.ControlIdBegin_time);
+            var fecha_fin = this.UnixTimeStampToDateTime(persona.ControlIdEnd_time);
+            lista_personas.Add(new
+            {
+                id = persona.Id,
+                ci = persona.Ci,
+                nombre = persona.Nombre,
+                apellido = persona.Apellido,
+                fecha_inicio = fecha_inicio,
+                fecha_fin = fecha_fin
+            });
+
+/*             System.Console.WriteLine(fecha_inicio);
+            System.Console.WriteLine(fecha_fin);
+
+ */
+        }
+        return Json(lista_personas);
+    }
+    private DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+    {
+
+        // Unix timestamp son los segundos pasados después de una fecha establecida, por lo general unix utiliza esta fecha 
+        System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+        dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+        return dtDateTime;
+    }
+    private long DateTimeToUnix(DateTime MyDateTime)
+    {
+        TimeSpan timeSpan = MyDateTime - new DateTime(2022, 9, 10, 0, 0, 0);
+
+        return (long)timeSpan.TotalSeconds;
     }
 }
 

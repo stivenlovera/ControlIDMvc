@@ -10,6 +10,7 @@ namespace ControlIDMvc.Entities
         public DateTime HoraInicio { get; set; }
         public DateTime HoraFin { get; set; }
         public int HorarioId { get; set; }
+        public string ControlId { get; set; }
         public Horario Horario { get; set; }
     }
 }

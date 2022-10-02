@@ -11,6 +11,7 @@ namespace ControlIDMvc.Entities
         public string Telefono { get; set; }
         public string Email { get; set; }
         public string Estado { get; set; } = "creado";
+        public List<Dispositivo> Dispositivos { get; set; }
     }
    
 }

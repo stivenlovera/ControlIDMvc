@@ -23,12 +23,18 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return persona;
         }
-        public async Task<List<Persona>> GetAll()
+        public async Task<List<PersonaDto>> GetAll()
         {
             var personas = await this._dbContext.Persona.ToListAsync();
-            return personas;
+            var resultado = _mapper.Map<List<PersonaDto>>(personas);
+            return resultado;
         }
 
+        public async Task<List<Persona>> GetAllByID(List<int> usuarios_id)
+        {
+            var personas = await this._dbContext.Persona.Where(persona => usuarios_id.Contains(persona.Id)).ToListAsync();
+            return personas;
+        }
 
         /* Datatable */
         public string draw;
@@ -79,7 +85,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Persona> GetOne(int id)
         {
-            var persona = await _dbContext.Persona.FindAsync(id);
+            var persona = await _dbContext.Persona.Where(persona => persona.Id == id).Include(p => p.card).FirstAsync();
             return persona;
         }
         public async Task<bool> ValidarUsuario(string ci)
@@ -104,6 +110,18 @@ namespace ControlIDMvc.Querys
             var persona = await _dbContext.Persona.FindAsync(id);
             var editpersona = _mapper.Map<PersonaDto>(persona);
             return persona;
+        }
+        public async Task<List<PersonaDto>> GetAllLikeCi(int value)
+        {
+            var personas = await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).ToListAsync();
+            var resultado = _mapper.Map<List<PersonaDto>>(personas);
+            return resultado;
+        }
+         public async Task<List<PersonaDto>> GetAllLikeId(int value)
+        {
+            var personas = await this._dbContext.Persona.Where(p => p.Id.ToString().Contains(value.ToString())).ToListAsync();
+            var resultado = _mapper.Map<List<PersonaDto>>(personas);
+            return resultado;
         }
     }
 }

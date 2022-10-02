@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Personas</h3>
+                <h3><span class="text-danger">@ViewData["ErrorConexion"]</span></h3>
             </div>
         </div>
     </div>
@@ -21,6 +21,7 @@
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>Datos de la Persona<small></small></h2>
+
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -100,34 +101,21 @@
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="nombre" name="nombre"
-                                                                class="form-control" placeholder="" value="">
+                                                                class="form-control" placeholder="" asp-for="Nombre">
                                                             <span asp-validation-for="Nombre"
                                                                 class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div class="item form-group">
-                                                        <label class="col-form-label col-md-4 col-sm-4"
+                                                        <label class="col-form-label col-md-2 col-sm-2"
                                                             for="apellido">Apellido<span class="required">*</span>
                                                         </label>
-                                                        <div class="col-md-8 col-sm-8">
+                                                        <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="apellido" name="apellido"
-                                                                placeholder="" class="form-control">
+                                                                placeholder="" class="form-control" asp-for="Apellido">
                                                             <span asp-validation-for="Apellido"
-                                                                class="text-danger"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="item form-group">
-                                                        <label class="col-form-label col-md-4 col-sm-4"
-                                                            for="usuario">Usuario ID <span class="required">*</span>
-                                                        </label>
-                                                        <div class="col-md-8 col-sm-8">
-                                                            <input type="text" id="usuario" name="usuario"
-                                                                class="form-control ">
-                                                            <span asp-validation-for="Usuario"
                                                                 class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -138,8 +126,10 @@
                                                             <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
-                                                            <input type="text" id="ci" name="ci" class="form-control ">
+                                                            <input type="text" id="ci" name="ci" class="form-control"
+                                                                asp-for="Ci">
                                                             <span asp-validation-for="Ci" class="text-danger"></span>
+                                                            <span class="text-danger">@ViewData["Error"]</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -151,7 +141,7 @@
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="email" name="email"
-                                                                class="form-control ">
+                                                                class="form-control" asp-for="Email">
                                                             <span asp-validation-for="Email" class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -163,8 +153,8 @@
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="celular" name="celular"
-                                                                class="form-control ">
-                                                                <span asp-validation-for="Celular"
+                                                                class="form-control" asp-for="Celular">
+                                                            <span asp-validation-for="Celular"
                                                                 class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -176,8 +166,8 @@
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="contraseña" name="contraseña"
-                                                                class="form-control ">
-                                                                  <span asp-validation-for="Contraseña"
+                                                                class="form-control">
+                                                            <span asp-validation-for="ControlIdPassword"
                                                                 class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -191,7 +181,6 @@
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="contraseña_repetido"
                                                                 name="contraseña_repetido" class="form-control ">
-                                                                
                                                         </div>
                                                     </div>
                                                 </div>
@@ -203,7 +192,7 @@
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="observaciones" name="observaciones"
-                                                                class="form-control ">
+                                                                class="form-control" asp-for="Observaciones">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -715,5 +704,5 @@
 <script src="~/assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script src="~/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 <script src="~/js/persona/create/datatable_tarjetas.js"></script>
-<script src="~/js/persona/store/store.js"></script>
+
 }

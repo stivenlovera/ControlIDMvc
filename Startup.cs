@@ -33,13 +33,33 @@ namespace ControlIDMvc
             Services.Services.AddTransient<PersonaQuery>();
             Services.Services.AddTransient<TarjetaQuery>();
             Services.Services.AddTransient<HorarioQuery>();
+            Services.Services.AddTransient<AreaQuery>();
+            Services.Services.AddTransient<AreaReglasAccesoQuery>();
+            Services.Services.AddTransient<ReglaAccesoQuery>();
+            Services.Services.AddTransient<PersonaReglaAccesoQuery>();
+            Services.Services.AddTransient<AccionQuery>();
+            Services.Services.AddTransient<PortalAccionQuery>();
+            Services.Services.AddTransient<PortalQuery>();
+            Services.Services.AddTransient<PortalReglasAccesoQuery>();
+            Services.Services.AddTransient<HorarioReglaAccesoQuery>();
+            Services.Services.AddTransient<DispositivoQuery>();
+            Services.Services.AddTransient<PaqueteQuery>();
+            Services.Services.AddTransient<InscripcionQuery>();
 
             /*Controlador*/
             Services.Services.AddTransient<LoginControlIdQuery>();
             Services.Services.AddTransient<UsuarioControlIdQuery>();
             Services.Services.AddTransient<CardControlIdQuery>();
             Services.Services.AddTransient<HorarioControlIdQuery>();
-            
+            Services.Services.AddTransient<UsuarioRulesAccessControlIdQuery>();
+            Services.Services.AddTransient<AccessRulesControlIdQuery>();
+            Services.Services.AddTransient<HorarioAccessRulesControlIdQuery>();
+            Services.Services.AddTransient<PortalsAccessRulesControlIdQuery>();
+            Services.Services.AddTransient<PortalsControlIdQuery>();
+            Services.Services.AddTransient<ActionsControlIdQuery>();
+            Services.Services.AddTransient<PortalsActionsControlIdQuery>();
+            Services.Services.AddTransient<AreaControlIdQuery>();
+
             Services.Services.AddAutoMapper(typeof(Startup));
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)

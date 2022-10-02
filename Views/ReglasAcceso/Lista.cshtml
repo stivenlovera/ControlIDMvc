@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <table id="datatable-checkbox" class="table table-striped table-bordered bulk_action"
+                                <table id="datatable" class="table table-striped table-bordered bulk_action"
                                     style="width:100%">
                                     <thead>
                                         <tr>
@@ -43,14 +43,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>test</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>test</td>
-                                            <td></td>
-                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -78,20 +71,6 @@
 <script src="~/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
 <script src="~/assets/vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
-<script>
-    function init_IonRangeSlider() {
-        $("#range").ionRangeSlider({
-            hide_min_max: true,
-            keyboard: true,
-            min: 0,
-            max: 5000,
-            from: 1000,
-            to: 4000,
-            type: 'double',
-            step: 1,
-            prefix: "$",
-            grid: true
-        });
-    }
-</script>
+@* personal *@
+<script src="~/js/reglaAcceso/lista.js"></script>
 }

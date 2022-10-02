@@ -22,12 +22,13 @@ namespace ControlIDMvc.Dtos
         public string Celular { get; set; }
         public string Dirrecion { get; set; }
         public string Observaciones { get; set; }
-        [Required(ErrorMessage = "EL Usuario requerido")]
         public string Usuario { get; set; }
-        [Required(ErrorMessage = "EL Contraseña requerido")]
-        public string Contraseña { get; set; }
         public string Sincronizacion { get; set; }
         public string ControlId { get; set; }
+        public string ControlIdPassword { get; set; }
+        public string ControlIdName { get; set; }
+        public string ControlIdSalt { get; set; }
+        public string ControlIdRegistration { get; set; }
         [JsonProperty(PropertyName = "cards")]
         public List<string> Area { get; set; }
         public List<string> Codigo { get; set; }

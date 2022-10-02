@@ -1,4 +1,10 @@
-var tarjetas = $("#tarjetas").DataTable();
+var tarjetas = $("#tarjetas").DataTable({
+    columns: [
+        { width: "90%", targets: 0 },
+        { width: "10%", targets: 1 }
+    ],
+    fixedColumns: true
+});
 $(document).on('click', '#añadir_tarjeta', function () {
     const area = $('#area').val();
     const codigo = $('#codigo').val();

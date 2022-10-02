@@ -11,32 +11,50 @@ namespace ControlIDMvc.ServicesCI.QueryCI
 {
     public class CardControlIdQuery
     {
-        public string ApiUrl { get; set; }
-        public BodyCreateObject CreateCards(List<PersonaCreateDto> personas, List<int> users_id)
+        public BodyCreateObject CreateCards(List<cardsCreateDto> tarjetas)
         {
-            cardsCreateDto card = new cardsCreateDto();
-
-            foreach (var persona in personas)
-            {
-                int i = 0;
-                foreach (var area in persona.Area)
-                {
-                    card.user_id = users_id[i];
-                    int area_convert = Int32.Parse(area);
-                    int area_codigo = Int32.Parse(persona.Codigo[i]);
-                    /*calculo*/
-                   card.value = (area_convert * Convert.ToInt64((Math.Pow(2, 32))))+ area_codigo;
-                    i++;
-                }
-
-            }
-            List<cardsCreateDto> cards = new List<cardsCreateDto>();
-            cards.Add(card);
-
             BodyCreateObject body = new BodyCreateObject()
             {
                 objeto = "cards",
-                values = cards
+                values = tarjetas
+            };
+            return body;
+        }
+        public BodyShowObject MostrarTodoCards()
+        {
+            BodyShowObject body = new BodyShowObject()
+            {
+                objeto = "cards",
+            };
+            return body;
+        }
+        public BodyShowObject MostrarUnoCard(int numero)
+        {
+            BodyShowObject body = new BodyShowObject()
+            {
+                objeto = "cards",
+                where = new
+                {
+                    cards = new
+                    {
+                        value = numero
+                    }
+                }
+            };
+            return body;
+        }
+        public BodyDeleteObject DeleteUnoCard(int numero)
+        {
+            BodyDeleteObject body = new BodyDeleteObject()
+            {
+                objeto = "cards",
+                where = new
+                {
+                    cards = new
+                    {
+                        value = numero
+                    }
+                }
             };
             return body;
         }

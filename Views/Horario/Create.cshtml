@@ -11,7 +11,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Horario</h3>
+              <h3><span class="text-danger">@ViewData["ErrorConexion"]</span></h3>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 ">
-                                            <input type="text" id="nombre" name="nombre" required="required"
+                                            <input type="text" id="nombre" name="nombre" 
                                                 class="form-control" name="nombre">
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="dia[]" value="lunes" id="lunes_dia" checked />
+                                                <input type="checkbox" name="dias[]" value="lunes" id="lunes_dias" checked />
                                                 Lunes
                                             </div>
                                             <div class="col mt-2">
@@ -74,7 +74,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_inicio" class="form-control"
+                                                <input type="time" required="hora_inicio" class="form-control"
                                                     name="hora_inicio[]">
                                             </div>
                                         </div>
@@ -82,7 +82,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_fin" class="form-control"
+                                                <input type="time" required="hora_fin" class="form-control"
                                                     name="hora_fin[]">
                                             </div>
                                         </div>
@@ -92,7 +92,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="dia[]" value="martes" checked/>
+                                                <input type="checkbox" name="dias[]" value="martes" checked/>
                                                 Martes
                                             </div>
                                             <div class="col mt-2">
@@ -126,7 +126,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="dia[]" value="miercoles" checked />
+                                                <input type="checkbox" name="dias[]" value="miercoles" checked />
                                                 Miercoles
                                             </div>
                                             <div class="col mt-2">
@@ -142,7 +142,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_inicio" class="form-control"
+                                                <input type="time" required="hora_inicio" class="form-control"
                                                     name="hora_inicio[]">
                                             </div>
                                         </div>
@@ -150,7 +150,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_fin" class="form-control"
+                                                <input type="time" required="hora_fin" class="form-control"
                                                     name="hora_fin[]">
                                             </div>
                                         </div>
@@ -160,7 +160,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="dia[]" value="jueves" checked />
+                                                <input type="checkbox" name="dias[]" value="jueves" checked />
                                                 Jueves
                                             </div>
                                             <div class="col mt-2">
@@ -176,7 +176,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_inicio" class="form-control"
+                                                <input type="time" required="hora_inicio" class="form-control"
                                                     name="hora_inicio[]">
                                             </div>
                                         </div>
@@ -184,7 +184,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_fin" class="form-control"
+                                                <input type="time" required="hora_fin" class="form-control"
                                                     name="hora_fin[]">
                                             </div>
                                         </div>
@@ -194,7 +194,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="dia[]" value="viernes" checked />
+                                                <input type="checkbox" name="dias[]" value="viernes" checked />
                                                 Viernes
                                             </div>
                                             <div class="col mt-2">
@@ -210,7 +210,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_inicio" class="form-control"
+                                                <input type="time" required="hora_inicio" class="form-control"
                                                     name="hora_inicio[]">
                                             </div>
                                         </div>
@@ -218,7 +218,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_fin" class="form-control"
+                                                <input type="time" required="hora_fin" class="form-control"
                                                     name="hora_fin[]">
                                             </div>
                                         </div>
@@ -228,7 +228,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="dia[]" value="sabado" checked />
+                                                <input type="checkbox" name="dias[]" value="sabado" checked />
                                                 Sabado
                                             </div>
                                             <div class="col mt-2">
@@ -244,7 +244,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_inicio" class="form-control"
+                                                <input type="time" required="hora_inicio" class="form-control"
                                                     name="hora_inicio[]">
                                             </div>
                                         </div>
@@ -252,7 +252,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_fin" class="form-control"
+                                                <input type="time" required="hora_fin" class="form-control"
                                                     name="hora_fin[]">
                                             </div>
                                         </div>
@@ -262,7 +262,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="dia[]" value="domingo" checked />
+                                                <input type="checkbox" name="dias[]" value="domingo" checked />
                                                 Domingo
                                             </div>
                                             <div class="col mt-2">
@@ -278,7 +278,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_inicio" class="form-control"
+                                                <input type="time" required="hora_inicio" class="form-control"
                                                     name="hora_inicio[]">
                                             </div>
                                         </div>
@@ -286,7 +286,7 @@
                                             <label class="col-form-label col-md-2 col-sm-2" for="barrio">Fin
                                             </label>
                                             <div class="col-md-10 col-sm-10">
-                                                <input type="text" required="hora_fin" class="form-control"
+                                                <input type="time" required="hora_fin" class="form-control"
                                                     name="hora_fin[]">
                                             </div>
                                         </div>

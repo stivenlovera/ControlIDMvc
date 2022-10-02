@@ -1,4 +1,5 @@
 using AutoMapper;
+using ControlIDMvc.Dtos.Horario;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
 using ControlIDMvc.Models.ModelForm;
@@ -86,26 +87,28 @@ namespace ControlIDMvc.Querys
                 data = horarios
             };
         }
-        
-        public async Task<bool> store(HorarioForm horarioForm)
+
+        public async Task<bool> store(HorarioCreateDto horarioForm)
         {
             List<Dia> dia = new List<Dia>();
-            for (int i = 0; i < horarioForm.dia.Count; i++)
+            for (int i = 0; i < horarioForm.Dias.Count; i++)
             {
-                DateTime hora_inicio = Convert.ToDateTime(horarioForm.hora_inicio[i]);
-                DateTime hora_fin = Convert.ToDateTime(horarioForm.hora_fin[i]);
+                DateTime hora_inicio = Convert.ToDateTime(horarioForm.Hora_inicio[i]);
+                DateTime hora_fin = Convert.ToDateTime(horarioForm.Hora_fin[i]);
                 dia.Add(
                     new Dia()
                     {
-                        Nombre = horarioForm.dia[i],
+                        Nombre = horarioForm.Dias[i],
                         HoraFin = hora_fin,
                         HoraInicio = hora_inicio,
+
                     });
             }
             Horario horario = new Horario();
-            horario.Nombre = horarioForm.nombre;
-            horario.Descripcion = horarioForm.descripcion;
+            horario.Nombre = horarioForm.Nombre;
+            horario.Descripcion = horarioForm.Descripcion;
             horario.Dias = dia;
+            horario.ControlId = horarioForm.ControlId;
             await _dbContext.AddAsync(horario);
             var resultado = await _dbContext.SaveChangesAsync();
             if (resultado == 1)
@@ -116,6 +119,11 @@ namespace ControlIDMvc.Querys
             {
                 return false;
             }
+        }
+        public async Task<List<Horario>> GetAllByID(List<int> horarios_id)
+        {
+            var horarios = await this._dbContext.Horario.Where(horario => horarios_id.Contains(horario.Id)).ToListAsync();
+            return horarios;
         }
     }
 }

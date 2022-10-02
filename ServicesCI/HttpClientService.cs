@@ -22,7 +22,34 @@ namespace ControlIDMvc.ServicesCI
                 string responseBody = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(responseBody + "1" + response.StatusCode.ToString());
 
-                 return new Response()
+                return new Response()
+                {
+                    estado = true,
+                    data = responseBody
+                };
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return new Response()
+                {
+                    estado = false,
+                    data = "error"
+                };
+            }
+        }
+        public async Task<Response> RunBlank(string host, string url)
+        {
+            try
+            {
+                System.Console.WriteLine($"http://{host}/{url}?session={this.session}");
+                HttpResponseMessage response = await client.PostAsync($"http://{host}/{url}?session={this.session}", null);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody + "1" + response.StatusCode.ToString());
+
+                return new Response()
                 {
                     estado = true,
                     data = responseBody
@@ -72,5 +99,9 @@ namespace ControlIDMvc.ServicesCI
     {
         public bool estado { get; set; }
         public string data { get; set; }
+    }
+    public class responseApi
+    {
+        public List<int> ids { get; set; }
     }
 }

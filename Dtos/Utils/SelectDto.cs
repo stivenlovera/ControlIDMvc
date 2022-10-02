@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ControlIDMvc.Entities
+namespace ControlIDMvc.Dtos.Utils
 {
-    public class ReglasAcceso
+    public class SelectDto
     {
-        
+        public string searchTerm { get; set; }
     }
 }

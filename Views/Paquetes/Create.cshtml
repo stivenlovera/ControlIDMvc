@@ -1,0 +1,89 @@
+@model ControlIDMvc.Dtos.Paquete.PaqueteCreateDto
+
+@{
+    ViewData["Title"] = "Create Paquete";
+}
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3><span class="text-danger">@ViewData["ErrorConexion"]</span></h3>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Nuevo de Paquete</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Informacion general<small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <form asp-action="Store" asp-antiforgery="true" id="formulario_paquete"
+                            enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                       
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Nombre">Nombre
+                                                Paquete
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Nombre" id="Nombre" class="form-control"
+                                                    placeholder="Nombre"  >
+                                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="FechaInicio">Dias
+                                                Duracion
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Dias" id="Dias"
+                                                    class="form-control" placeholder="Dias" asp-for="Dias">
+                                                <span asp-validation-for="Dias" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Costo">Costo<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Costo" id="Costo" class="form-control"
+                                                    placeholder="" asp-for="Costo" >
+                                                <span asp-validation-for="Costo" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="item form-group">
+                                    <div class="col-md-6 col-sm-6 offset-md-3 mt-2">
+                                        <button class="btn btn-primary" type="button">Cancelar</button>
+                                        <button type="submit" class="btn btn-success"
+                                            id="save_dispositivo">Guardar</button>
+                                        <button type="button" class="btn btn-warning" id="">Imprimir Recibo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

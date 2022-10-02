@@ -7,8 +7,11 @@ namespace ControlIDMvc.Dtos.Horario
     {
         [Required(ErrorMessage = "Nombre requerido")]
         public string Nombre { get; set; }
-        [Required(ErrorMessage = "Descripcion requerido")]
         public string Descripcion { get; set; }
-        public List<DiaCreateDto> Dias { get; set; }
+        public string ControlId { get; set; }
+        public List<string> Dias { get; set; }
+        public List<string> DiasControlId { get; set; }
+        public List<string> Hora_inicio { get; set; }
+        public List<string> Hora_fin { get; set; }
     }
 }

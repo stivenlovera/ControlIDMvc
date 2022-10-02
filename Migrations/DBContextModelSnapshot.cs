@@ -19,6 +19,112 @@ namespace ControlIDMvc.Migrations
                 .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ControlIDMvc.Entities.Accion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlIdAction")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdParametrers")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ControlIdRunAt")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accion");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.AccionPortal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdAreaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdPortalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("portalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccionId");
+
+                    b.HasIndex("portalId");
+
+                    b.ToTable("AccionPortal");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Area", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlIdName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Area");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.AreaReglaAcceso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AreaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdAreaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlidReglaAccesoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReglaAccesoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("ReglaAccesoId");
+
+                    b.ToTable("AreaReglaAcceso");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Departamento", b =>
                 {
                     b.Property<int>("Id")
@@ -51,6 +157,9 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("ControlId")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("HoraFin")
                         .HasColumnType("datetime(6)");
 
@@ -68,6 +177,55 @@ namespace ControlIDMvc.Migrations
                     b.HasIndex("HorarioId");
 
                     b.ToTable("Dia");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Dispositivo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlIdIp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdPublicKey")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Modelo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroSerie")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ProyectoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Puerto")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Usuario")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProyectoId");
+
+                    b.ToTable("Dispositivo");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Grupo", b =>
@@ -106,6 +264,9 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("ControlId")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
 
@@ -115,6 +276,33 @@ namespace ControlIDMvc.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Horario");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.HorarioReglaAcceso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdAccessRulesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdTimeZoneId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HorarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReglasAccesoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HorarioId");
+
+                    b.HasIndex("ReglasAccesoId");
+
+                    b.ToTable("HorarioReglaAcceso");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.ImagenDocumento", b =>
@@ -173,6 +361,62 @@ namespace ControlIDMvc.Migrations
                     b.ToTable("ImagenPerfil");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.Inscripcion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("PaqueteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("costo")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaqueteId");
+
+                    b.HasIndex("PersonaId");
+
+                    b.ToTable("Inscripcion");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Paquete", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("costo")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<int>("dias")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("nombre")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Paquete");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
                 {
                     b.Property<int>("Id")
@@ -188,10 +432,25 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Ci")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Contraseña")
+                    b.Property<string>("ControlId")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ControlId")
+                    b.Property<int>("ControlIdBegin_time")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdEnd_time")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlIdName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdPassword")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdRegistration")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdSalt")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Dirrecion")
@@ -209,6 +468,9 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Observaciones")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ReglaAccesoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Sincronizacion")
                         .HasColumnType("longtext");
 
@@ -217,7 +479,97 @@ namespace ControlIDMvc.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ReglaAccesoId");
+
                     b.ToTable("Persona");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PersonaReglasAcceso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdAccessRulesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReglaAccesoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonaId");
+
+                    b.HasIndex("ReglaAccesoId");
+
+                    b.ToTable("PersonaReglasAcceso");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Portal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlId")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ControlIdAreaFromId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdAreaToId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlIdName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("DispositivoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DispositivoId");
+
+                    b.ToTable("Portal");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PortalReglaAcceso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdPortalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdRulesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PortalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReglaAccesoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PortalId");
+
+                    b.HasIndex("ReglaAccesoId");
+
+                    b.ToTable("PortalReglaAcceso");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Proyecto", b =>
@@ -255,6 +607,35 @@ namespace ControlIDMvc.Migrations
                     b.ToTable("Proyecto");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.ReglaAcceso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ControlId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ControlIdName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ControlIdPriority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlIdType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReglaAcceso");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Tarjeta", b =>
                 {
                     b.Property<int>("Id")
@@ -283,71 +664,38 @@ namespace ControlIDMvc.Migrations
                     b.ToTable("Tarjeta");
                 });
 
-            modelBuilder.Entity("ControlIDMvc.Entities.Usuario", b =>
+            modelBuilder.Entity("ControlIDMvc.Entities.AccionPortal", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("ControlIDMvc.Entities.Accion", "Puerta")
+                        .WithMany("PortalAccion")
+                        .HasForeignKey("AccionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("Apellido")
-                        .HasColumnType("longtext");
+                    b.HasOne("ControlIDMvc.Entities.Portal", "Area")
+                        .WithMany("AccionePortal")
+                        .HasForeignKey("portalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("Celular")
-                        .HasColumnType("longtext");
+                    b.Navigation("Area");
 
-                    b.Property<string>("Ci")
-                        .HasColumnType("longtext");
+                    b.Navigation("Puerta");
+                });
 
-                    b.Property<string>("ContraseñaTarjeta")
-                        .HasColumnType("longtext");
+            modelBuilder.Entity("ControlIDMvc.Entities.AreaReglaAcceso", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Area", "Area")
+                        .WithMany("AreaReglaAcceso")
+                        .HasForeignKey("AreaId");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("longtext");
+                    b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglaAcceso")
+                        .WithMany("AreaSReglaAccesos")
+                        .HasForeignKey("ReglaAccesoId");
 
-                    b.Property<string>("Estado")
-                        .HasColumnType("longtext");
+                    b.Navigation("Area");
 
-                    b.Property<DateTime>("Fecha_nac")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NumTarjeta")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("creado_porId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("departamento_idId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("dirrecion")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("grupo_idId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("nota")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("proyecto_idId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("creado_porId");
-
-                    b.HasIndex("departamento_idId");
-
-                    b.HasIndex("grupo_idId");
-
-                    b.HasIndex("proyecto_idId");
-
-                    b.ToTable("Usuario");
+                    b.Navigation("ReglaAcceso");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Dia", b =>
@@ -359,6 +707,17 @@ namespace ControlIDMvc.Migrations
                         .IsRequired();
 
                     b.Navigation("Horario");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Dispositivo", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Proyecto", "proyecto")
+                        .WithMany("Dispositivos")
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("proyecto");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Grupo", b =>
@@ -374,6 +733,25 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Creado_por");
 
                     b.Navigation("Proyecto");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.HorarioReglaAcceso", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Horario", "Horario")
+                        .WithMany("HorarioReglaAccesos")
+                        .HasForeignKey("HorarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglasAcceso")
+                        .WithMany()
+                        .HasForeignKey("ReglasAccesoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Horario");
+
+                    b.Navigation("ReglasAcceso");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.ImagenDocumento", b =>
@@ -398,6 +776,81 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Persona");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.Inscripcion", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Paquete", "Paquete")
+                        .WithMany("Inscripciones")
+                        .HasForeignKey("PaqueteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
+                        .WithMany("Inscripciones")
+                        .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paquete");
+
+                    b.Navigation("Persona");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.ReglaAcceso", null)
+                        .WithMany("Personas")
+                        .HasForeignKey("ReglaAccesoId");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PersonaReglasAcceso", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
+                        .WithMany()
+                        .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglaAcceso")
+                        .WithMany()
+                        .HasForeignKey("ReglaAccesoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Persona");
+
+                    b.Navigation("ReglaAcceso");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Portal", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Dispositivo", "Dispositivo")
+                        .WithMany("Portals")
+                        .HasForeignKey("DispositivoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dispositivo");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PortalReglaAcceso", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Portal", "Portal")
+                        .WithMany("PortalReglaAcceso")
+                        .HasForeignKey("PortalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglaAcceso")
+                        .WithMany("PortalReglaAccesos")
+                        .HasForeignKey("ReglaAccesoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Portal");
+
+                    b.Navigation("ReglaAcceso");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Tarjeta", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
@@ -409,45 +862,63 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Persona");
                 });
 
-            modelBuilder.Entity("ControlIDMvc.Entities.Usuario", b =>
+            modelBuilder.Entity("ControlIDMvc.Entities.Accion", b =>
                 {
-                    b.HasOne("ControlIDMvc.Entities.Usuario", "creado_por")
-                        .WithMany()
-                        .HasForeignKey("creado_porId");
+                    b.Navigation("PortalAccion");
+                });
 
-                    b.HasOne("ControlIDMvc.Entities.Departamento", "departamento_id")
-                        .WithMany()
-                        .HasForeignKey("departamento_idId");
+            modelBuilder.Entity("ControlIDMvc.Entities.Area", b =>
+                {
+                    b.Navigation("AreaReglaAcceso");
+                });
 
-                    b.HasOne("ControlIDMvc.Entities.Grupo", "grupo_id")
-                        .WithMany()
-                        .HasForeignKey("grupo_idId");
-
-                    b.HasOne("ControlIDMvc.Entities.Proyecto", "proyecto_id")
-                        .WithMany()
-                        .HasForeignKey("proyecto_idId");
-
-                    b.Navigation("creado_por");
-
-                    b.Navigation("departamento_id");
-
-                    b.Navigation("grupo_id");
-
-                    b.Navigation("proyecto_id");
+            modelBuilder.Entity("ControlIDMvc.Entities.Dispositivo", b =>
+                {
+                    b.Navigation("Portals");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Horario", b =>
                 {
                     b.Navigation("Dias");
+
+                    b.Navigation("HorarioReglaAccesos");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Paquete", b =>
+                {
+                    b.Navigation("Inscripciones");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
                 {
+                    b.Navigation("Inscripciones");
+
                     b.Navigation("card");
 
                     b.Navigation("documentos");
 
                     b.Navigation("perfiles");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Portal", b =>
+                {
+                    b.Navigation("AccionePortal");
+
+                    b.Navigation("PortalReglaAcceso");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Proyecto", b =>
+                {
+                    b.Navigation("Dispositivos");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.ReglaAcceso", b =>
+                {
+                    b.Navigation("AreaSReglaAccesos");
+
+                    b.Navigation("Personas");
+
+                    b.Navigation("PortalReglaAccesos");
                 });
 #pragma warning restore 612, 618
         }

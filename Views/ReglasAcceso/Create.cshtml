@@ -1,3 +1,4 @@
+@model ControlIDMvc.Dtos.ReglaAcceso.ReglaAccesoCreateDto
 @{
     ViewData["Title"] = "Create Regla de Acceso";
 }
@@ -67,240 +68,189 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div id="step-1">
-                                <h2 class="StepTitle">Nombre de la regla de acceso</h2>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label class="col-form-label col-md-3 col-sm-3 label-align"
-                                                for="nombre">Nombre <span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-6 col-sm-6 ">
-                                                <input type="text" id="nombre" name="nombre" required="required"
-                                                    class="form-control">
+                            <form asp-action="Store" asp-antiforgery="true" id="formulario_reglas_acceso">
+                                @Html.AntiForgeryToken()
+                                <div id="step-1">
+                                    <h2 class="StepTitle">Nombre de la regla de acceso</h2>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                                    for="nombre">Nombre <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 ">
+                                                    <input type="text" id="nombre" name="nombre" required="required"
+                                                        class="form-control">
+                                                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="step-2">
-                                <h2 class="StepTitle">Selecion de personas</h2>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <label class="col-form-label col-md-4 col-sm-4" for="tipo">Seleciones a
-                                                quienes deben ser afectados por las nueva
-                                                regla<span class="required">*</span>
-                                            </label>
-                                            <div class="col-md-8 col-sm-8">
-                                                <select id="tipo" class="form-control" required>
-                                                    <option value="" selected>Lector Biometrico USB</option>
-                                                </select>
+                                <div id="step-2">
+                                    <h2 class="StepTitle">Selecion de personas</h2>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-md-4 col-sm-4" for="tipo">Seleciones a
+                                                    quienes deben ser afectados por las nueva
+                                                    regla<span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <select id="tipo" class="form-control">
+                                                        <option value="" selected>Lector Biometrico USB</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h2 class="StepTitle">Personas Diponibles</h2>
-                                        <table id="personas_disponibles"
-                                            class="table table-striped table-bordered bulk_action" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nombre</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        <div class="col-md-6">
+                                            <h2 class="StepTitle">Personas Diponibles</h2>
+                                            <table id="personas_disponibles"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <h2 class="StepTitle">Personas selecionadas</h2>
-                                        <table id="personas_selecionadas"
-                                            class="table table-striped table-bordered bulk_action" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 25%;"></th>
-                                                    <th style="width: 75%;">Nombre</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+                                        <div class="col-md-6">
+                                            <h2 class="StepTitle">Personas selecionadas</h2>
+                                            <table id="personas_selecionadas"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 25%;"></th>
+                                                        <th style="width: 75%;">Nombre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="step-3">
-                                <h2 class="StepTitle">Seleccione cuando debe utilizarse la regla*</h2>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h2 class="StepTitle">Horario disponibles</h2>
-                                        <table id="horario_disponibles"
-                                            class="table table-striped table-bordered bulk_action" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nombre</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>43</td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>43</td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>43</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h2 class="StepTitle">Horario selecionadas</h2>
-                                        <table id="horario_selecionadas"
-                                            class="table table-striped table-bordered bulk_action" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Nombre</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td>43</td>
-                                                </tr>
-                                                <tr>
-                                                    <td></td>
-                                                    <td>43</td>
-                                                </tr>
-                                                <tr>
-                                                    <td></td>
-                                                    <td>43</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="step-4">
-                                <h2 class="StepTitle">Seleccionar el lugar donde se debe utilizar la regla*</h2>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h2 class="StepTitle">Areas selecionadas</h2>
-                                        <table id="area_disponibles"
-                                            class="table table-striped table-bordered bulk_action" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nombre</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>43</td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>43</td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>43</td>
-                                                    <td></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h2 class="StepTitle">Areas selecionadas</h2>
-                                        <table id="area_selecionadas"
-                                            class="table table-striped table-bordered bulk_action" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Nombre</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td></td>
-                                                    <td>43</td>
-                                                </tr>
-                                                <tr>
-                                                    <td></td>
-                                                    <td>43</td>
-                                                </tr>
-                                                <tr>
-                                                    <td></td>
-                                                    <td>43</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="step-5">
-                                <h2 class="StepTitle">Descripcion de Regla: test</h2>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <ul class="messages">
-                                            <li>
-                                                <div class="message_wrapper">
-                                                    <h4 class="heading">Personas</h4>
-                                                    <blockquote class="message">
-                                                        Ali stiven
-                                                    </blockquote>
-                                                    <blockquote class="message">
-                                                        Rojer
-                                                    </blockquote>
-                                                    <blockquote class="message">
-                                                        Moises
-                                                    </blockquote>
-                                                    <blockquote class="message">
-                                                        Franz Tito
-                                                    </blockquote>
+                                <div id="step-3">
+                                    <h2 class="StepTitle">Seleccione cuando debe utilizarse la regla*</h2>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h2 class="StepTitle">Horario disponibles</h2>
+                                            <table id="horario_disponibles"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="message_wrapper">
-                                                    <h4 class="heading">Horario</h4>
-                                                    <blockquote class="message">
-                                                        24/7
-                                                    </blockquote>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="message_wrapper">
-                                                    <h4 class="heading">Areas</h4>
-                                                    <blockquote class="message">
-                                                        Piso 1
-                                                    </blockquote>
-                                                    <blockquote class="message">
-                                                        Planta baja
-                                                    </blockquote>
-                                                    <blockquote class="message">
-                                                        Garaje
-                                                    </blockquote>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="message_wrapper">
-                                                    <h4 class="heading">Dispositivos</h4>
-                                                    <blockquote class="message">
-                                                        Valida para todos
-                                                    </blockquote>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h2 class="StepTitle">Horario selecionadas</h2>
+                                            <table id="horarios_seleccionados"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Nombre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div id="step-4">
+                                    <h2 class="StepTitle">Seleccionar el lugar donde se debe utilizar la regla*</h2>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h2 class="StepTitle">Areas selecionadas</h2>
+                                            <table id="area_disponibles"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h2 class="StepTitle">Areas selecionadas</h2>
+                                            <table id="area_selecionadas"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Nombre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="step-5">
+                                    <h2 class="StepTitle">Descripcion de Regla: test</h2>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <ul class="messages">
+                                                <li>
+                                                    <div class="message_wrapper">
+                                                        <h4 class="heading">Personas</h4>
+                                                        <div id="lista_personas">
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="message_wrapper">
+                                                        <h4 class="heading">Horario</h4>
+                                                        <div id="lista_horarios">
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="message_wrapper">
+                                                        <h4 class="heading">Areas</h4>
+                                                        <div id="lista_areas">
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="message_wrapper">
+                                                        <h4 class="heading">Dispositivos</h4>
+                                                        <blockquote class="message">
+                                                            Valida para todos
+                                                        </blockquote>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -308,9 +258,7 @@
         </div>
     </div>
 </div>
-</div>
-</div>
-</div>
+
 @section Scripts {
 <!-- Datatables -->
 <script src="~/assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -329,35 +277,6 @@
 <script src="~/assets/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
 <script src="~/js/reglaAcceso/dataTableUsuario.js"></script>
 <script src="~/js/reglaAcceso/dataTableHorario.js"></script>
-<script>
-    function init_SmartWizard() {
-
-        if (typeof ($.fn.smartWizard) === 'undefined') { return; }
-        console.log('init_SmartWizard');
-
-        $('#wizard').smartWizard();
-
-        $('#wizard_verticle').smartWizard({
-            transitionEffect: 'slide'
-        });
-
-        $('.buttonNext').addClass('btn btn-success');
-        $('.buttonNext').text('Siguiente');
-
-        $('.buttonPrevious').addClass('btn btn-secondary');
-        $('.buttonPrevious').text('Atras');
-
-        $('.buttonFinish').addClass('btn btn-primary');
-        $('.buttonFinish').addClass('Finalizar');
-
-    };
-
-    $('#area_disponibles').dataTable();
-    $('#area_selecionadas').dataTable();
-
-    $('#horario_disponibles').dataTable();
-    $('#horario_selecionadas').dataTable();
-
-
-</script>
+<script src="~/js/reglaAcceso/dataTableArea.js"></script>
+<script src="~/js/reglaAcceso/wizardData.js"></script>
 }

@@ -15,12 +15,12 @@ namespace ControlIDMvc.Controllers
             return View("~/Views/Visitante/Lista.cshtml");
         }
 
-        public IActionResult Create()
+       /*  public IActionResult Create()
         {
             var usuario = _dbContext.Usuario.First();
             System.Console.WriteLine("respuesta" + usuario.grupo_id);
             return View("~/Views/Visitante/Create.cshtml");
-        }
+        } */
 
     }
 }

@@ -1,0 +1,160 @@
+@model ControlIDMvc.Dtos.Dispositivo.DispositivoCreateDto
+@{
+    ViewData["Title"] = "Crear Dispositivos";
+}
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3><span class="text-danger">@ViewData["ErrorConexion"]</span></h3>
+            </div>
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Nuevo Dispositivo</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Informacion general<small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <form asp-action="Store" asp-antiforgery="true" id="formulario_dispositivo"
+                            enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-2 col-sm-2">
+                                <div class="profile_img">
+                                    <div id="crop-avatar">
+                                        <!-- Current avatar -->
+                                        <img class="img-responsive avatar-view" src="~/assets/images/profile_user.jpg"
+                                            width="100%" height="100%" alt="Avatar" title="Change the avatar">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10 col-sm-10">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Modelo">Modelo<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Modelo" id="Modelo" class="form-control"
+                                                    placeholder="">
+                                                <span asp-validation-for="Modelo" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Ip">IP/DNS<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Ip" id="Ip" class="form-control"
+                                                    placeholder="">
+                                                <span asp-validation-for="Ip" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="puerto">Puerto<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Puerto" id="Puerto" class="form-control"
+                                                    placeholder="">
+                                                <span asp-validation-for="Puerto" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3"
+                                                for="ControlIdPublicKey">Public Key<span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="ControlIdPublicKey" id="ControlIdPublicKey"
+                                                    class="form-control" placeholder="">
+                                                <span asp-validation-for="ControlIdPublicKey"
+                                                    class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <button class="btn btn-primary" type="button" id="probar_conexion">Probar
+                                                conexion</button>
+                                            @* <div class="spinner-border inline" role="status" id="loading">
+                                                <span class="sr-only">Loading...</span>
+                                                </div> *@
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Nombre">Nombre<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Nombre" id="Nombre" class="form-control"
+                                                    placeholder="">
+                                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="NumeroSerie">Numero de
+                                                serie<span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="NumeroSerie" id="NumeroSerie"
+                                                    class="form-control" placeholder="">
+                                                <span asp-validation-for="NumeroSerie" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Usuario">Nombre
+                                                Usuario<span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Usuario" id="Usuario" class="form-control"
+                                                    placeholder="">
+                                                <span asp-validation-for="Usuario" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Password">Password<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="password" name="Password" id="Password"
+                                                    class="form-control" placeholder="">
+                                                <span asp-validation-for="Password" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="item form-group">
+                                    <div class="col-md-6 col-sm-6 offset-md-3">
+                                        <button class="btn btn-primary" type="button">Cancelar</button>
+                                        <button type="submit" class="btn btn-success"
+                                            id="save_dispositivo">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+<!-- Extras -->
+<script src="~/js/dispositivo/create/probarConexion.js"></script>
+}

@@ -3,9 +3,7 @@
         <div class="navbar nav_title" style="border: 0;">
             <a href="index.html" class="site_title"><i class="fa fa-language"></i> <span>A+ plus</span></a>
         </div>
-
         <div class="clearfix"></div>
-
         <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
@@ -17,9 +15,7 @@
             </div>
         </div>
         <!-- /menu profile quick info -->
-
         <br />
-
         <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
@@ -47,14 +43,12 @@
                             Grupos
                         </a>
                     </li>
-
                     <li>
                         <a asp-controller="Visitante" asp-action="Index">
                             <i class="fa fa-user"></i>
                             Visitantes
                         </a>
                     </li>
-
                     <li>
                         <a href="javascript:void(0)">
                             <i class="fa fa-code-fork"></i>
@@ -81,13 +75,13 @@
                 <h3>Accesos</h3>
                 <ul class="nav side-menu">
                     <li>
-                        <a href="javascript:void(0)">
+                        <a asp-controller="Dispositivo" asp-action="Index">
                             <i class="fa fa-desktop"></i>
                             Dispositivo
                         </a>
                     </li>
                     <li>
-                     <a asp-controller="Area" asp-action="Index">
+                        <a asp-controller="Area" asp-action="Index">
                             <i class="fa fa-shield"></i>
                             Areas
                         </a>
@@ -102,6 +96,25 @@
                         <a asp-controller="ReglasAcceso" asp-action="Index">
                             <i class="fa fa-shield"></i>
                             Regla de Acceso
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu_section">
+                <h3>Sistema</h3>
+                <ul class="nav side-menu">
+                    <li>
+                        <a asp-controller="Inscripcion" asp-action="Index">
+                            <i class="fa fa-bookmark-o"></i>
+                            Inscripcion
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a asp-controller="Paquete" asp-action="Index">
+                            <i class="fa fa-dropbox"></i>
+                            Paquetes
                         </a>
                     </li>
                 </ul>

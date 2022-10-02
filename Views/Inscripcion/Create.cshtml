@@ -1,0 +1,202 @@
+
+@model ControlIDMvc.Dtos.Inscripcion.InscripcionCreateDto
+@{
+    ViewData["Title"] = "Crear Inscripcion";
+    string format = "dd/MM/yyyy";
+    var now = DateTime.Now.ToString(format);
+    /*paquetes*/
+    var paquetes = ViewData["paquetes"] as List<ControlIDMvc.Dtos.Paquete.PaqueteDto>;
+    var personas = ViewData["personas"] as List<ControlIDMvc.Dtos.PersonaDto>;
+}
+@section Estilos {
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3><span class="text-danger">@ViewData["ErrorConexion"]</span></h3>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Recibo de inscripcíon</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Informacion general<small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <form asp-action="Store" asp-antiforgery="true" id="formulario_dispositivo"
+                            enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-12 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3"
+                                                for="FechaCreacion">Fecha<span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="FechaCreacion" id="FechaCreacion"
+                                                    class="form-control" placeholder="" value="@now" readonly>
+                                                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="PersonaId">CI
+                                                Cliente<span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <select class="form-control" id="PersonaId" name="PersonaId">
+                                                    @foreach (var persona in personas)
+                                                    {
+                                                        <option value="@persona.Id">@persona.Ci</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="PersonaId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="PersonaId">Nombre
+                                                cliente
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <input type="text" name="Cliente" id="Cliente" class="form-control"
+                                                    placeholder="Cliente" readonly >
+                                                <span asp-validation-for="Cliente" class="text-danger"></span>
+                                            </div>
+                                             <div class="col-md-3 col-sm-3">
+                                                  <button type="button" class="btn btn-success" id="buscar_cliente">Buscar
+                                                    Cliente</button>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="FechaInicio">Fecha
+                                                Inicio
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="FechaInicio" id="FechaInicio"
+                                                    class="form-control" placeholder="Fecha Inicio" readonly asp-for="FechaInicio">
+                                                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+
+                                                <input type="text" name="FechaInicioCliente" id="FechaInicioCliente"
+                                                    class="form-control" placeholder="Fecha Inicio" hidden>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Costo">Costo<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Costo" id="Costo" class="form-control"
+                                                    placeholder="" readonly >
+                                                <span asp-validation-for="Costo" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Costo">Dias de duracion<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="Dias" id="Dias" class="form-control"
+                                                    placeholder="Dias de duracion" readonly >
+                                                <span asp-validation-for="Dias" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Costo">Paquete<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9 ">
+                                                <select class="form-control" id="PaqueteId" name="PaqueteId">
+                                                    @foreach (var paquete in paquetes)
+                                                    {
+                                                        <option value="@paquete.Id" data-costo="@paquete.Costo"
+                                                        data-dias="@paquete.Dias">@paquete.Nombre</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="PaqueteId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="FechaFin">Fecha
+                                                Fin<span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="FechaFin" id="FechaFin" class="form-control"
+                                                    placeholder="Fecha Fin" readonly asp-for="FechaFin">
+                                                <input type="text" name="FechaFinCliente" id="FechaFinCliente"
+                                                    class="form-control" placeholder="Fecha Inicio" hidden>
+                                                <span asp-validation-for="FechaFin" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="item form-group">
+                                    <div class="col-md-6 col-sm-6 offset-md-3 mt-2">
+                                        <button class="btn btn-primary" type="button">Cancelar</button>
+                                        <button type="submit" class="btn btn-success"
+                                            id="save_dispositivo">Guardar</button>
+                                        <button type="button" class="btn btn-warning" id="">Imprimir Recibo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Large modal -->
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_buscar_cliente">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Resultado de Busqueda</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="x_panel">
+                        <div class="x_content" id="contenido">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"
+    integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Extras -->
+<script src="~/js/Inscripcion/select.js"></script>
+<script src="~/js/Inscripcion/buscarCliente.js"></script>
+
+}

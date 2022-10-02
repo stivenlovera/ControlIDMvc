@@ -22,18 +22,18 @@ var personas_disponibles = $("#personas_disponibles").DataTable({
             data: "id",
             render: function (data, type, row) {
                 return `
-                <button class="btn btn-success btn-xs añadir" data-id="${data}" role="button"><i class="fa fa-arrow-right"></i></button>
+                <button class="btn btn-success btn-xs añadir" type="button" data-id="${data}" role="button"><i class="fa fa-arrow-right"></i></button>
                 `;
             }
         }
     ]
 });
-
 var personas_selecionadas = $('#personas_selecionadas').DataTable();
+
 
 $(document).on('click', '.añadir', function () {
     var usuarios = personas_selecionadas.rows().data().toArray()
-
+    console.log(personas_selecionadas.rows().data())
     var data = personas_disponibles.row($(this).parent().parent()).data();
 
     var alerta = false;
@@ -43,17 +43,19 @@ $(document).on('click', '.añadir', function () {
         }
     });
     if (alerta == false) {
-        load_data(data);
+        load_data_usuario(data);
     } else {
         console.log("ya fue registrado")
     }
 
 });
 
-function load_data(data) {
+function load_data_usuario(data) {
     personas_selecionadas.row.add([ //  <button class="btn btn-success btn-xs" data-id="${data.id}" role="button"><i class="fa fa-arrow-left"></i></button>
         `
         <button class="btn btn-danger btn-xs remover_usuario" data-id="${data.id}" role="button"><i class="fa fa fa-trash"></i></button>
+        <input type="text" name="PersonasSelecionadas[]" value="${data.id}" hidden>
+        <input type="text" name="PersonasSelecionadasNombre[]" value="${data.nombre}" hidden>
         `,
         data.nombre,
         data.id,

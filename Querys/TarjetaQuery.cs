@@ -1,6 +1,7 @@
 using AutoMapper;
 using ControlIDMvc.Dtos.Tarjeta;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -27,6 +28,12 @@ namespace ControlIDMvc.Querys
             {
                 return false;
             }
+        }
+        public async Task<List<TarjetaDto>> GetAllByPersona(int personaId)
+        {
+            var listaTarjetas=await _dbContext.Tarjeta.Where(tarjeta=>tarjeta.PersonaId==personaId).ToListAsync();
+            var resultado = _mapper.Map<List<TarjetaDto>>(listaTarjetas);
+            return resultado;
         }
     }
 }

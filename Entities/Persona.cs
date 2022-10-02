@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.ComponentModel.DataAnnotations;
 namespace ControlIDMvc.Entities
 {
@@ -14,11 +15,17 @@ namespace ControlIDMvc.Entities
         public string Dirrecion { get; set; }
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
-        public string Contraseña { get; set; }
+        public string ControlIdPassword { get; set; }
+        public string ControlIdName { get; set; }
+        public string ControlIdSalt { get; set; }
+        public string ControlIdRegistration { get; set; }
         public string Sincronizacion { get; set; }
         public string ControlId { get; set; }
+        public int ControlIdBegin_time { get; set; }
+        public int ControlIdEnd_time { get; set; }
         public List<Tarjeta> card { get; set; }
         public List<ImagenDocumento> documentos { get; set; }
         public List<ImagenPerfil> perfiles { get; set; }
+        public List<Inscripcion> Inscripciones { get; set; }
     }
 }
