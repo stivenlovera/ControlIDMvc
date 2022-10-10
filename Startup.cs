@@ -4,7 +4,7 @@ using ControlIDMvc.ServicesCI;
 using ControlIDMvc.ServicesCI.QueryCI;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 namespace ControlIDMvc
 {
     public class Startup
@@ -18,7 +18,7 @@ namespace ControlIDMvc
         {
 
             // Add services to the container.
-            Services.Services.AddControllersWithViews();
+            Services.Services.AddRazorPages();
             //conect database
             var connectionString = Services.Configuration.GetConnectionString("DefaultConnection");
             Services.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
@@ -26,8 +26,18 @@ namespace ControlIDMvc
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
+
             Services.Services.AddHttpContextAccessor();
             Services.Services.AddHttpClient();
+            Services.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                option =>
+                {
+                    option.AccessDeniedPath = "/home";
+                    option.LoginPath = "/login";
+                    option.LogoutPath = "/Login/Logout";
+                    option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                }
+            );
             Services.Services.AddTransient<HttpClientService>();
             /*sistema*/
             Services.Services.AddTransient<PersonaQuery>();
@@ -45,6 +55,9 @@ namespace ControlIDMvc
             Services.Services.AddTransient<DispositivoQuery>();
             Services.Services.AddTransient<PaqueteQuery>();
             Services.Services.AddTransient<InscripcionQuery>();
+            Services.Services.AddTransient<RolQuery>();
+            Services.Services.AddTransient<RolesUsuarioQuery>();
+            Services.Services.AddTransient<UsuarioQuery>();
 
             /*Controlador*/
             Services.Services.AddTransient<LoginControlIdQuery>();
@@ -74,7 +87,7 @@ namespace ControlIDMvc
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

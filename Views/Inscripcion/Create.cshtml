@@ -55,7 +55,7 @@
                                                 Cliente<span class="required">*</span>
                                             </label>
                                             <div class="col-md-9 col-sm-9">
-                                                <select class="form-control" id="PersonaId" name="PersonaId">
+                                                <select class="form-control" id="PersonaId" name="PersonaId" style="width: 100%;">
                                                     @foreach (var persona in personas)
                                                     {
                                                         <option value="@persona.Id">@persona.Ci</option>
@@ -164,7 +164,6 @@
 </div>
 
 <!-- Large modal -->
-
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_buscar_cliente">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

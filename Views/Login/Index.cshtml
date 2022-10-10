@@ -1,0 +1,33 @@
+@model ControlIDMvc.Dtos.Login.LoginDto
+@{
+    Layout = "_LayoutLogin";
+    ViewData["Title"] = "Login";
+}
+
+@Html.AntiForgeryToken()
+<form asp-action="Store" asp-antiforgery="true" id="formulario_login">
+    <h1>Control de acceso</h1>
+    <div class="x_content">
+        <br>
+
+        <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Usuario
+            </label>
+            <div class="col-md-9 col-sm-9">
+                <input type="text" class="form-control" placeholder="Usuario" asp-for="User" />
+                <span asp-validation-for="User" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Contraseña
+            </label>
+            <div class="col-md-9 col-sm-9">
+                <input type="password" class="form-control" placeholder="Contraseña" asp-for="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12">
+            <button type="submit" class="btn btn-primary submit" >Log in</button>
+        </div>
+    </div>
+</form>

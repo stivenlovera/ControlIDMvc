@@ -6,6 +6,7 @@ using AutoMapper;
 using ControlIDMvc.Dtos.Inscripcion;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -77,6 +78,25 @@ namespace ControlIDMvc.Querys
             _dbContext.Inscripcion.Add(inscripcion);
             await _dbContext.SaveChangesAsync();
             return _mapper.Map<InscripcionDto>(inscripcion);
+        }
+          public async Task<InscripcionDto> Update(InscripcionCreateDto inscripcionCreateDto, int id)
+        {
+            var inscripcion = _mapper.Map<Inscripcion>(inscripcionCreateDto);
+            inscripcion.Id = id;
+            _dbContext.Update(inscripcion);
+            await _dbContext.SaveChangesAsync();
+            return _mapper.Map<InscripcionDto>(inscripcion);
+        }
+        public async Task<bool> Delete(int id)
+        {
+            var existe = await _dbContext.Inscripcion.AnyAsync(x => x.Id == id);
+            if (existe)
+            {
+                return false;
+            }
+            _dbContext.Remove(new Inscripcion() { Id = id });
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

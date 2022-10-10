@@ -130,13 +130,7 @@ namespace ControlIDMvc.Controllers
                     await this.saveActionSistema(responseApiActions);
                 }
                 /*obtener horario default*/
-
-
                 /*obtener control acceso default*/
-
-
-
-
                 return RedirectToAction(nameof(Index));
             }
             var aux = dispositivoCreateDto;

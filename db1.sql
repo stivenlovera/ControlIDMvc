@@ -255,5 +255,62 @@ VALUES (
         '192.168.88.129',
         'MIIBCgKCAQEAn4TC3VZ17dXymM6pYRdkG8IYTUVv6glzYD7VunE6R4jg9mjIyi51z7ZwfJxh3SL2euQZZnOaR+FKtMFIZIz9z+jFYqUd8mC/8Pq4N6sgCUfrHcURyMjAJi4zOE+gGzlTyFj21LWvh5Bywewhqt051+Xds1Vpm5h25vzrry0WWM7yjvIFk899xQ4P+LVxPYScpVViS768XmD8bept6ljZL03LMXOM1+fELRWCdBujFdSLSjMFnWMX5zfrmr9C0Tx/F+oUDKp52D81iUEWIctL+rYyVBrhAEwxB2XH/EV693cqPbhbeE6sHsuFfsDZRZylAYPIeKB2YUT0fRXSyJE70wIDAQAB'
     )
+INSERT INTO
+    `paquete`(
+        `nombre`,
+        `dias`,
+        `fechaCreacion`,
+        `costo`
+    )
+VALUES (
+        '2 x 1 primavera',
+        '30',
+        '2022-09-26',
+        '200'
+    );
 
-    INSERT INTO `paquete`( `nombre`, `dias`, `fechaCreacion`, `costo`) VALUES ('2 x 1 primavera','30','2022-09-26','200');
+/*modulos*/
+
+INSERT INTO `modulo`(`nombre`)
+VALUES ('Personas'), ('Grupos'), ('Visitantes'), ('Departamentos'), ('Grupo Visitante'), ('Dispositivo'), ('Areas'), ('Horario'), ('Regla de Acceso'), ('Roles y acceso'), ('Inscripcion'), ('Paquetes')
+
+INSERT INTO
+    `persona`(
+        `Ci`,
+        `Nombre`,
+        `Apellido`,
+        `Fecha_nac`,
+        `Email`,
+        `Celular`,
+        `Dirrecion`,
+        `Observaciones`,
+        `ControlIdPassword`,
+        `ControlIdName`,
+        `ControlIdSalt`,
+        `ControlIdRegistration`,
+        `Sincronizacion`,
+        `ControlId`,
+        `ControlIdBegin_time`,
+        `ControlIdEnd_time`,
+        `ReglaAccesoId`
+    )
+VALUES (
+        '8963497',
+        'stiven',
+        'lovera',
+        '1991-01-01',
+        'stivenlovera@gmail.com',
+        '75679775',
+        'barrio toborochi',
+        'ninguna',
+        '',
+        'stiven',
+        '1',
+        '',
+        '',
+        '100010',
+        '0',
+        '0',
+        '1'
+    );
+    INSERT INTO `usuario`( `User`, `Password`, `PersonaId`) VALUES ('admin','admin','1');

@@ -11,8 +11,10 @@ using ControlIDMvc.Dtos;
 using ControlIDMvc.ServicesCI.Dtos.cardsDto;
 using ControlIDMvc.Dtos.Tarjeta;
 using ControlIDMvc.Dtos.Persona;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers;
+
 
 [Route("persona")]
 public class PersonaController : Controller
@@ -142,19 +144,6 @@ public class PersonaController : Controller
                 else
                 {
                     ViewData["ErrorConexion"] = "Error de conexion con el dipositivo";
-                    /*  var storePersona = await this._personaQuery.Store(personaCreateDto);
-                     if (personaCreateDto.Area != null)
-                     {
-                         int i = 0;
-                         foreach (var area in personaCreateDto.Area)
-                         {
-                             TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto();
-                             tarjetaCreateDto.PersonaId = storePersona.Id;
-                             tarjetaCreateDto.Area = Int32.Parse(area);
-                             tarjetaCreateDto.Codigo = Int32.Parse(personaCreateDto.Codigo[i]);
-                             var storeTarjeta = await this._tarjetaQuery.Store(tarjetaCreateDto);
-                         }
-                     } */
                     return View("~/Views/Persona/Create.cshtml", personaCreateDto);
                 }
                 return RedirectToAction(nameof(Index));
@@ -191,7 +180,7 @@ public class PersonaController : Controller
         {
             if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
             {
-
+                
             }
             else
             {
@@ -221,11 +210,6 @@ public class PersonaController : Controller
                 fecha_inicio = fecha_inicio,
                 fecha_fin = fecha_fin
             });
-
-/*             System.Console.WriteLine(fecha_inicio);
-            System.Console.WriteLine(fecha_fin);
-
- */
         }
         return Json(lista_personas);
     }

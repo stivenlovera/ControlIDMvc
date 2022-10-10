@@ -367,6 +367,12 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("FechaFin")
                         .HasColumnType("datetime(6)");
 
@@ -379,12 +385,6 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("costo")
-                        .HasColumnType("decimal(20,2)");
-
-                    b.Property<DateTime>("fechaCreacion")
-                        .HasColumnType("datetime(6)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PaqueteId");
@@ -394,22 +394,36 @@ namespace ControlIDMvc.Migrations
                     b.ToTable("Inscripcion");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.Modulo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Modulo");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Paquete", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<decimal>("costo")
+                    b.Property<decimal>("Costo")
                         .HasColumnType("decimal(20,2)");
 
-                    b.Property<int>("dias")
+                    b.Property<int>("Dias")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("fechaCreacion")
+                    b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("nombre")
+                    b.Property<string>("Nombre")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -472,9 +486,6 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Sincronizacion")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Usuario")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -636,6 +647,65 @@ namespace ControlIDMvc.Migrations
                     b.ToTable("ReglaAcceso");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.Rol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rol");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.RolModulo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModuloId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuloId");
+
+                    b.HasIndex("RolId");
+
+                    b.ToTable("RolModulo");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.RolUsuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RolId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("RolUsuario");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Tarjeta", b =>
                 {
                     b.Property<int>("Id")
@@ -662,6 +732,29 @@ namespace ControlIDMvc.Migrations
                     b.HasIndex("PersonaId");
 
                     b.ToTable("Tarjeta");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("User")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonaId")
+                        .IsUnique();
+
+                    b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.AccionPortal", b =>
@@ -851,11 +944,60 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("ReglaAcceso");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.RolModulo", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Modulo", "Modulo")
+                        .WithMany("rolModulo")
+                        .HasForeignKey("ModuloId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlIDMvc.Entities.Rol", "Rol")
+                        .WithMany("RolModulo")
+                        .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Modulo");
+
+                    b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.RolUsuario", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Rol", "Rol")
+                        .WithMany("RolUsuarios")
+                        .HasForeignKey("RolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ControlIDMvc.Entities.Usuario", "Usuario")
+                        .WithMany("RolUsuarios")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rol");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Tarjeta", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
                         .WithMany("card")
                         .HasForeignKey("PersonaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Persona");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Usuario", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
+                        .WithOne("Usuario")
+                        .HasForeignKey("ControlIDMvc.Entities.Usuario", "PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -884,6 +1026,11 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("HorarioReglaAccesos");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.Modulo", b =>
+                {
+                    b.Navigation("rolModulo");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Paquete", b =>
                 {
                     b.Navigation("Inscripciones");
@@ -892,6 +1039,8 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
                 {
                     b.Navigation("Inscripciones");
+
+                    b.Navigation("Usuario");
 
                     b.Navigation("card");
 
@@ -919,6 +1068,18 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Personas");
 
                     b.Navigation("PortalReglaAccesos");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Rol", b =>
+                {
+                    b.Navigation("RolModulo");
+
+                    b.Navigation("RolUsuarios");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Usuario", b =>
+                {
+                    b.Navigation("RolUsuarios");
                 });
 #pragma warning restore 612, 618
         }

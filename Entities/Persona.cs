@@ -14,7 +14,6 @@ namespace ControlIDMvc.Entities
         public string Celular { get; set; }
         public string Dirrecion { get; set; }
         public string Observaciones { get; set; }
-        public string Usuario { get; set; }
         public string ControlIdPassword { get; set; }
         public string ControlIdName { get; set; }
         public string ControlIdSalt { get; set; }
@@ -27,5 +26,6 @@ namespace ControlIDMvc.Entities
         public List<ImagenDocumento> documentos { get; set; }
         public List<ImagenPerfil> perfiles { get; set; }
         public List<Inscripcion> Inscripciones { get; set; }
+        public Usuario Usuario { get; set; }
     }
 }

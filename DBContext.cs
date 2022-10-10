@@ -28,6 +28,9 @@ namespace ControlIDMvc
         public DbSet<Dispositivo> Dispositivo { get; set; }
         public DbSet<Inscripcion> Inscripcion { get; set; }
         public DbSet<Paquete> Paquete { get; set; }
+        public DbSet<Rol> Rol { get; set; }
+        public DbSet<RolUsuario> RolUsuario { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
     }
 }
 

@@ -8,7 +8,8 @@ using ControlIDMvc.Dtos.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;    
 namespace ControlIDMvc.Controllers
 {
     [Route("auth")]
@@ -27,7 +28,7 @@ namespace ControlIDMvc.Controllers
         [HttpGet]
         public ActionResult login()
         {
-            return View("~/Views/Auth/index.cshtml");
+            return RedirectToPage("~/Views/Auth/Login");
         }
         [HttpPost("register")]
         [ValidateAntiForgeryToken]

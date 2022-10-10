@@ -11,7 +11,10 @@ using ControlIDMvc.Dtos.PersonaReglasAcceso;
 using ControlIDMvc.Dtos.Portal;
 using ControlIDMvc.Dtos.PortalReglaAcceso;
 using ControlIDMvc.Dtos.ReglaAcceso;
+using ControlIDMvc.Dtos.Rol;
+using ControlIDMvc.Dtos.RolUsuario;
 using ControlIDMvc.Dtos.Tarjeta;
+using ControlIDMvc.Dtos.Usuario;
 using ControlIDMvc.Entities;
 
 namespace ControlIDMvc
@@ -61,6 +64,16 @@ namespace ControlIDMvc
 
             CreateMap<InscripcionCreateDto, Inscripcion>();
             CreateMap<Inscripcion, InscripcionDto>();
+
+            CreateMap<RolCreateDto, Rol>();
+            CreateMap<Rol, RolDto>();
+
+            CreateMap<RolUsuarioCreateDto, RolUsuario>();
+            CreateMap<RolUsuario, RolUsuarioDto>();
+            
+            CreateMap<UsuarioCreateDto, Usuario>();
+            CreateMap<Usuario, UsuarioDto>();
+
 
         }
 

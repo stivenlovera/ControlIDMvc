@@ -10,6 +10,7 @@ namespace ControlIDMvc.Controllers
     [Route("inscripcion")]
     public class InscripcionController : Controller
     {
+                                               
         private readonly PaqueteQuery _paqueteQuery;
         private readonly PersonaQuery _personaQuery;
         private readonly InscripcionQuery _inscripcionQuery;
@@ -61,6 +62,7 @@ namespace ControlIDMvc.Controllers
             }
             System.Console.WriteLine("añadiendo");
             var inscripcion = await this._inscripcionQuery.Store(InscripcionCreateDto);
+            //inscripcion.PersonaId
             return RedirectToAction(nameof(Index));
         }
 

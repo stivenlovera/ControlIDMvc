@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Identity
+
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
@@ -27,81 +29,92 @@
                         </a>
                     </li>
                 </ul>
-                <h3>REGISTROS</h3>
             </div>
-            <div class="menu_section">
-                <ul class="nav side-menu">
-                    <li>
-                        <a asp-controller="Persona" asp-action="Index">
-                            <i class="fa fa-user"></i>
-                            Personas
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="fa fa-group"></i>
-                            Grupos
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Visitante" asp-action="Index">
-                            <i class="fa fa-user"></i>
-                            Visitantes
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="fa fa-code-fork"></i>
-                            Departamentos
-                        </a>
-                    </li>
+            @if (User.IsInRole("admin"))
+            {
+                <div class="menu_section">
+                    <h3>CONTROL ACCESSO</h3>
+                    <ul class="nav side-menu">
 
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="fa fa-users"></i>
-                            Grupo Visitante
-                        </a>
-                    </li>
+                        <li>
+                            <a asp-controller="Persona" asp-action="Index">
+                                <i class="fa fa-user"></i>
+                                Personas
+                            </a>
+                        </li>
 
-                    <li>
-                        <a href="javascript:void(0)">
-                            <i class="fa fa-industry"></i>
-                            Empresas
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="menu_section">
-                <h3>Accesos</h3>
-                <ul class="nav side-menu">
-                    <li>
-                        <a asp-controller="Dispositivo" asp-action="Index">
-                            <i class="fa fa-desktop"></i>
-                            Dispositivo
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Area" asp-action="Index">
-                            <i class="fa fa-shield"></i>
-                            Areas
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Horario" asp-action="Index">
-                            <i class="fa fa-clock-o"></i>
-                            Horario
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="ReglasAcceso" asp-action="Index">
-                            <i class="fa fa-shield"></i>
-                            Regla de Acceso
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-group"></i>
+                                Grupos
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Visitante" asp-action="Index">
+                                <i class="fa fa-user"></i>
+                                Visitantes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-code-fork"></i>
+                                Departamentos
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-users"></i>
+                                Grupo Visitante
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-industry"></i>
+                                Empresas
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Dispositivo" asp-action="Index">
+                                <i class="fa fa-desktop"></i>
+                                Dispositivo
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Area" asp-action="Index">
+                                <i class="fa fa-shield"></i>
+                                Areas
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Horario" asp-action="Index">
+                                <i class="fa fa-clock-o"></i>
+                                Horario
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="ReglasAcceso" asp-action="Index">
+                                <i class="fa fa-shield"></i>
+                                Regla de Acceso
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
             <div class="menu_section">
                 <h3>Sistema</h3>
+                <ul class="nav side-menu">
+                    <li>
+                        <a asp-controller="Rol" asp-action="Index">
+                            <i class="fa fa-pencil-square"></i>
+                            Roles y acceso 
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu_section">
+                <h3>Recepcion</h3>
                 <ul class="nav side-menu">
                     <li>
                         <a asp-controller="Inscripcion" asp-action="Index">

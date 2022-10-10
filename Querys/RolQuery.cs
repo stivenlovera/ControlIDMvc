@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using ControlIDMvc.Dtos.Paquete;
+using ControlIDMvc.Dtos.Rol;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
-    public class PaqueteQuery
+    public class RolQuery
     {
         private readonly DBContext _dbContext;
         private readonly IMapper _mapper;
-        public PaqueteQuery(DBContext dbContext, IMapper mapper)
+
+        public RolQuery(DBContext dbContext, IMapper mapper)
         {
             this._dbContext = dbContext;
             this._mapper = mapper;
         }
-        
         /* Datatable */
         public string draw;
         public string start;
@@ -42,69 +42,65 @@ namespace ControlIDMvc.Querys
             skip = start != null ? Convert.ToInt32(start) : 0;
             recordsTotal = 0;
 
-            List<DataTablePaquete> paquetes = new List<DataTablePaquete>();
+            List<DataTableRol> rols = new List<DataTableRol>();
             using (_dbContext)
             {
-                paquetes = (from d in _dbContext.Paquete
-                            select new DataTablePaquete
-                            {
-                                Id = d.Id,
-                                FechaCreacion = d.FechaCreacion,
-                                Dias = d.Dias,
-                                Costo = d.Costo,
-                                Nombre = d.Nombre
-                            }).ToList();
-                recordsTotal = paquetes.Count();
-                paquetes = paquetes.Skip(skip).Take(pageSize).ToList();
-                System.Console.WriteLine($"el total de registros es : {paquetes.Count()}");
+                rols = (from R in _dbContext.Rol
+                        select new DataTableRol
+                        {
+                            Id = R.Id,
+                            Descripcion = R.Nombre,
+                            Nombre = R.Nombre
+                        }).ToList();
+                recordsTotal = rols.Count();
+                rols = rols.Skip(skip).Take(pageSize).ToList();
+                System.Console.WriteLine($"el total de registros es : {rols.Count()}");
             }
             return new
             {
                 draw = "draw",
                 recordsFiltered = recordsTotal,
                 recordsTotal = recordsTotal,
-                data = paquetes
+                data = rols
             };
         }
-        public async Task<List<PaqueteDto>> GetAll()
+
+        public async Task<List<RolDto>> GetAll()
         {
-            var paquetes = await this._dbContext.Paquete.ToListAsync();
-            var resultado = _mapper.Map<List<PaqueteDto>>(paquetes);
-            return resultado;
+            var roles = await this._dbContext.Rol.ToListAsync();
+            return _mapper.Map<List<RolDto>>(roles);
+
         }
-        public async Task<List<PaqueteDto>> GetAllLike(string value)
+        public async Task<List<RolDto>> GetAllLike(string value)
         {
-            var paquetes = await this._dbContext.Paquete.Where(p => p.Nombre.Contains(value)).ToListAsync();
-            var resultado = _mapper.Map<List<PaqueteDto>>(paquetes);
-            return resultado;
+            var roles = await this._dbContext.Rol.Where(p => p.Nombre.Contains(value)).ToListAsync();
+            return _mapper.Map<List<RolDto>>(roles);
         }
-        public async Task<PaqueteDto> Store(PaqueteCreateDto paqueteCreateDto)
+        public async Task<RolDto> Store(RolCreateDto rolCreateDto)
         {
-            var paquete = _mapper.Map<Paquete>(paqueteCreateDto);
-            await _dbContext.AddAsync(paquete);
+            var rol = _mapper.Map<Rol>(rolCreateDto);
+            await _dbContext.AddAsync(rol);
             await _dbContext.SaveChangesAsync();
-            var resultado = _mapper.Map<PaqueteDto>(paquete);
-            return resultado;
+            return _mapper.Map<RolDto>(rol);
         }
-        public async Task<PaqueteDto> Update(PaqueteCreateDto paqueteCreateDto, int id)
+        public async Task<RolDto> Update(RolCreateDto rolCreateDto, int id)
         {
-            var paquete = _mapper.Map<Paquete>(paqueteCreateDto);
-            paquete.Id = id;
-            _dbContext.Update(paquete);
+            var rol = _mapper.Map<Usuario>(rolCreateDto);
+            rol.Id = id;
+            _dbContext.Update(rol);
             await _dbContext.SaveChangesAsync();
-            return _mapper.Map<PaqueteDto>(paquete);
+            return _mapper.Map<RolDto>(rol);
         }
         public async Task<bool> Delete(int id)
         {
-            var existe = await _dbContext.Paquete.AnyAsync(x => x.Id == id);
+            var existe = await _dbContext.Rol.AnyAsync(x => x.Id == id);
             if (existe)
             {
                 return false;
             }
-            _dbContext.Remove(new Paquete() { Id = id });
+            _dbContext.Remove(new Rol() { Id = id });
             await _dbContext.SaveChangesAsync();
             return true;
         }
     }
-
 }

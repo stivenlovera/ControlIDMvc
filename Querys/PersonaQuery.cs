@@ -16,6 +16,11 @@ namespace ControlIDMvc.Querys
             this._dbContext = dbContext;
             this._mapper = mapper;
         }
+        public async Task<PersonaDto> Show(int id)
+        {
+            var persona = await _dbContext.Persona.Where(p => p.Id == id).FirstOrDefaultAsync();
+            return _mapper.Map<PersonaDto>(persona);
+        }
         public async Task<Persona> Store(PersonaCreateDto personaCreateDto)
         {
             var persona = _mapper.Map<Persona>(personaCreateDto);
@@ -117,7 +122,7 @@ namespace ControlIDMvc.Querys
             var resultado = _mapper.Map<List<PersonaDto>>(personas);
             return resultado;
         }
-         public async Task<List<PersonaDto>> GetAllLikeId(int value)
+        public async Task<List<PersonaDto>> GetAllLikeId(int value)
         {
             var personas = await this._dbContext.Persona.Where(p => p.Id.ToString().Contains(value.ToString())).ToListAsync();
             var resultado = _mapper.Map<List<PersonaDto>>(personas);
