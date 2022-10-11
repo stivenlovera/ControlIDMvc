@@ -29,7 +29,7 @@ namespace ControlIDMvc
 
             Services.Services.AddHttpContextAccessor();
             Services.Services.AddHttpClient();
-            Services.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+            /* Services.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 option =>
                 {
                     option.AccessDeniedPath = "/home";
@@ -37,7 +37,7 @@ namespace ControlIDMvc
                     option.LogoutPath = "/Login/Logout";
                     option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 }
-            );
+            ); */
             Services.Services.AddTransient<HttpClientService>();
             /*sistema*/
             Services.Services.AddTransient<PersonaQuery>();

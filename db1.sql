@@ -18,8 +18,10 @@ VALUES (
         '3356690',
         'sergio@a.com',
         '1'
-    )
-    /*puertas */
+    );
+
+/*puertas */
+
 INSERT INTO
     `portal`(
         `Nombre`,
@@ -269,10 +271,21 @@ VALUES (
         '200'
     );
 
+INSERT INTO
+    `reglaacceso`(
+        `Nombre`,
+        `ControlId`,
+        `ControlIdName`,
+        `ControlIdType`,
+        `ControlIdPriority`,
+        `Descripcion`
+    )
+VALUES ('default', '1', 'test', 0, 0, '');
+INSERT INTO `rolusuario`(`RolId`, `UsuarioId`) VALUES ('1','2');
 /*modulos*/
-
+INSERT INTO `rol`(`Nombre`, `Descripcion`) VALUES ('admin','acceso total'),('recepcion','adminitrativo');
 INSERT INTO `modulo`(`nombre`)
-VALUES ('Personas'), ('Grupos'), ('Visitantes'), ('Departamentos'), ('Grupo Visitante'), ('Dispositivo'), ('Areas'), ('Horario'), ('Regla de Acceso'), ('Roles y acceso'), ('Inscripcion'), ('Paquetes')
+VALUES ('Personas'), ('Grupos'), ('Visitantes'), ('Departamentos'), ('Grupo Visitante'), ('Dispositivo'), ('Areas'), ('Horario'), ('Regla de Acceso'), ('Roles y acceso'), ('Inscripcion'), ('Paquetes');
 
 INSERT INTO
     `persona`(
@@ -313,4 +326,11 @@ VALUES (
         '0',
         '1'
     );
-    INSERT INTO `usuario`( `User`, `Password`, `PersonaId`) VALUES ('admin','admin','1');
+
+INSERT INTO
+    `usuario`(
+        `User`,
+        `Password`,
+        `PersonaId`
+    )
+VALUES ('admin', 'admin', '1');
