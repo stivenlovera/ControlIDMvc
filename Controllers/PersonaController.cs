@@ -126,7 +126,6 @@ public class PersonaController : Controller
                             if (responseAddCards.estado)
                             {
                                 cardsResponseDto responseCards = JsonConvert.DeserializeObject<cardsResponseDto>(responseAddCards.data);
-
                                 int i = 0;
                                 foreach (var id in responseCards.ids)
                                 {
@@ -180,7 +179,7 @@ public class PersonaController : Controller
         {
             if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
             {
-                
+
             }
             else
             {
@@ -193,7 +192,7 @@ public class PersonaController : Controller
     [HttpPost("buscar")]
     public async Task<ActionResult> buscar(PersonaCreateDto personaCreateDto)
     {
-        var personas = await this._personaQuery.GetAllLikeId(Convert.ToInt32(personaCreateDto.Ci));
+        var personas = await this._personaQuery.GetAllLikeCi(Convert.ToInt32(personaCreateDto.Ci));
 
         List<object> lista_personas = new List<object>();
 
@@ -212,6 +211,20 @@ public class PersonaController : Controller
             });
         }
         return Json(lista_personas);
+    }
+    [HttpPost("store-ajax")]
+    public async Task<ActionResult> StoreAjax(PersonaCreateDto personaCreateDto)
+    {
+        var storePersona = await this._personaQuery.Store(personaCreateDto);
+
+        return Json(
+            new
+            {
+                status = "success",
+                data=storePersona,
+                message = "Persona creado correctamente"
+            }
+        );
     }
     private DateTime UnixTimeStampToDateTime(double unixTimeStamp)
     {

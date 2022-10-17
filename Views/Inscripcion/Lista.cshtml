@@ -3,16 +3,24 @@
 }
 
 <div class="right_col" role="main">
-    <div class="">
-        <div class="page-title">
-            <div class="title_left">
-                <h3>Inscripciones</h3>
-            </div>
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Inscripciones</h3>
         </div>
     </div>
+
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
+            @if (ViewData["message"] != null)
+            {
+                <div class="alert alert-success alert-dismissible " role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">×</span>
+                    </button>
+                    @ViewData["message"]
+                </div>
+            }
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Lista de Inscripcion</small></h2>
@@ -126,7 +134,7 @@
                 name: "paqueteCosto",
                 data: "paqueteCosto"
             },
-              {
+            {
                 name: "paqueteDias",
                 data: "paqueteDias"
             },
@@ -135,12 +143,14 @@
                 data: "id",
                 render: function (data, type, row) {
                     return `
-                    <a class="btn btn-success btn-xs" href="#" role="button"><i class="fa fa-pencil"></i></a>
-                    <button class="btn btn-danger btn-xs" data-id="${data}" role="button"><i class="fa fa-trash"></i></button>
+                    <a class="btn btn-success btn-xs" href="inscripcion/factura-recibo/${data}" role="button"><i class="fa fa-file-pdf-o" title="Editar"></i></a>
+                    <a class="btn btn-success btn-xs" href="inscripcion/edit/${data}" role="button"><i class="fa fa-pencil" title="Ver recibo"></i></a>
+                    <button class="btn btn-danger btn-xs delete" data-id="${data}" role="button"><i class="fa fa-trash" title="Eliminar"></i></button>
                     `;
                 }
             }
         ]
     });
 </script>
+<script src="~/js/Inscripcion/delete.js"></script>
 }

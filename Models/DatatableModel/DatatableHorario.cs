@@ -7,6 +7,7 @@ namespace ControlIDMvc.Models.DatatableModel
 {
     public class DatatableHorario
     {
+        
         public int id { get; set; }
         public string nombre { get; set; }
         public string lunes { get; set; }

@@ -21,37 +21,11 @@ $(document).ready(function () {
                 console.log('reestablecer',resultado)
                 $('#FechaInicio').val(resultado.fecha_inicio);
                 $('#FechaFin').val(resultado.fecha_fin);
-                
             }
         });
-
-    /* $("#PaqueteId").select2({
-        theme: "bootstrap4",
-        ajax: {
-            url: `/inscripcion/select-paquetes`,
-            type: "post",
-            dataType: "json",
-            delay: 250,
-            data: function (params) {
-                return {
-                    searchTerm: params.term
-                };
-            },
-            processResults: function (response) {
-                return {
-                    results: response,
-                };
-            },
-            cache: true,
-        },
-    }).on("select2:select", function (e) {
- 
- 
-    }); */
-
 });
 function validar_fecha(fecha_fin) {
-    if (moment(fecha_fin).format("YYYY/MM/DD")>moment().format("YYYY/MM/DD")) {
+    if (moment(fecha_fin).format("YYYY/MM/DD") > moment().format("YYYY/MM/DD")) {
         return true;
     } else {
         return false;
@@ -69,7 +43,7 @@ function añadir_dias(cantidad) {
 
 function reestablecer_dias(cantidad) {
     /*validate  */
-    const fecha_actual=moment().format("YYYY/MM/DD");
+    const fecha_actual = moment().format("YYYY/MM/DD");
     let dias = moment(fecha_actual).add(cantidad, 'days');
     return {
         fecha_inicio: moment().format("YYYY/MM/DD"),
@@ -77,5 +51,11 @@ function reestablecer_dias(cantidad) {
     };
 }
 
-/*select cliente */
-$("#PersonaId").select2();
+$('#formulario_inscripcion').on('keyup keypress', function (e) {
+    var keyCode = e.keyCode || e.which;
+    if (keyCode === 13) {
+        e.preventDefault();
+        $("#buscar_cliente").trigger("click");
+        return false;
+    }
+});

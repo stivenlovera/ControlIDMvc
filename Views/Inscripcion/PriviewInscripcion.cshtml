@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = "PriviewInscripcion";
+}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3><span class="text-danger"></span></h3>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Recibo y factura</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel">
+                    <div class="x_content">
+                        <form asp-action="StoreInscripcion" asp-antiforgery="true" id="formulario_recibo"
+                            enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="x_title">
+                                        <h2>Recibo<small></small></h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="ratio w-100">
+                                        <iframe src="https://www.dspguide.com/CH1.PDF" width="100%"></iframe>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 w-100">
+                                    <div class="x_title">
+                                        <h2>Factura<small></small></h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="ratio w-100">
+                                        <iframe src="https://www.dspguide.com/CH1.PDF" width="100%"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-success" id="guardar_inscripcion">Volver a
+                                            la lista</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

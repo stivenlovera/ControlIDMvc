@@ -1,7 +1,8 @@
-@model ControlIDMvc.Dtos.Inscripcion.InscripcionCreateDto
+@model ControlIDMvc.Dtos.Inscripcion.InscripcionUpdateDto
 @{
-    ViewData["Title"] = "Crear Inscripcion";
     string format = "yyyy/MM/dd";
+    ViewData["Title"] = "Editar Inscripcion";
+
     var now = DateTime.Now.ToString(format);
     /*paquetes*/
     var paquetes = ViewData["paquetes"] as List<ControlIDMvc.Dtos.Paquete.PaqueteDto>;
@@ -24,7 +25,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Nueva Inscripcion</h2>
+                    <h2>Edit Inscripcion</h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_panel">
@@ -33,10 +34,10 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <form asp-action="Store" asp-antiforgery="true" id="formulario_inscripcion"
+                        <form asp-action="Update" asp-route-id="@Model.Id" method="post" asp-antiforgery="true" id="formulario_inscripcion"
                             enctype="multipart/form-data">
                             @Html.AntiForgeryToken()
-                            <input type="text" id="PersonaId" name="PersonaId" class="form-control" hidden>
+                            <input type="text" id="PersonaId" name="PersonaId" value="@Model.PersonaId" class="form-control" hidden>
                             <div class="col-md-12 col-sm-12">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -46,18 +47,20 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="FechaCreacion" id="FechaCreacion"
-                                                    class="form-control" placeholder="" value="@now" readonly>
+                                                    class="form-control" placeholder="" value="@Model.FechaCreacion.ToString(format)"
+                                                    readonly>
                                                 <span asp-validation-for="FechaCreacion" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3" for="Buscar">Buscar por CI<span class="required">*</span>
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Buscar">Buscar por
+                                                CI<span class="required">*</span>
                                             </label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input type="text" id="Buscar" name="Buscar" class="form-control"
-                                                    placeholder="Buscar Cliente">
+                                                    placeholder="Buscar Cliente" value="">
                                             </div>
-                                             <div class="col-md-3 col-sm-3">
+                                            <div class="col-md-3 col-sm-3">
                                                 <button type="button" class="btn btn-success"
                                                     id="buscar_cliente">Buscar</button>
                                             </div>
@@ -67,7 +70,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="CI" id="CI" class="form-control"
-                                                    placeholder="CI" readonly>
+                                                    placeholder="CI" readonly value="@Model.CI">
                                                 <span asp-validation-for="CI" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -76,7 +79,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="Nombres" id="Nombres" class="form-control"
-                                                    placeholder="Nombres" readonly>
+                                                    placeholder="Nombres" readonly value="@Model.Nombres">
                                                 <span asp-validation-for="Nombres" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -85,7 +88,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="Apellidos" id="Apellidos" class="form-control"
-                                                    placeholder="Apellidos" readonly>
+                                                    placeholder="Apellidos" readonly value="@Model.Apellidos">
                                                 <span asp-validation-for="Apellidos" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -97,11 +100,11 @@
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="FechaInicio" id="FechaInicio"
                                                     class="form-control" placeholder="Fecha Inicio" readonly
-                                                    asp-for="FechaInicio">
+                                                    asp-for="FechaInicio" value="@Model.FechaInicio.ToString(format)">
                                                 <span asp-validation-for="FechaInicio" class="text-danger"></span>
 
                                                 <input type="text" name="FechaInicioCliente" id="FechaInicioCliente"
-                                                    class="form-control" placeholder="Fecha Inicio" hidden>
+                                                    class="form-control" placeholder="Fecha Inicio" hidden value="@Model.FechaInicio.ToString(format)">
                                             </div>
                                         </div>
                                     </div>
@@ -112,17 +115,17 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="Costo" id="Costo" class="form-control"
-                                                    placeholder="" readonly>
+                                                    placeholder="" readonly value="@Model.Costo">
                                                 <span asp-validation-for="Costo" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="item form-group">
-                                            <label class="col-form-label col-md-3 col-sm-3" for="Costo">Dias de
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Dias">Dias de
                                                 duracion<span class="required">*</span>
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="Dias" id="Dias" class="form-control"
-                                                    placeholder="Dias de duracion" readonly>
+                                                    placeholder="Dias de duracion" readonly value="@Model.Dias">
                                                 <span asp-validation-for="Dias" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -131,12 +134,20 @@
                                                     class="required">*</span>
                                             </label>
                                             <div class="col-md-9 col-sm-9 ">
-                                                <select class="form-control" id="PaqueteId" name="PaqueteId" disabled>
+                                                <select class="form-control" id="PaqueteId" name="PaqueteId">
                                                     <option value="">Seleccione Paquete</option>
                                                     @foreach (var paquete in paquetes)
                                                     {
-                                                        <option value="@paquete.Id" data-costo="@paquete.Costo"
+                                                        @if (Model.PaqueteId == paquete.Id)
+                                                        {
+                                                            <option value="@paquete.Id" data-costo="@paquete.Costo"
+                                                        data-dias="@paquete.Dias" selected>@paquete.Nombre</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@paquete.Id" data-costo="@paquete.Costo"
                                                         data-dias="@paquete.Dias">@paquete.Nombre</option>
+                                                        }
                                                     }
                                                 </select>
                                                 <span asp-validation-for="PaqueteId" class="text-danger"></span>
@@ -148,9 +159,10 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="FechaFin" id="FechaFin" class="form-control"
-                                                    placeholder="Fecha Fin" readonly asp-for="FechaFin">
+                                                    placeholder="Fecha Fin" readonly asp-for="FechaFin"
+                                                    value="@Model.FechaFin.ToString(format)">
                                                 <input type="text" name="FechaFinCliente" id="FechaFinCliente"
-                                                    class="form-control" placeholder="Fecha Inicio" hidden>
+                                                    class="form-control" placeholder="Fecha Inicio" value="@Model.FechaFin.ToString(format)" hidden>
                                                 <span asp-validation-for="FechaFin" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -160,7 +172,8 @@
                             <div class="col-md-12">
                                 <div class="d-flex justify-content-center">
                                     <button class="btn btn-primary" type="button">Cancelar</button>
-                                    <button type="submit" class="btn btn-success"id="guardar_inscripcion">Guardar</button>
+                                    <button type="submit" class="btn btn-success"
+                                        id="guardar_inscripcion">Guardar</button>
                                 </div>
                             </div>
                         </form>

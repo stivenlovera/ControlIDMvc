@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Create Paquete";
 }
+@section Estilos {
+<link href="~/assets/vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+}
 
 <div class="right_col" role="main">
     <div class="">
@@ -32,7 +35,6 @@
                             <div class="col-md-12 col-sm-12">
                                 <div class="row">
                                     <div class="col-md-6">
-                                       
                                         <div class="item form-group">
                                             <label class="col-form-label col-md-3 col-sm-3" for="Nombre">Nombre
                                                 Paquete
@@ -40,7 +42,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="Nombre" id="Nombre" class="form-control"
-                                                    placeholder="Nombre"  >
+                                                    placeholder="Nombre">
                                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -50,20 +52,28 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-9 col-sm-9">
-                                                <input type="text" name="Dias" id="Dias"
-                                                    class="form-control" placeholder="Dias" asp-for="Dias">
+                                                <input type="text" name="Dias" id="Dias" class="form-control"
+                                                    placeholder="Dias" asp-for="Dias">
                                                 <span asp-validation-for="Dias" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="Nombre">Estado
+                                                <span class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="checkbox" class="js-switch" checked /> Activo
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
                                             <label class="col-form-label col-md-3 col-sm-3" for="Costo">Costo<span
                                                     class="required">*</span>
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="text" name="Costo" id="Costo" class="form-control"
-                                                    placeholder="" asp-for="Costo" >
+                                                    placeholder="" asp-for="Costo">
                                                 <span asp-validation-for="Costo" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -87,3 +97,7 @@
         </div>
     </div>
 </div>
+@section Scripts {
+<!-- Switchery -->
+<script src="~/assets/vendors/switchery/dist/switchery.min.js"></script>
+}

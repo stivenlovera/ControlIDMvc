@@ -69,6 +69,10 @@ namespace ControlIDMvc.Controllers
             var dataTable = await this._horarioQuery.Datatable(Request);
             return Json(dataTable);
         }
+        /*
+            *nota sobre horario este modulo necesita refractor  
+            cuando el horario asignado es igual en uno mas dias se debe guardar en una solo objecto en el controlador
+        */
         [HttpPost("store")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Store([FromForm] HorarioCreateDto horarioCreateDto)
@@ -127,7 +131,7 @@ namespace ControlIDMvc.Controllers
                             {
                                 horarioCreateDto.DiasControlId.Add((responseHorarioDias.ids[index]).ToString());
                             }
-                            var storePersona = await this._horarioQuery.store(horarioCreateDto);
+                            //var storePersona = await this._horarioQuery.store(horarioCreateDto);
                         }
                     }
                 }

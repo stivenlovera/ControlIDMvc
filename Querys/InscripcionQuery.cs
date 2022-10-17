@@ -20,57 +20,56 @@ namespace ControlIDMvc.Querys
             this._mapper = mapper;
         }
 
-        /* Datatable */
-        public string draw;
-        public string start;
-        public string length;
-        public string showColumn;
-        public string showColumnDir;
-        public string searchValue;
-        public int pageSize, skip, recordsTotal;
-
         public object DataTable(HttpRequest httpRequest)
         {
+            int totalRecord = 0;
+            int filterRecord = 0;
+
             var draw = httpRequest.Form["draw"].FirstOrDefault();
-            var start = httpRequest.Form["start"].FirstOrDefault();
-            var length = httpRequest.Form["length"].FirstOrDefault();
-            var sortColumna = httpRequest.Form["column[" + httpRequest.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-            var sortColumnaDir = httpRequest.Form["order[0][dir]"].FirstOrDefault();
+            var sortColumn = httpRequest.Form["columns[" + httpRequest.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            var sortColumnDirection = httpRequest.Form["order[0][dir]"].FirstOrDefault();
             var searchValue = httpRequest.Form["search[value]"].FirstOrDefault();
+            int pageSize = Convert.ToInt32(httpRequest.Form["length"].FirstOrDefault() ?? "0");
+            int skip = Convert.ToInt32(httpRequest.Form["start"].FirstOrDefault() ?? "0");
 
-            pageSize = length != null ? Convert.ToInt32(length) : 0;
-            skip = start != null ? Convert.ToInt32(start) : 0;
-            recordsTotal = 0;
+            var data = (from i in _dbContext.Inscripcion
+                        select new DatatableInscripciones()
+                        {
+                            Id = i.Id,
+                            PaqueteNombre = i.Paquete.Nombre,
+                            PersonaNombre = i.Persona.Nombre,
+                            PersonaCi = i.Persona.Ci,
+                            PaqueteId = i.PaqueteId,
+                            PersonaId = i.PersonaId,
+                            PaqueteCosto = i.Paquete.Costo,
+                            PaqueteDias = i.Paquete.Dias,
+                            FechaCreacion = i.FechaCreacion.ToString("dddd, dd MMMM yyyy"),
+                            FechaFin = i.FechaFin,
+                            FechaInicio = i.FechaFin
+                        });
 
-            List<DatatableInscripciones> personas = new List<DatatableInscripciones>();
-            using (_dbContext)
+            totalRecord = data.Count();
+            // buscar por valor
+            if (!string.IsNullOrEmpty(searchValue))
             {
-                personas = (from i in _dbContext.Inscripcion
-                            select new DatatableInscripciones
-                            {
-                                Id = i.Id,
-                                PaqueteNombre = i.Paquete.Nombre,
-                                PersonaNombre = i.Persona.Nombre,
-                                PersonaCi = i.Persona.Ci,
-                                PaqueteId = i.PaqueteId,
-                                PersonaId = i.PersonaId,
-                                PaqueteCosto = i.Paquete.Costo,
-                                PaqueteDias = i.Paquete.Dias,
-                                FechaCreacion = i.FechaCreacion.ToString("dddd, dd MMMM yyyy"),
-                                FechaFin = i.FechaFin,
-                                FechaInicio = i.FechaFin
-                            }).ToList();
-                recordsTotal = personas.Count();
-                personas = personas.Skip(skip).Take(pageSize).ToList();
-                System.Console.WriteLine($"el total de registros es : {personas.Count()}");
+                data = data.Where(x => x.PaqueteNombre.ToLower().Contains(searchValue.ToLower()) || x.PersonaNombre.ToLower().Contains(searchValue.ToLower()) || x.PersonaCi.ToLower().Contains(searchValue.ToLower()) || x.PaqueteCosto.ToString().ToLower().Contains(searchValue.ToLower()));
             }
+            // get total count of records after search
+            filterRecord = data.Count();
+            System.Console.WriteLine(" filtro "+sortColumn+" "+sortColumnDirection);
+            //filtro columna
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection)) data = data.OrderBy(x=>sortColumn).ThenBy(x=>sortColumnDirection);
+            //pagination
+            var empList = data.Skip(skip).Take(pageSize).ToList();
             return new
             {
-                draw = "draw",
-                recordsFiltered = recordsTotal,
-                recordsTotal = recordsTotal,
-                data = personas
+                draw = draw,
+                recordsTotal = totalRecord,
+                recordsFiltered = filterRecord,
+                data = empList
             };
+
+
         }
         public async Task<InscripcionDto> Store(InscripcionCreateDto inscripcionCreateDto)
         {
@@ -79,7 +78,14 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return _mapper.Map<InscripcionDto>(inscripcion);
         }
-          public async Task<InscripcionDto> Update(InscripcionCreateDto inscripcionCreateDto, int id)
+
+        public async Task<Inscripcion> Edit(int id)
+        {
+            var inscripcion = await _dbContext.Inscripcion.Where(i => i.Id == id).Include(p => p.Persona).Include(p => p.Paquete).FirstOrDefaultAsync();
+            return inscripcion;
+        }
+
+        public async Task<InscripcionDto> Update(InscripcionCreateDto inscripcionCreateDto, int id)
         {
             var inscripcion = _mapper.Map<Inscripcion>(inscripcionCreateDto);
             inscripcion.Id = id;
@@ -92,11 +98,12 @@ namespace ControlIDMvc.Querys
             var existe = await _dbContext.Inscripcion.AnyAsync(x => x.Id == id);
             if (existe)
             {
-                return false;
+                _dbContext.Remove(new Inscripcion() { Id = id });
+                await _dbContext.SaveChangesAsync();
+                return true;
             }
-            _dbContext.Remove(new Inscripcion() { Id = id });
-            await _dbContext.SaveChangesAsync();
-            return true;
+            return false;
+
         }
     }
 }
