@@ -183,6 +183,9 @@ namespace ControlIDMvc.Controllers
             });
         }
 
+
+        
+
         /*Otros*/
         private async Task<Boolean> loginControlId()
         {

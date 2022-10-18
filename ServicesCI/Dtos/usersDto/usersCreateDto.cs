@@ -11,6 +11,7 @@ namespace ControlIDMvc.ServicesCI.Dtos.usersDto
     }
     public class usersResponseDto
     {
+        
         public List<int> ids { get; set; }
     }
 }

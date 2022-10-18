@@ -35,7 +35,7 @@ namespace ControlIDMvc.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            //return RedirectToPage("/Login/Index");
+            
             return View("~/Views/Login/Index.cshtml");
         }
 
@@ -62,6 +62,7 @@ namespace ControlIDMvc.Controllers
                 {
                     claims.Add(new Claim(ClaimTypes.Role, rol));
                 }
+
                 var claimsIndentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIndentity));
                 return RedirectToAction("Index", "Home");

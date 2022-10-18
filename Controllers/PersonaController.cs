@@ -71,7 +71,9 @@ public class PersonaController : Controller
         BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
         Response login = await this._httpClientService.LoginRun(this.controlador, this._ApiRutas.ApiUrlLogin, cuerpo);
         this._httpClientService.session = login.data;
+        
         return login.estado;
+      
     }
 
     [HttpPost("store")]
@@ -85,17 +87,18 @@ public class PersonaController : Controller
                 if (await this.loginControlId())
                 {
                     ViewData["Verificar CI"] = "Carnet de identidad ya se encuentra registrada";
-                    List<usersCreateDto> personas = new List<usersCreateDto>();
-                    personas.Add(new usersCreateDto
-                    {
-                        name = personaCreateDto.Nombre,
-                        password = "",
-                        registration = "",
-                        salt = ""
-                    });
 
-                    BodyCreateObject AddUsers = this._usuarioControlIdQuery.CreateUser(personas);
-                    Response responseAddUsers = await this._httpClientService.Run(this.controlador, this._ApiRutas.ApiUrlCreate, AddUsers);
+                    var response = await this._usuarioControlIdQuery.CreateOneUser(personaCreateDto);
+                    if (response.status)
+                    {
+                        personaCreateDto.ControlId = response.ids[0].ToString();
+                        var storePersona = await this._personaQuery.Store(personaCreateDto);
+                        if (personaCreateDto.Area != null)
+                        {
+                        }
+                    }
+                
+                     /*Response responseAddUsers = await this._httpClientService.Run(this.controlador, this._ApiRutas.ApiUrlCreate, AddUsers);
                     if (responseAddUsers.estado)
                     {
                         usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
@@ -105,7 +108,6 @@ public class PersonaController : Controller
 
                         if (personaCreateDto.Area != null)
                         {
-                            /*tarjeta*/
                             List<cardsCreateDto> tarjetas = new List<cardsCreateDto>();
                             int index = 0;
                             foreach (var area in personaCreateDto.Area)
@@ -138,12 +140,12 @@ public class PersonaController : Controller
                                 }
                             }
                         }
-                    }
+                    } */
                 }
                 else
                 {
-                    ViewData["ErrorConexion"] = "Error de conexion con el dipositivo";
-                    return View("~/Views/Persona/Create.cshtml", personaCreateDto);
+                     var storePersona = await this._personaQuery.Store(personaCreateDto);
+                       
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -155,6 +157,7 @@ public class PersonaController : Controller
         }
         return View("~/Views/Persona/Create.cshtml", personaCreateDto);
     }
+
     [HttpPost("data-table")]
     public ActionResult DataTable()
     {
@@ -172,6 +175,7 @@ public class PersonaController : Controller
         }
         return View("~/Views/Persona/Edit.cshtml", persona);
     }
+
     [HttpGet("update/{id:int}")]
     public async Task<ActionResult> Update(int id, PersonaUpdateDto personaCreateDto)
     {
@@ -189,6 +193,7 @@ public class PersonaController : Controller
         }
         return View("~/Views/Persona/Edit.cshtml", personaCreateDto);
     }
+
     [HttpPost("buscar")]
     public async Task<ActionResult> buscar(PersonaCreateDto personaCreateDto)
     {
@@ -212,6 +217,7 @@ public class PersonaController : Controller
         }
         return Json(lista_personas);
     }
+
     [HttpPost("store-ajax")]
     public async Task<ActionResult> StoreAjax(PersonaCreateDto personaCreateDto)
     {
@@ -221,11 +227,12 @@ public class PersonaController : Controller
             new
             {
                 status = "success",
-                data=storePersona,
+                data = storePersona,
                 message = "Persona creado correctamente"
             }
         );
     }
+
     private DateTime UnixTimeStampToDateTime(double unixTimeStamp)
     {
 
@@ -234,6 +241,7 @@ public class PersonaController : Controller
         dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
         return dtDateTime;
     }
+
     private long DateTimeToUnix(DateTime MyDateTime)
     {
         TimeSpan timeSpan = MyDateTime - new DateTime(2022, 9, 10, 0, 0, 0);
