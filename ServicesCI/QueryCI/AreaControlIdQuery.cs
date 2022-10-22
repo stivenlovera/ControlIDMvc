@@ -112,7 +112,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         {
             ResponseAreaShow responseCreate = new ResponseAreaShow();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyShowAllObject, this.session);
+            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
             if (responseAddUsers.estado)
             {
                 areaResponseDto responseUser = JsonConvert.DeserializeObject<areaResponseDto>(responseAddUsers.data);
