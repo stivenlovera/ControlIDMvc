@@ -9,6 +9,7 @@ namespace ControlIDMvc.Entities
     public class Inscripcion
     {
         public int Id { get; set; }
+        public string NumeroRecibo { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }

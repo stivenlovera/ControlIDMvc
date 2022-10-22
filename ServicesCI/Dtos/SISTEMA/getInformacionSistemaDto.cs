@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ControlIDMvc.ServicesCI.Dtos.SISTEMA
 {
-    public class getInformacionSistemaDto
+    public class responseInformacionSistemaDto
     {
         public Uptime uptime { get; set; }
         public int time { get; set; }

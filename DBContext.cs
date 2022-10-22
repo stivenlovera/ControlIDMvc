@@ -31,6 +31,8 @@ namespace ControlIDMvc
         public DbSet<Rol> Rol { get; set; }
         public DbSet<RolUsuario> RolUsuario { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Caja> Caja { get; set; }
+        public DbSet<Egreso> Egreso { get; set; }
     }
 }
 

@@ -9,20 +9,30 @@ namespace ControlIDMvc.ServicesCI.QueryCI
     public class UsuarioControlIdQuery
     {
         /* propiedades */
-        public string controlador = "192.168.88.129";
-        public string user = "admin";
-        public string password = "admin";
+        public int port { get; set; }
+        public string controlador { get; set; }
+        public string user { get; set; }
+        public string password { get; set; }
+        public string session { get; set; }
         private readonly HttpClientService _httpClientService;
         ApiRutas _ApiRutas;
         public UsuarioControlIdQuery(HttpClientService httpClientService)
         {
             this._httpClientService = httpClientService;
             this._ApiRutas = new ApiRutas();
+
         }
 
-        public string ApiUrl { get; set; }
+        public void Params(int port, string controlador, string user, string password, string session)
+        {
+            this.port = port;
+            this.controlador = controlador;
+            this.user = user;
+            this.password = password;
+            this.session = session;
+        }
 
-        public async Task<ResponseCreate> CreateOneUser(PersonaCreateDto personaCreateDto)
+        public async Task<ResponseUserCreate> CreateOneUser(Persona personaCreateDto)
         {
             var usuario = new List<usersCreateDto>(){
                 new usersCreateDto{
@@ -32,18 +42,15 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                     name=personaCreateDto.Nombre,
                     registration="",
                     salt="",
-                    
+
                 }
             };
-
             BodyCreateObject body = new BodyCreateObject()
             {
                 objeto = "users",
                 values = usuario
             };
-
             var response = await this.RunCreate(body);
-                
             return response;
         }
 
@@ -109,30 +116,31 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             };
             return body;
         }
-        private async Task<ResponseCreate> RunCreate(BodyCreateObject bodyCreateObject)
+        private async Task<ResponseUserCreate> RunCreate(BodyCreateObject bodyCreateObject)
         {
-            ResponseCreate responseCreate = new ResponseCreate();
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this._ApiRutas.ApiUrlCreate, bodyCreateObject);
+            ResponseUserCreate responseCreate = new ResponseUserCreate();
+
+            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyCreateObject, this.session);
             if (responseAddUsers.estado)
             {
                 usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
-                responseCreate.status = false;
+                responseCreate.status = responseAddUsers.estado;
                 responseCreate.ids = responseUser.ids;
             }
             else
             {
-                responseCreate.status = false;
+                responseCreate.status = responseAddUsers.estado;
             }
             return responseCreate;
         }
     }
     /*clases de ayuda*/
-    public class ResponseCreate
+    public class ResponseUserCreate
     {
         public bool status { get; set; }
         public List<int> ids { get; set; }
     }
-    public class ResponseShow
+    public class ResponseUserShow
     {
         public List<int> ids { get; set; }
     }

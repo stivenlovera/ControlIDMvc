@@ -9,9 +9,30 @@ namespace ControlIDMvc.ServicesCI.QueryCI
 {
     public class HorarioAccessRulesControlIdQuery
     {
+          /* propiedades */
+        public int port { get; set; }
+        public string controlador { get; set; }
+        public string user { get; set; }
+        public string password { get; set; }
+        public string session { get; set; }
+        private readonly HttpClientService _httpClientService;
+        ApiRutas _ApiRutas;
+        public HorarioAccessRulesControlIdQuery(HttpClientService httpClientService)
+        {
+            this._httpClientService = httpClientService;
+            this._ApiRutas = new ApiRutas();
+        }
+
+        public void Params(int port, string controlador, string user, string password, string session)
+        {
+            this.port = port;
+            this.controlador = controlador;
+            this.user = user;
+            this.password = password;
+            this.session = session;
+        }
         public BodyCreateObject CreateTimeZonesAccessRules(List<time_zones_access_rulesDto> time_Zones_Access_RulesDtos)
         {
-
             BodyCreateObject body = new BodyCreateObject()
             {
                 objeto = "access_rule_time_zones",

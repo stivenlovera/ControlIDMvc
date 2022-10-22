@@ -10,4 +10,8 @@ namespace ControlIDMvc.ServicesCI.Dtos.portalsActionUpdateDto
         public int portal_id { get; set; }
         public int action_id { get; set; }
     }
+    public class responsePortalsActionsDto
+    {
+public List<portalsActionsDto> portalsActionsDtos { get; set; }
+    }
 }

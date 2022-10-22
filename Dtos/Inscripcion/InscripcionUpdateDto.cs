@@ -9,6 +9,7 @@ namespace ControlIDMvc.Dtos.Inscripcion
     public class InscripcionUpdateDto
     {
         public int Id { get; set; }
+        public string NumeroRecibo { get; set; }
         public DateTime FechaCreacion { get; set; }
         [Required(ErrorMessage = "Fecha Inicio es requerido")]
         public DateTime FechaInicio { get; set; }

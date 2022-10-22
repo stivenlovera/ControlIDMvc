@@ -39,7 +39,7 @@ namespace ControlIDMvc
                 }
             ); */
             Services.Services.AddTransient<HttpClientService>();
-            /*sistema*/
+            /*modelos sistema*/
             Services.Services.AddTransient<PersonaQuery>();
             Services.Services.AddTransient<TarjetaQuery>();
             Services.Services.AddTransient<HorarioQuery>();
@@ -58,8 +58,11 @@ namespace ControlIDMvc
             Services.Services.AddTransient<RolQuery>();
             Services.Services.AddTransient<RolesUsuarioQuery>();
             Services.Services.AddTransient<UsuarioQuery>();
+            Services.Services.AddTransient<EgresoQuery>();
+            Services.Services.AddTransient<CajaQuery>();
 
-            /*Controlador*/
+
+            /*modelo Control ID*/
             Services.Services.AddTransient<LoginControlIdQuery>();
             Services.Services.AddTransient<UsuarioControlIdQuery>();
             Services.Services.AddTransient<CardControlIdQuery>();

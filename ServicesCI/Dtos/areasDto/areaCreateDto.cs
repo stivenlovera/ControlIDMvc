@@ -9,4 +9,8 @@ namespace ControlIDMvc.ServicesCI.Dtos.areasDto
     {
         public string name { get; set; }
     }
+    public class responseareaCreateDto
+    {
+        public List<int> ids { get; set; }
+    }
 }

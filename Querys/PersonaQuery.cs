@@ -107,13 +107,12 @@ namespace ControlIDMvc.Querys
         public async Task<Persona> EditOne(int id)
         {
             var persona = await _dbContext.Persona.FindAsync(id);
-
             return persona;
         }
-        public async Task<Persona> UpdateOne(int id)
+        public async Task<Persona> UpdateOne(Persona persona)
         {
-            var persona = await _dbContext.Persona.FindAsync(id);
-            var editpersona = _mapper.Map<PersonaDto>(persona);
+            _dbContext.Update(persona);
+            await _dbContext.SaveChangesAsync();
             return persona;
         }
         public async Task<List<PersonaDto>> GetAllLikeCi(int value)

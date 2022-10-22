@@ -27,6 +27,5 @@ namespace ControlIDMvc.Dtos.Dispositivo
         public string ControlIdName { get; set; }
         public string ControlIdIp { get; set; }
         public string ControlIdPublicKey { get; set; }
-        public int ProyectoId { get; set; }
     }
 }

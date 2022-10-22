@@ -20,7 +20,6 @@ namespace ControlIDMvc.Querys
             this._mapper = mapper;
         }
 
-
         /* Datatable */
         public string draw;
         public string start;
@@ -33,7 +32,6 @@ namespace ControlIDMvc.Querys
         {
             var dispostivos = await this._dbContext.Dispositivo
             .Where(dispositivo => dispositivo.Id == controlador_id)
-            .Where(dispostivo => dispostivo.ProyectoId == proyecto_id)
             .ToListAsync();
             return dispostivos;
         }
@@ -80,6 +78,16 @@ namespace ControlIDMvc.Querys
             var resultado = await _dbContext.SaveChangesAsync();
             return dispositivo;
         }
+        public async Task<List<Dispositivo>> GetAll()
+        {
+           return await _dbContext.Dispositivo.ToListAsync();
+        }
+        public async Task<List<Dispositivo>> GetOne(int id)
+        {
+            var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivo.Id==id).ToListAsync();
+            return dispostivos;
+        }
+        
         public async Task<List<Dispositivo>> GetAllByID(List<int> dispositivos_id)
         {
             var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivos_id.Contains(dispositivo.Id)).ToListAsync();

@@ -11,8 +11,7 @@ namespace ControlIDMvc.Dtos.Area
         [Required(ErrorMessage = "Nombre requerido")]
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public string ControlId { get; set; }
+        public int ControlId { get; set; }
         public string ControlIdName { get; set; }
-        public List<string> PuertasSelecionadas { get; set; }
     }
 }

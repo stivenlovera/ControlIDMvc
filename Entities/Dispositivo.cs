@@ -21,7 +21,5 @@ namespace ControlIDMvc.Entities
         public string ControlIdIp { get; set; }
         public string ControlIdPublicKey { get; set; }
         public List<Portal> Portals { get; set; }
-        public int ProyectoId { get; set; }
-        public Proyecto proyecto { get; set; }
     }
 }

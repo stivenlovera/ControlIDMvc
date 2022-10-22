@@ -19,9 +19,12 @@ namespace ControlIDMvc.Controllers
     public class HorarioController : Controller
     {
         /* propiedades */
-        public string controlador = "192.168.88.129";
-        public string user = "admin";
-        public string password = "admin";
+
+        public int port { get; set; }
+        public string controlador { get; set; }
+        public string user { get; set; }
+        public string password { get; set; }
+
         private readonly DBContext _dbContext;
         private readonly HorarioQuery _horarioQuery;
         private readonly LoginControlIdQuery _loginControlIdQuery;
@@ -47,8 +50,7 @@ namespace ControlIDMvc.Controllers
         private async Task<Boolean> loginControlId()
         {
             BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
-            Response login = await this._httpClientService.LoginRun(this.controlador, this._apiRutas.ApiUrlLogin, cuerpo);
-            this._httpClientService.session = login.data;
+            Response login = await this._httpClientService.LoginRun(this.controlador,this.port, this._apiRutas.ApiUrlLogin, cuerpo,"");
             return login.estado;
         }
 
@@ -75,17 +77,17 @@ namespace ControlIDMvc.Controllers
         */
         [HttpPost("store")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Store([FromForm] HorarioCreateDto horarioCreateDto)
+        public ActionResult Store([FromForm] HorarioCreateDto horarioCreateDto)
         {
             if (ModelState.IsValid)
             {
-                if (await this.loginControlId())
+              /*   if (await this.loginControlId())
                 {
                     time_zonesCreateDto time_ZonesCreateDto = new time_zonesCreateDto();
                     time_ZonesCreateDto.name = horarioCreateDto.Nombre;
 
                     BodyCreateObject AddHorario = this._horarioControlIdQuery.CreateHorario(time_ZonesCreateDto);
-                    Response responseAddHorario = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlCreate, AddHorario);
+                    Response responseAddHorario = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddHorario,"");
                     if (responseAddHorario.estado)
                     {
                         time_zonesResponseDto responseHorario = JsonConvert.DeserializeObject<time_zonesResponseDto>(responseAddHorario.data);
@@ -98,8 +100,8 @@ namespace ControlIDMvc.Controllers
                             var hora_inicio = Convert.ToDateTime(horarioCreateDto.Hora_inicio[i]);
                             var hora_fin = Convert.ToDateTime(horarioCreateDto.Hora_fin[i]);
 
-                            var cal_hora_inicio = Convert.ToInt32(hora_inicio.Hour == 00 ? 60 : hora_inicio.Hour) * Convert.ToInt32(hora_inicio.Minute == 00 ? 60 : hora_inicio.Minute * 60) /* * Convert.ToInt32(hora_inicio.Second) */;
-                            var cal_hora_fin = Convert.ToInt32(hora_fin.Hour == 00 ? 60 : hora_fin.Hour) * Convert.ToInt32(hora_fin.Minute == 00 ? 60 : hora_fin.Minute * 60) /* * Convert.ToInt32(hora_fin.Second); */;
+                            var cal_hora_inicio = Convert.ToInt32(hora_inicio.Hour == 00 ? 60 : hora_inicio.Hour) * Convert.ToInt32(hora_inicio.Minute == 00 ? 60 : hora_inicio.Minute * 60) // Convert.ToInt32(hora_inicio.Second) ;
+                            var cal_hora_fin = Convert.ToInt32(hora_fin.Hour == 00 ? 60 : hora_fin.Hour) * Convert.ToInt32(hora_fin.Minute == 00 ? 60 : hora_fin.Minute * 60) //Convert.ToInt32(hora_fin.Second); ;
                             time_spansCreateDto time_SpansCreateDto = new time_spansCreateDto
                             {
                                 start = cal_hora_inicio,
@@ -120,7 +122,7 @@ namespace ControlIDMvc.Controllers
                             i++;
                         }
                         BodyCreateObject AddHorarioDias = this._horarioControlIdQuery.CreateDias(dias, responseHorario.ids[0]);
-                        Response responseAddHorarioDias = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlCreate, AddHorarioDias);
+                        Response responseAddHorarioDias = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddHorarioDias,"");
 
                         if (responseAddHorario.estado)
                         {
@@ -138,7 +140,7 @@ namespace ControlIDMvc.Controllers
                 else
                 {
                     var storePersona = await this._horarioQuery.store(horarioCreateDto);
-                }
+                } */
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Horario/Create.cshtml");

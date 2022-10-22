@@ -8,6 +8,7 @@ namespace ControlIDMvc.Models.DatatableModel
     public class DatatableInscripciones
     {
         public int Id { get; set; }
+        public string numeroRecibo { get; set; }
         public string FechaCreacion { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }

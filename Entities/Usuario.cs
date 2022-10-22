@@ -13,5 +13,6 @@ namespace ControlIDMvc.Entities
         public int PersonaId { get; set; }
         public Persona Persona { get; set; }
         public List<RolUsuario> RolUsuarios { get; set; }
+        public List<Egreso> Egresos { get; set; }
     }
 }

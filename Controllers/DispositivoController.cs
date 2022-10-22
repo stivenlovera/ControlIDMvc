@@ -24,10 +24,10 @@ namespace ControlIDMvc.Controllers
     public class DispositivoController : Controller
     {
         /*proyecto por default*/
-        public int ProyectoId { get; set; } = 1;
-        public string controlador = "192.168.88.129";
-        public string user = "admin";
-        public string password = "admin";
+        public int port { get; set; }
+        public string controlador { get; set; }
+        public string user { get; set; }
+        public string password { get; set; }
         private readonly LoginControlIdQuery _loginControlIdQuery;
         private readonly DispositivoQuery _dispositivoQuery;
         private readonly HttpClientService _httpClientService;
@@ -92,48 +92,47 @@ namespace ControlIDMvc.Controllers
         [HttpPost("store")]
         public async Task<ActionResult> Store(DispositivoCreateDto dispositivoCreateDto)
         {
-            if (ModelState.IsValid)
+            await getDispostivo(dispositivoCreateDto.Ip,dispositivoCreateDto.Puerto,dispositivoCreateDto.Usuario,"login.fcgi",dispositivoCreateDto.Password);
+           /*  if (ModelState.IsValid)
             {
-                /*conectarse al dispositivo*/
                 this.user = dispositivoCreateDto.Usuario;
                 this.password = dispositivoCreateDto.Password;
                 this.controlador = dispositivoCreateDto.Ip;
+                this.port = dispositivoCreateDto.Puerto;
 
                 await this.loginControlId();
                 Response responseInfoSistem = await this.getControlIdHardware(dispositivoCreateDto.Ip, dispositivoCreateDto.Puerto);
                 getInformacionSistemaDto responsenfoSistem = JsonConvert.DeserializeObject<getInformacionSistemaDto>(responseInfoSistem.data);
-                /*guardar en el sistema dispositivo*/
+           
                 dispositivoCreateDto.NumeroSerie = responsenfoSistem.serial;
-                dispositivoCreateDto.ProyectoId = this.ProyectoId;
                 var dispositivo = await this._dispositivoQuery.Store(dispositivoCreateDto);
-                /*obtener area default*/
+                
                 Response responseArea = await this.getControlIdAreaDefault();
                 if (responseArea.estado)
                 {
-                    /*guardar area en el sistema*/
+                   
                     areaResponseDto responseApiAreas = JsonConvert.DeserializeObject<areaResponseDto>(responseArea.data);
                     await this.saveAreaSistema(responseApiAreas);
                 }
 
-                /*obtener puertas default*/
+              
                 var responsePortals = await this.getControlIdPortalsDefault();
                 if (responsePortals.estado)
                 {
                     ResponseportalsDto responseApiPortals = JsonConvert.DeserializeObject<ResponseportalsDto>(responsePortals.data);
                     await this.savePortalSistema(responseApiPortals, dispositivo.Id);
                 }
-                /*obtener acciones default*/
+                
                 var responseActions = await this.getAccionDefault();
                 if (responseActions.estado)
                 {
                     ResponseActionsDto responseApiActions = JsonConvert.DeserializeObject<ResponseActionsDto>(responseActions.data);
                     await this.saveActionSistema(responseApiActions);
                 }
-                /*obtener horario default*/
-                /*obtener control acceso default*/
+               
                 return RedirectToAction(nameof(Index));
             }
-            var aux = dispositivoCreateDto;
+            var aux = dispositivoCreateDto; */
             return View("~/Views/Dispositivo/Create.cshtml", dispositivoCreateDto);
         }
 
@@ -158,7 +157,7 @@ namespace ControlIDMvc.Controllers
             if (ModelState.IsValid)
             {
                 BodyLogin cuerpo = this._loginControlIdQuery.Login(probarConexionDto.Usuario, probarConexionDto.Password);
-                Response login = await this._httpClientService.LoginRun(probarConexionDto.Ip, this._apiRutas.ApiUrlLogin, cuerpo);
+                Response login = await this._httpClientService.LoginRun(probarConexionDto.Ip,this.port, this._apiRutas.ApiUrlLogin, cuerpo,"");
                 if (login.estado)
                 {
                     return Json(new
@@ -183,44 +182,96 @@ namespace ControlIDMvc.Controllers
             });
         }
 
+        /*
+            *CARGAR DESDE CONTROL ID 
+        */
+        /*login dispositivo*/
+        private async Task<bool> LoginControlId(string ip, int port, string user, string api, string password)
+        {
+            BodyLogin cuerpo = _loginControlIdQuery.Login(user, password);
+            Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
+            /*valido si es el login fue ok*/
+            this._areaControlIdQuery.Params(port, ip, user, password, login.data);
+            return login.estado;
+        }
+        /*------Obtener data dispositivo------*/
+        private async Task<bool> getDispostivo(string Ip, int Puerto, string Usuario, string ApiUrlLogin, string Password)
+        {
+            /*consutar por dispositivos*/
 
-        
+            var loginStatus = await this.LoginControlId(Ip, Puerto, Usuario, ApiUrlLogin, Password);
+            if (loginStatus)
+            {
+                //crear area
+                await this.ApiAreaStore();
+                //crear tarjetas
+                //await this.CardStoreControlId(persona);
+            }
+            return loginStatus;
+        }
+        private async Task<bool> ApiAreaStore()
+        {
+            var areas = await this._areaControlIdQuery.ShowAll();
+            if (areas.status)
+            {
+                List<AreaCreateDto> new_area = new List<AreaCreateDto>();
+                foreach (var area in areas.areaResponseDtos)
+                {
+                    new_area.Add(
+                        new AreaCreateDto
+                        {
+                            ControlId = area.id,
+                            ControlIdName = area.name,
+                            Descripcion = area.name,
+                            Nombre = area.name
+                        }
+                    );
+                }
+                var updateUsuario = await this._areaQuery.StoreAll(new_area);
+                return areas.status;
+            }
+            else
+            {
+                return areas.status;
+            }
 
-        /*Otros*/
+        }
+
+
+
         private async Task<Boolean> loginControlId()
         {
             BodyLogin cuerpo = this._loginControlIdQuery.Login(this.user, this.password);
-            Response login = await this._httpClientService.LoginRun(this.controlador, this._apiRutas.ApiUrlLogin, cuerpo);
-            this._httpClientService.session = login.data;
+            Response login = await this._httpClientService.LoginRun(this.controlador,this.port, this._apiRutas.ApiUrlLogin, cuerpo,"");
             return login.estado;
         }
 
-        /*Api controlador*/
-        private async Task<Response> getControlIdHardware(string ip, int port)
+     
+       /*  private async Task<Response> getControlIdHardware(string ip, int port)
         {
-            Response responseAddHorario = await this._httpClientService.RunBlank(controlador, this._apiRutas.ApiUrlGetInfoSistema);
+            Response responseAddHorario = await this._httpClientService.RunBlank(controlador,this.port, this._apiRutas.ApiUrlGetInfoSistema,"");
             return responseAddHorario;
         }
         private async Task<Response> getControlIdPortalsDefault()
         {
             BodyShowAllObject getPortals = this._portalsControlIdQuery.ShowPortals();
-            Response responseGetPortals = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlMostrar, getPortals);
+            Response responseGetPortals = await this._httpClientService.Run(controlador, this.port,this._apiRutas.ApiUrlMostrar, getPortals,"");
             return responseGetPortals;
         }
         private async Task<Response> getControlIdAreaDefault()
         {
             BodyShowAllObject getArea = this._areaControlIdQuery.MostrarTodoAreas();
-            Response responseGetArea = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlMostrar, getArea);
+            Response responseGetArea = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlMostrar, getArea,"");
             return responseGetArea;
         }
         private async Task<Response> getAccionDefault()
         {
             BodyShowAllObject getActions = this._actionsControlIdQuery.ShowActions();
-            Response responseGetActions = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlMostrar, getActions);
+            Response responseGetActions = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlMostrar, getActions ,"");
             return responseGetActions;
         }
         /*Sistema*/
-        private async Task<bool> saveAreaSistema(areaResponseDto areaResponseDto)
+        /* private async Task<bool> saveAreaSistema(areaResponseDto areaResponseDto)
         {
             foreach (var area in areaResponseDto.areas)
             {
@@ -253,7 +304,7 @@ namespace ControlIDMvc.Controllers
             }
             return true;
         }
-        private async Task<Boolean> saveActionSistema(ResponseActionsDto responseActionsDto)
+        private async Task<Boolean> saveActionSistema(ResponseActionsDto responseActionsDto) 
         {
             foreach (var action in responseActionsDto.actions)
             {
@@ -269,6 +320,6 @@ namespace ControlIDMvc.Controllers
                 await this._accionQuery.store(actionsDto);
             }
             return true;
-        }
+        } */
     }
 }

@@ -27,7 +27,7 @@ namespace ControlIDMvc.Controllers
         public string controlador = "192.168.88.129";
         public string user = "admin";
         public string password = "admin";
-
+        public int port { get; set; }
         private readonly DBContext _dbContext;
         private readonly LoginControlIdQuery _loginControlIdQuery;
         private readonly UsuarioRulesAccessControlIdQuery _usuarioRulesAccessControlIdQuery;
@@ -90,8 +90,7 @@ namespace ControlIDMvc.Controllers
         private async Task<Boolean> loginControlId()
         {
             BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
-            Response login = await this._httpClientService.LoginRun(this.controlador, this._apiRutas.ApiUrlLogin, cuerpo);
-            this._httpClientService.session = login.data;
+            Response login = await this._httpClientService.LoginRun(this.controlador,this.port, this._apiRutas.ApiUrlLogin, cuerpo,"");
             return login.estado;
         }
 
@@ -239,7 +238,7 @@ namespace ControlIDMvc.Controllers
             }
 
             var AddUsuarioReglaAcceso = this._horarioAccessRulesControlIdQuery.CreateTimeZonesAccessRules(usuarioAcceso);
-            Response responseAddHorario = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso);
+            Response responseAddHorario = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso,"");
             return responseAddHorario;
         }
 
@@ -259,7 +258,7 @@ namespace ControlIDMvc.Controllers
             }
 
             var AddUsuarioReglaAcceso = this._horarioAccessRulesControlIdQuery.CreateTimeZonesAccessRules(usuarioAcceso);
-            Response responseAddHorario = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso);
+            Response responseAddHorario = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso,"");
             return responseAddHorario;
         }
 
@@ -278,7 +277,7 @@ namespace ControlIDMvc.Controllers
             }
 
             var AddUsuarioReglaAcceso = this._usuarioRulesAccessControlIdQuery.CreateUserReglaAcceso(usuarioAcceso);
-            Response responseAddHorario = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso);
+            Response responseAddHorario = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso,"");
             return responseAddHorario;
         }
 
@@ -294,7 +293,7 @@ namespace ControlIDMvc.Controllers
                 }
             );
             var AddUsuarioReglaAcceso = this._accessRulesControlIdQuery.CreateAccessRules(accessRules);
-            Response responseAddHorario = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso);
+            Response responseAddHorario = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddUsuarioReglaAcceso,"");
             return responseAddHorario;
         }
         private async Task<Response> SavePortalAccessRulesControlId(List<Portal> portales, int access_rule_id)
@@ -312,7 +311,7 @@ namespace ControlIDMvc.Controllers
             }
 
             var AddPortalsAccessRules = this._portalsAccessRulesControlIdQuery.CreatePortalAccessRules(portalsAccessRulesCreateDto);
-            Response responseAddPortalsAccessRules = await this._httpClientService.Run(controlador, this._apiRutas.ApiUrlCreate, AddPortalsAccessRules);
+            Response responseAddPortalsAccessRules = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddPortalsAccessRules,"");
             return responseAddPortalsAccessRules;
         }
     }

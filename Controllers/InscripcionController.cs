@@ -1,7 +1,9 @@
 
+using ControlIDMvc.Dtos.Caja;
 using ControlIDMvc.Dtos.Inscripcion;
 using ControlIDMvc.Dtos.Paquete;
 using ControlIDMvc.Dtos.Utils;
+using ControlIDMvc.Entities;
 using ControlIDMvc.Querys;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,20 +12,22 @@ namespace ControlIDMvc.Controllers
     [Route("inscripcion")]
     public class InscripcionController : Controller
     {
-
         private readonly PaqueteQuery _paqueteQuery;
         private readonly PersonaQuery _personaQuery;
         private readonly InscripcionQuery _inscripcionQuery;
+        private readonly CajaQuery _cajaQuery;
 
         public InscripcionController(
             PaqueteQuery PaqueteQuery,
             PersonaQuery personaQuery,
-            InscripcionQuery inscripcionQuery
+            InscripcionQuery inscripcionQuery,
+            CajaQuery cajaQuery
         )
         {
             this._paqueteQuery = PaqueteQuery;
             this._personaQuery = personaQuery;
             this._inscripcionQuery = inscripcionQuery;
+            this._cajaQuery = cajaQuery;
         }
         [HttpGet]
         public ActionResult Index(string message)
@@ -52,6 +56,9 @@ namespace ControlIDMvc.Controllers
             ViewData["paquetes"] = paquetes;
             var personas = await this._personaQuery.GetAll();
             ViewData["personas"] = personas;
+            DateTime fechaRecibo = DateTime.Now;
+            fechaRecibo.ToString("yyyyMMdd");
+            ViewData["numeroRecibo"] = fechaRecibo.ToString("MMddHHmmss");
             return View("~/Views/Inscripcion/Create.cshtml");
         }
 
@@ -69,6 +76,7 @@ namespace ControlIDMvc.Controllers
                 return View("~/Views/Inscripcion/Create.cshtml");
             }
             var inscripcion = await this._inscripcionQuery.Store(InscripcionCreateDto);
+            var caja=await this.addCash(inscripcion);
             return RedirectToAction("PreviewRecibo", new { id = 1 });
         }
 
@@ -96,7 +104,7 @@ namespace ControlIDMvc.Controllers
             var inscripcion = await this._inscripcionQuery.Edit(id);
             InscripcionUpdateDto inscripcionUpdateDto = new InscripcionUpdateDto
             {
-                Id=inscripcion.Id,
+                Id = inscripcion.Id,
                 Nombres = inscripcion.Persona.Nombre,
                 Apellidos = inscripcion.Persona.Apellido,
                 CI = inscripcion.Persona.Ci,
@@ -115,7 +123,7 @@ namespace ControlIDMvc.Controllers
         [HttpPost("update/{id:int}")]
         public async Task<ActionResult> Update(int id, InscripcionCreateDto inscripcionCreateDto)
         {
-            var inscripcion = await this._inscripcionQuery.Update(inscripcionCreateDto,id);
+            var inscripcion = await this._inscripcionQuery.Update(inscripcionCreateDto, id);
             return RedirectToAction("PreviewRecibo", new { id = 1 });
         }
 
@@ -160,6 +168,30 @@ namespace ControlIDMvc.Controllers
 
             }
             return paquetes;
+        }
+        /*
+        * Modelo de negocio
+        */
+          private async Task<bool> addCash(InscripcionDto inscripcionDto)
+        {
+            var egresoCaja = new CajaCreateDto
+            {
+                Concepto = $"pago inscripcion",
+                Fecha = inscripcionDto.FechaCreacion,
+                NumeroRecibo = inscripcionDto.NumeroRecibo,
+                Persona = "cliente x",
+                Tipo = "ingreso",
+                Valor = inscripcionDto.Costo
+            };
+            var caja = await this._cajaQuery.Store(egresoCaja);
+            if (caja != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

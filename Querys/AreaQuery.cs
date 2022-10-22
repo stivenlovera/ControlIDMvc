@@ -66,13 +66,19 @@ namespace ControlIDMvc.Querys
                 data = personas
             };
         }
-        public async Task<AreaDto> Store(AreaCreateDto areaCreateDto)
+        public async Task<Area> Store(AreaCreateDto areaCreateDto)
         {
             var area = _mapper.Map<Area>(areaCreateDto);
             await _dbContext.AddAsync(area);
             await _dbContext.SaveChangesAsync();
-            var resultado = _mapper.Map<AreaDto>(area);
-            return resultado;
+            return area;
+        }
+        public async Task<List<Area>> StoreAll(List<AreaCreateDto> areaCreateDtos)
+        {
+            var area = _mapper.Map<List<Area>>(areaCreateDtos);
+            await _dbContext.AddRangeAsync(area);
+            await _dbContext.SaveChangesAsync();
+            return area;
         }
         public async Task<List<Area>> GetAllByID(List<int> areas_id)
         {
@@ -80,13 +86,11 @@ namespace ControlIDMvc.Querys
             return areas;
         }
         //revisar esta funcion
-        public async Task<AreaDto> Update(AreaCreateDto areaCreateDto,int portal_id)
+        public async Task<Area> Update(Area area)
         {
-            var area = _mapper.Map<Area>(areaCreateDto);
-            await _dbContext.Area.AddAsync(area);
+            _dbContext.Update(area);
             await _dbContext.SaveChangesAsync();
-            var resultado = _mapper.Map<AreaDto>(area);
-            return resultado;
+            return area;
         }
     }
 }

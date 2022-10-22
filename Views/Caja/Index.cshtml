@@ -1,0 +1,211 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Resume de caja";
+    var usuarios = ViewData["usuarios"] as List<ControlIDMvc.Dtos.Usuario.UsuarioDto>;
+}
+@section Estilos {
+<link href="~/assets/css/custom.min.css" rel="stylesheet" />
+}
+
+<div class="right_col" role="main">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Resume de Caja</h3>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            @if (ViewData["message"] != null)
+            {
+                <div class="alert alert-success alert-dismissible " role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">×</span>
+                    </button>
+                    @ViewData["message"]
+                </div>
+            }
+            <div class="x_panel">
+                <div class="row">
+                    <div class="tile h2 " style="margin: 10px 0;"></div>
+                    <div class="col-md-3 col-sm-3  tile">
+                        <span>Total Egreso</span>
+                        <h2 id="total_egreso"></h2>
+                    </div>
+                    <div class="col-md-3 col-sm-3  tile">
+                        <span>Total Ingreso</span>
+                        <h2 id="total_ingreso"></h2>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3 tile">
+                        <span>Saldo</span>
+                        <h2 id="total"></h2>
+                    </div>
+                    @* <div class="col-md-3 col-sm-3 tile">
+                        <span>Total Otros</span>
+                        <h2>00,00</h2>
+                        </div> *@
+                </div>
+            </div>
+            <div class="x_title">
+                <h2>Resumen de caja</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card-box table-responsive">
+                            <div class="buttons">
+                                <!-- Standard button -->
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="last-name"><span class="required">Fecha</span>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input type="date" id="last-name" name="last-name" required="required"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="last-name"><span class="required">Usuario</span>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <select class="form-control" id="usuario" name="usuario">
+                                                <option value="">Seleccione un usuario</option>
+                                                @foreach (var usuario in usuarios)
+                                                {
+                                                    <option value="@usuario.Id">@usuario.User</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="last-name"><span class="required">Tipo</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            <select class="form-control" id="tipo" name="tipo" style="width: 100%;">
+                                                <option value="">Selecione Tipo</option>
+                                                <option value="egreso">Egreso</option>
+                                                <option value="ingreso">Ingreso</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="datatable_personas" class="table table-striped table-bordered bulk_action"
+                                style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Nro recibo</th>
+                                        <th>Usuario</th>
+                                        <th>Entregado a </th>
+                                        <th>Consepto</th>
+                                        <th>Tipo</th>
+                                        <th>Egreso</th>
+                                        <th>Ingreso</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+@section Scripts {
+<!-- Datatables -->
+
+<script src="~/assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/assets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/assets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="~/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+<script>
+    table = $("#datatable_personas").DataTable({
+        // ServerSide Setups
+        processing: true,
+        serverSide: true,
+        // Paging Setups
+        paging: true,
+        filter: true,
+        order: [],
+        ajax: {
+            url: `caja/data-table?tipo=${$('#tipo').val()}`,
+            type: "POST",
+
+        },
+        columns: [
+
+            {
+                name: "fecha",
+                data: "fecha"
+            },
+            {
+                name: "numeroRecibo",
+                data: "numeroRecibo"
+            },
+            {
+                name: "usuario",
+                data: "usuario"
+            },
+            {
+                name: "entregado",
+                data: "entregado"
+            },
+
+            {
+                name: "concepto",
+                data: "concepto"
+            },
+            {
+                name: "tipo",
+                data: "tipo"
+            },
+            {
+                name: "egreso",
+                data: "egreso"
+            },
+            {
+                name: "ingreso",
+                data: "ingreso"
+            },
+            {
+                name: "id",
+                data: "id",
+                render: function (data, type, row) {
+                    return `
+                    <button class="btn btn-danger btn-xs delete" data-id="${data}" role="button"><i class="fa fa-trash" title="Eliminar"></i></button>
+                    `;
+                }
+            }
+        ]
+    });
+    $('#tipo').change(function() {
+            table.ajax.url(
+                `caja/data-table?tipo=${$('#tipo').val()}`
+            ).load();
+            recarga_totales();
+            // = table.rows().data().toArray();
+        });
+</script>
+
+<script src="~/js/caja/totales.js"></script>
+}

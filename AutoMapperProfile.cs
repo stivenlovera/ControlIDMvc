@@ -3,7 +3,9 @@ using ControlIDMvc.Dtos;
 using ControlIDMvc.Dtos.Accion;
 using ControlIDMvc.Dtos.Area;
 using ControlIDMvc.Dtos.AreaReglaAccesoCreateDto;
+using ControlIDMvc.Dtos.Caja;
 using ControlIDMvc.Dtos.Dispositivo;
+using ControlIDMvc.Dtos.Egreso;
 using ControlIDMvc.Dtos.HorarioReglaAcceso;
 using ControlIDMvc.Dtos.Inscripcion;
 using ControlIDMvc.Dtos.Paquete;
@@ -73,7 +75,12 @@ namespace ControlIDMvc
             
             CreateMap<UsuarioCreateDto, Usuario>();
             CreateMap<Usuario, UsuarioDto>();
-
+            
+            CreateMap<EgresoCreateDto, Egreso>();
+            CreateMap<Egreso, UsuarioDto>();
+            
+            CreateMap<CajaCreateDto, Caja>();
+            CreateMap<Caja, CajaDto>();
 
         }
 

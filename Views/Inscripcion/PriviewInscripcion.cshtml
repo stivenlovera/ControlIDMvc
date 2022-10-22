@@ -1,6 +1,13 @@
 @{
     ViewData["Title"] = "PriviewInscripcion";
 }
+
+<style>
+    .pdfobject-container {
+        height: 30rem;
+        border: 1rem solid rgba(0, 0, 0, .1);
+    }
+</style>
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
@@ -29,7 +36,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="ratio w-100">
-                                        <iframe src="https://www.dspguide.com/CH1.PDF" width="100%"></iframe>
+                                        <div id="factura"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 w-100">
@@ -38,7 +45,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="ratio w-100">
-                                        <iframe src="https://www.dspguide.com/CH1.PDF" width="100%"></iframe>
+                                        <div id="recibo"></div>
                                     </div>
                                 </div>
                             </div>
@@ -58,3 +65,8 @@
         </div>
     </div>
 </div>
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/pdfobject@2.2.8/pdfobject.min.js"></script>
+<script>PDFObject.embed("https://www.dspguide.com/CH1.PDF", "#factura");</script>
+<script>PDFObject.embed("https://www.dspguide.com/CH1.PDF", "#recibo");</script>
+}

@@ -107,6 +107,16 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="item form-group">
+                                            <label class="col-form-label col-md-3 col-sm-3" for="NumeroRecibo">NumeroRecibo<span
+                                                    class="required">*</span>
+                                            </label>
+                                            <div class="col-md-9 col-sm-9">
+                                                <input type="text" name="NumeroRecibo" id="NumeroRecibo" class="form-control"
+                                                    placeholder="" value='@ViewData["numeroRecibo"]' readonly>
+                                                <span asp-validation-for="NumeroRecibo" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group">
                                             <label class="col-form-label col-md-3 col-sm-3" for="Costo">Costo<span
                                                     class="required">*</span>
                                             </label>

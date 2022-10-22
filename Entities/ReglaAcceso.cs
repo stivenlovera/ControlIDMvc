@@ -14,7 +14,6 @@ namespace ControlIDMvc.Entities
         public int ControlIdType { get; set; }
         public int ControlIdPriority { get; set; }
         public string Descripcion { get; set; }
-        public List<Persona> Personas { get; set; }
         public List<PortalReglaAcceso> PortalReglaAccesos { get; set; }
         public List<AreaReglaAcceso> AreaSReglaAccesos { get; set; }
     }

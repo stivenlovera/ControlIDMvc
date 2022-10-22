@@ -304,8 +304,7 @@ INSERT INTO
         `Sincronizacion`,
         `ControlId`,
         `ControlIdBegin_time`,
-        `ControlIdEnd_time`,
-        `ReglaAccesoId`
+        `ControlIdEnd_time`
     )
 VALUES (
         '8963497',
@@ -323,8 +322,7 @@ VALUES (
         '',
         '100010',
         '0',
-        '0',
-        '1'
+        '0'
     );
 
 INSERT INTO

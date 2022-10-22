@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221015191847_init")]
+    [Migration("20221021000440_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,6 +127,35 @@ namespace ControlIDMvc.Migrations
                     b.ToTable("AreaReglaAcceso");
                 });
 
+            modelBuilder.Entity("ControlIDMvc.Entities.Caja", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Concepto")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NumeroRecibo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Persona")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Tipo")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Caja");
+                });
+
             modelBuilder.Entity("ControlIDMvc.Entities.Departamento", b =>
                 {
                     b.Property<int>("Id")
@@ -214,9 +243,6 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ProyectoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Puerto")
                         .HasColumnType("int");
 
@@ -225,9 +251,38 @@ namespace ControlIDMvc.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProyectoId");
-
                     b.ToTable("Dispositivo");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.Egreso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Concepto")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<string>("NumeroRecibo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Persona")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Egreso");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Grupo", b =>
@@ -381,6 +436,9 @@ namespace ControlIDMvc.Migrations
                     b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("NumeroRecibo")
+                        .HasColumnType("longtext");
+
                     b.Property<int>("PaqueteId")
                         .HasColumnType("int");
 
@@ -484,15 +542,10 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Observaciones")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ReglaAccesoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Sincronizacion")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ReglaAccesoId");
 
                     b.ToTable("Persona");
                 });
@@ -804,15 +857,15 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Horario");
                 });
 
-            modelBuilder.Entity("ControlIDMvc.Entities.Dispositivo", b =>
+            modelBuilder.Entity("ControlIDMvc.Entities.Egreso", b =>
                 {
-                    b.HasOne("ControlIDMvc.Entities.Proyecto", "proyecto")
-                        .WithMany("Dispositivos")
-                        .HasForeignKey("ProyectoId")
+                    b.HasOne("ControlIDMvc.Entities.Usuario", "Usuario")
+                        .WithMany("Egresos")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("proyecto");
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Grupo", b =>
@@ -888,13 +941,6 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Paquete");
 
                     b.Navigation("Persona");
-                });
-
-            modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
-                {
-                    b.HasOne("ControlIDMvc.Entities.ReglaAcceso", null)
-                        .WithMany("Personas")
-                        .HasForeignKey("ReglaAccesoId");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.PersonaReglasAcceso", b =>
@@ -1058,16 +1104,9 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("PortalReglaAcceso");
                 });
 
-            modelBuilder.Entity("ControlIDMvc.Entities.Proyecto", b =>
-                {
-                    b.Navigation("Dispositivos");
-                });
-
             modelBuilder.Entity("ControlIDMvc.Entities.ReglaAcceso", b =>
                 {
                     b.Navigation("AreaSReglaAccesos");
-
-                    b.Navigation("Personas");
 
                     b.Navigation("PortalReglaAccesos");
                 });
@@ -1081,6 +1120,8 @@ namespace ControlIDMvc.Migrations
 
             modelBuilder.Entity("ControlIDMvc.Entities.Usuario", b =>
                 {
+                    b.Navigation("Egresos");
+
                     b.Navigation("RolUsuarios");
                 });
 #pragma warning restore 612, 618

@@ -29,9 +29,21 @@ namespace ControlIDMvc.Querys
                 return false;
             }
         }
+        public async Task<Tarjeta> UpdateOne(Tarjeta tarjeta)
+        {
+            _dbContext.Update(tarjeta);
+            await _dbContext.SaveChangesAsync();
+            return tarjeta;
+        }
+         public async Task<Tarjeta>GetOne(Tarjeta tarjeta)
+        {
+            _dbContext.Update(tarjeta);
+            await _dbContext.SaveChangesAsync();
+            return tarjeta;
+        }
         public async Task<List<TarjetaDto>> GetAllByPersona(int personaId)
         {
-            var listaTarjetas=await _dbContext.Tarjeta.Where(tarjeta=>tarjeta.PersonaId==personaId).ToListAsync();
+            var listaTarjetas = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.PersonaId == personaId).ToListAsync();
             var resultado = _mapper.Map<List<TarjetaDto>>(listaTarjetas);
             return resultado;
         }

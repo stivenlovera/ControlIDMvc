@@ -37,6 +37,7 @@ namespace ControlIDMvc.Querys
                         {
                             Id = i.Id,
                             PaqueteNombre = i.Paquete.Nombre,
+                            numeroRecibo=i.NumeroRecibo,
                             PersonaNombre = i.Persona.Nombre,
                             PersonaCi = i.Persona.Ci,
                             PaqueteId = i.PaqueteId,
