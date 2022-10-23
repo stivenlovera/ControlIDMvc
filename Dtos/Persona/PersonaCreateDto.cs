@@ -24,7 +24,7 @@ namespace ControlIDMvc.Dtos.Persona
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
         public string Sincronizacion { get; set; }
-        public string ControlId { get; set; }
+        public int ControlId { get; set; }
         public string ControlIdPassword { get; set; }
         public string ControlIdName { get; set; }
         public string ControlIdSalt { get; set; }

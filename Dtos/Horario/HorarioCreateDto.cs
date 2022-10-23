@@ -8,7 +8,7 @@ namespace ControlIDMvc.Dtos.Horario
         [Required(ErrorMessage = "Nombre requerido")]
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public string ControlId { get; set; }
+        public int ControlId { get; set; }
         public List<string> Dias { get; set; }
         public List<string> DiasControlId { get; set; }
         public List<string> Hora_inicio { get; set; }

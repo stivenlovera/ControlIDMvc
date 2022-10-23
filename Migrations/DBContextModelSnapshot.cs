@@ -319,8 +319,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
@@ -504,8 +504,8 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Ci")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ControlIdBegin_time")
                         .HasColumnType("int");
@@ -581,8 +581,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ControlIdAreaFromId")
                         .HasColumnType("int");
@@ -677,8 +677,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ControlIdName")
                         .HasColumnType("longtext");
@@ -765,8 +765,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");

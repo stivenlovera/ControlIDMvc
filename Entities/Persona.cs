@@ -19,7 +19,7 @@ namespace ControlIDMvc.Entities
         public string ControlIdSalt { get; set; }
         public string ControlIdRegistration { get; set; }
         public string Sincronizacion { get; set; }
-        public string ControlId { get; set; }
+        public int ControlId { get; set; }
         public int ControlIdBegin_time { get; set; }
         public int ControlIdEnd_time { get; set; }
         public List<Tarjeta> card { get; set; }

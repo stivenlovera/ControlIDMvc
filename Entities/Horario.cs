@@ -8,7 +8,7 @@ namespace ControlIDMvc.Entities
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public string ControlId { get; set; }
+        public int ControlId { get; set; }
         public List<Dia> Dias { get; set; }
         public List<HorarioReglaAcceso> HorarioReglaAccesos { get; set; }
     }

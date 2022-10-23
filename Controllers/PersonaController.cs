@@ -314,7 +314,7 @@ public class PersonaController : Controller
         var addUsuario = await this._usuarioControlIdQuery.CreateOneUser(persona);
         if (addUsuario.status)
         {
-            persona.ControlId = addUsuario.ids[0].ToString();
+            persona.ControlId = addUsuario.ids[0];
             var updateUsuario = await this._personaQuery.UpdateOne(persona);
         }
         return addUsuario.status;
@@ -344,7 +344,7 @@ public class PersonaController : Controller
                 var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
                 if (createCard.status)
                 {
-                    card.ControlId = createCard.ids[0].ToString();
+                    card.ControlId = createCard.ids[0];
                     var updateCard = await this._tarjetaQuery.UpdateOne(card);
                 }
             }
@@ -385,7 +385,6 @@ public class PersonaController : Controller
             {
                 var updateUsuario = await this._personaQuery.UpdateOne(persona);
             }
-
         }
         return addUsuario.status;
     }
@@ -401,7 +400,7 @@ public class PersonaController : Controller
                 var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
                 if (createCard.status)
                 {
-                    card.ControlId = createCard.ids[0].ToString();
+                    card.ControlId = createCard.ids[0];
                     var updateCard = await this._tarjetaQuery.UpdateOne(card);
                 }
             }
@@ -452,7 +451,7 @@ public class PersonaController : Controller
                 var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
                 if (createCard.status)
                 {
-                    card.ControlId = createCard.ids[0].ToString();
+                    card.ControlId = createCard.ids[0];
                     var updateCard = await this._tarjetaQuery.UpdateOne(card);
                 }
             }

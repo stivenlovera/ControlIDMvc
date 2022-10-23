@@ -7,7 +7,7 @@ namespace ControlIDMvc.Entities
         public int codigo { get; set; }
         public int PersonaId { get; set; }
         public Persona Persona { get; set; }
-        public string ControlId { get; set; }
+        public int ControlId { get; set; }
         public string Sincronizacion { get; set; }
     }
 }

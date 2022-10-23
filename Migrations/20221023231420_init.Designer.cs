@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221021000440_init")]
+    [Migration("20221023231420_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -321,8 +321,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
@@ -506,8 +506,8 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Ci")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ControlIdBegin_time")
                         .HasColumnType("int");
@@ -583,8 +583,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ControlIdAreaFromId")
                         .HasColumnType("int");
@@ -679,8 +679,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ControlIdName")
                         .HasColumnType("longtext");
@@ -767,8 +767,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
