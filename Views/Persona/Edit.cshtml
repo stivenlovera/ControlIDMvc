@@ -1,4 +1,4 @@
-@model ControlIDMvc.Entities.Persona
+@model ControlIDMvc.Dtos.Persona.PersonaDto
 @{
     ViewData["Title"] = "Editar Persona";
 }
@@ -26,7 +26,7 @@
                     </div>
                     <div class="x_content">
 
-                        <form action="/Persona/Update" method="post" enctype="multipart/form-data">
+                        <form action="/Persona/Update/@Model.Id" method="post" enctype="multipart/form-data">
                             @Html.AntiForgeryToken()
                             <div class="col-md-3 col-sm-3 profile_left">
                                 <!-- foto -->
@@ -126,6 +126,7 @@
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="ci" name="ci" value="@Model.Ci"
                                                                 class="form-control ">
+                                                                <span class="text-danger">@ViewData["Error"]</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,7 +159,7 @@
                                                             for="contraseña">Contraseña <span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
-                                                            <input type="text" id="contraseña" name="contraseña" required="contraseña" value="@Model.ControlIdPassword"
+                                                            <input type="text" id="ControlIdPassword" name="ControlIdPassword" value="@Model.ControlIdPassword"
                                                                 class="form-control ">
                                                         </div>
                                                     </div>
@@ -322,7 +323,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                   @foreach (var card in Model.card)
+                                                   @* @foreach (var card in Model.card)
                                                    {
                                                      <tr>
                                                         <td>@card.area,@card.codigo</td>
@@ -334,7 +335,7 @@
                                                             </button>
                                                         </td>
                                                     </tr>
-                                                   }
+                                                   } *@
                                                 </tbody>
                                             </table>
                                             <!-- end user projects -->

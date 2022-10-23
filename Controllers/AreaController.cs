@@ -81,23 +81,24 @@ namespace ControlIDMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                /* var puertas = await this._portalQuery.GetAll();
-                ViewData["puertas"] = puertas; */
-                /*insertar*/
-                var area = await this._areaQuery.Store(areaCreateDto);
-                await this.StoreArea(area);
-                return RedirectToAction(nameof(Index));
-            }
+                if (await this._areaQuery.ValidarNombre(areaCreateDto.Nombre))
+                {
+                    var area = await this._areaQuery.Store(areaCreateDto);
+                    await this.StoreArea(area);
+                    return RedirectToAction(nameof(Index));
+                }
 
+            }
             return View("~/Views/Area/Create.cshtml", areaCreateDto);
         }
 
-        [HttpGet("edit")]
-        public async Task<ActionResult> Edit()
+        [HttpGet("edit/{id:int}")]
+        public async Task<ActionResult> Edit(int id)
         {
             var puertas = await this._portalQuery.GetAll();
             ViewData["puertas"] = puertas;
-            return View("~/Views/Area/Create.cshtml");
+            var area = await this._areaQuery.GetOne(id);
+            return View("~/Views/Area/Edit.cshtml", area);
         }
 
         [HttpPut("edit")]

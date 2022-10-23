@@ -22,7 +22,7 @@ var personas_disponibles = $("#datatable").DataTable({
             data: "id",
             render: function (data, type, row) {
                 return `
-                <a class="btn btn-success btn-xs" href="@Url.Content("~/persona/editar")/${data}" role="button"><i class="fa fa-pencil"></i></a>
+                <a class="btn btn-success btn-xs" href="area/edit/${data}" role="button"><i class="fa fa-pencil"></i></a>
                 <button class="btn btn-danger btn-xs" data-id="${data}" role="button"><i class="fa fa-trash"></i></button>
                 `;
             }

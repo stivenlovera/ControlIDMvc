@@ -44,7 +44,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunCreate(body);
             return response;
         }
-        public BodyShowObject MostrarTodoCards()
+        public BodyShowObject ShowAll()
         {
             BodyShowObject body = new BodyShowObject()
             {
@@ -52,7 +52,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             };
             return body;
         }
-        public BodyShowObject MostrarUnoCard(int numero)
+        public BodyShowObject Show(int numero)
         {
             BodyShowObject body = new BodyShowObject()
             {

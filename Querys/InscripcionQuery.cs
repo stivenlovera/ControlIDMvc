@@ -104,7 +104,6 @@ namespace ControlIDMvc.Querys
                 return true;
             }
             return false;
-
         }
     }
 }

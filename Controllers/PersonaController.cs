@@ -13,6 +13,7 @@ using ControlIDMvc.Dtos.Tarjeta;
 using ControlIDMvc.Dtos.Persona;
 using Microsoft.AspNetCore.Authorization;
 using ControlIDMvc.Entities;
+using System.Web;
 
 namespace ControlIDMvc.Controllers;
 
@@ -26,6 +27,7 @@ public class PersonaController : Controller
     public int port { get; set; }
     private readonly ILogger<HomeController> _logger;
     private readonly HttpClientService _httpClientService;
+    private readonly IWebHostEnvironment _webHostEnvironment;
     private PersonaQuery _personaQuery;
     private readonly TarjetaQuery _tarjetaQuery;
     private readonly LoginControlIdQuery _loginControlIdQuery;
@@ -36,6 +38,7 @@ public class PersonaController : Controller
     public PersonaController(
         ILogger<HomeController> logger,
         HttpClientService httpClientService,
+        IWebHostEnvironment webHostEnvironment,
         PersonaQuery personaQuery,
         TarjetaQuery tarjetaQuery,
         LoginControlIdQuery loginControlIdQuery,
@@ -45,7 +48,7 @@ public class PersonaController : Controller
         )
     {
         this._httpClientService = httpClientService;
-
+        this._webHostEnvironment = webHostEnvironment;
         this._personaQuery = personaQuery;
         this._tarjetaQuery = tarjetaQuery;
 
@@ -85,7 +88,18 @@ public class PersonaController : Controller
         {
             if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
             {
+                //save img
+                if (personaCreateDto.perfil != null)
+                {
+                    string folder = "images/perfiles";
+                    folder += Guid.NewGuid().ToString() + personaCreateDto.perfil.FileName;
+                    string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                    await personaCreateDto.perfil.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+
+                }
                 /*insertar*/
+                personaCreateDto.ControlIdSalt = "";
+                personaCreateDto.ControlIdRegistration = "";
                 var persona = await this._personaQuery.Store(personaCreateDto);
                 if (personaCreateDto.Area != null)
                 {
@@ -104,7 +118,7 @@ public class PersonaController : Controller
                         index++;
                     }
                 }
-                await this.SaveDispostivo(persona);
+                await this.SaveDispositivo(persona);
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -134,27 +148,77 @@ public class PersonaController : Controller
         {
             return NotFound();
         }
-        return View("~/Views/Persona/Edit.cshtml", persona);
+        else
+        {
+            var editPersona = new PersonaDto
+            {
+                Id = persona.Id,
+                Nombre = persona.Nombre,
+                Apellido = persona.Apellido,
+                Area = null,
+                Celular = persona.Celular,
+                Ci = persona.Ci,
+                Codigo = null,
+                Dirrecion = persona.Dirrecion,
+                Email = persona.Email,
+                Fecha_nac = persona.Fecha_nac,
+                Observaciones = persona.Observaciones,
+                ControlIdPassword = persona.ControlIdPassword
+            };
+            return View("~/Views/Persona/Edit.cshtml", editPersona);
+        }
     }
 
-    [HttpGet("update/{id:int}")]
-    public async Task<ActionResult> Update(int id, PersonaUpdateDto personaCreateDto)
+    [HttpPost("update/{id:int}")]
+    public async Task<ActionResult> Update(int id, PersonaDto personaDto)
     {
         if (ModelState.IsValid)
         {
-            if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
+            if (await this._personaQuery.ValidateExistExceptoId(personaDto.Ci, id))
             {
-
+                var personaUpdate = new Persona
+                {
+                    Id = id,
+                    Celular = personaDto.Celular,
+                    Apellido = personaDto.Apellido,
+                    Ci = personaDto.Ci,
+                    Nombre = personaDto.Nombre,
+                    Email = personaDto.Email,
+                    Observaciones = personaDto.Observaciones,
+                    Dirrecion = personaDto.Dirrecion,
+                    Fecha_nac = personaDto.Fecha_nac,
+                    ControlIdPassword = personaDto.ControlIdPassword,
+                };
+                var persona = await this._personaQuery.UpdateOne(personaUpdate);
+                await this.UpdateDispositivo(persona);
+                return RedirectToAction(nameof(Index));
             }
             else
             {
                 ViewData["Error"] = "CI ya fue registrado";
-                return View("~/Views/Persona/Edit.cshtml", personaCreateDto);
+                return View("~/Views/Persona/Edit.cshtml", personaDto);
             }
         }
-        return View("~/Views/Persona/Edit.cshtml", personaCreateDto);
+        else
+        {
+            return View("~/Views/Persona/Edit.cshtml", personaDto);
+        }
     }
-
+    [HttpDelete("delete/{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        if (ModelState.IsValid)
+        {
+            var persona = await this._personaQuery.GetOne(id);
+            var delete = await this._personaQuery.Delete(persona.Id);
+            await this.DeleteDispositivo(persona);
+        }
+        return Json(new
+        {
+            status = "success",
+            message = "Eliminado correctamente",
+        });
+    }
     [HttpPost("buscar")]
     public async Task<ActionResult> buscar(PersonaCreateDto personaCreateDto)
     {
@@ -222,7 +286,7 @@ public class PersonaController : Controller
         return login.estado;
     }
     /*------USUARIO------*/
-    private async Task<bool> SaveDispostivo(Persona persona)
+    private async Task<bool> SaveDispositivo(Persona persona)
     {
         /*consutar por dispositivos*/
         var dispositivos = await this._dispositivoQuery.GetAll();
@@ -233,8 +297,11 @@ public class PersonaController : Controller
             {
                 //crear usuario
                 await this.UserStoreControlId(persona);
-                //crear tarjetas
-                await this.CardStoreControlId(persona);
+                //crear tarjetas si hay 
+                if (persona.card != null)
+                {
+                    await this.CardStoreControlId(persona);
+                }
             }
         }
         return true;
@@ -264,6 +331,114 @@ public class PersonaController : Controller
         return card;
     }
     private async Task<bool> CardStoreControlId(Persona persona)
+    {
+        List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
+        if (persona.card.Count > 0)
+        {
+            foreach (var card in persona.card)
+            {
+                var newCard = this.ConvertCard(Convert.ToInt32(persona.ControlId), card.area.ToString(), card.codigo.ToString());
+                cardsCreateDto.Add(newCard);
+                var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
+                if (createCard.status)
+                {
+                    card.ControlId = createCard.ids[0].ToString();
+                    var updateCard = await this._tarjetaQuery.UpdateOne(card);
+                }
+            }
+        }
+        return true;
+    }
+
+    /*
+       *UPDATE DATA CONTROL ID 
+   */
+    private async Task<bool> UpdateDispositivo(Persona persona)
+    {
+        /*consutar por dispositivos*/
+        var dispositivos = await this._dispositivoQuery.GetAll();
+        foreach (var dispositivo in dispositivos)
+        {
+            var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._ApiRutas.ApiUrlLogin, dispositivo.Password);
+            if (loginStatus)
+            {
+                //crear usuario
+                await this.UserUpdateControlId(persona);
+                //crear tarjetas si hay 
+                if (persona.card != null)
+                {
+                    //await this.CardUpdateControlId(persona);
+                }
+            }
+        }
+        return true;
+    }
+    private async Task<bool> UserUpdateControlId(Persona persona)
+    {
+        var addUsuario = await this._usuarioControlIdQuery.Update(persona);
+        if (addUsuario.status)
+        {
+            //si el cambio due exitoso
+            if (addUsuario.changes == 1)
+            {
+                var updateUsuario = await this._personaQuery.UpdateOne(persona);
+            }
+
+        }
+        return addUsuario.status;
+    }
+    private async Task<bool> CardUpdateControlId(Persona persona)
+    {
+        List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
+        if (persona.card.Count > 0)
+        {
+            foreach (var card in persona.card)
+            {
+                var newCard = this.ConvertCard(Convert.ToInt32(persona.ControlId), card.area.ToString(), card.codigo.ToString());
+                cardsCreateDto.Add(newCard);
+                var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
+                if (createCard.status)
+                {
+                    card.ControlId = createCard.ids[0].ToString();
+                    var updateCard = await this._tarjetaQuery.UpdateOne(card);
+                }
+            }
+        }
+        return true;
+    }
+    /*
+       *DELETE DATA CONTROL ID 
+    */
+    private async Task<bool> DeleteDispositivo(Persona persona)
+    {
+        /*consutar por dispositivos*/
+        var dispositivos = await this._dispositivoQuery.GetAll();
+        foreach (var dispositivo in dispositivos)
+        {
+            var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._ApiRutas.ApiUrlLogin, dispositivo.Password);
+            if (loginStatus)
+            {
+                //crear usuario
+                await this.UserDeleteControlId(persona);
+                //crear tarjetas si hay 
+                if (persona.card != null)
+                {
+                    //await this.CardUpdateControlId(persona);
+                }
+            }
+        }
+        return true;
+    }
+    private async Task<bool> UserDeleteControlId(Persona persona)
+    {
+        var addUsuario = await this._usuarioControlIdQuery.Delete(persona);
+        if (addUsuario.status)
+        {
+            //si el eliminacion due exitoso
+        }
+        return addUsuario.status;
+    }
+    private async Task<bool> CardDeleteControlId(Persona persona)
     {
         List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
         if (persona.card.Count > 0)

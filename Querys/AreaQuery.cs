@@ -66,12 +66,26 @@ namespace ControlIDMvc.Querys
                 data = personas
             };
         }
+        public async Task<bool> ValidarNombre(string nombre)
+        {
+            var persona = await _dbContext.Area.Where(a => a.Nombre == nombre).FirstOrDefaultAsync();
+
+            if (persona == null)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task<Area> Store(AreaCreateDto areaCreateDto)
         {
             var area = _mapper.Map<Area>(areaCreateDto);
             await _dbContext.AddAsync(area);
             await _dbContext.SaveChangesAsync();
             return area;
+        }
+        public async Task<Area> GetOne(int id)
+        {
+            return await _dbContext.Area.FindAsync(id);
         }
         public async Task<List<Area>> StoreAll(List<AreaCreateDto> areaCreateDtos)
         {

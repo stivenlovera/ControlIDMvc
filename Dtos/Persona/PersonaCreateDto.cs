@@ -3,7 +3,7 @@ using ControlIDMvc.Dtos.Tarjeta;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace ControlIDMvc.Dtos
+namespace ControlIDMvc.Dtos.Persona
 {
     [Index(nameof(Ci), IsUnique = true)]
     public class PersonaCreateDto
@@ -32,5 +32,6 @@ namespace ControlIDMvc.Dtos
         [JsonProperty(PropertyName = "cards")]
         public List<string> Area { get; set; }
         public List<string> Codigo { get; set; }
+        public  IFormFile perfil { get; set; }
     }
 }

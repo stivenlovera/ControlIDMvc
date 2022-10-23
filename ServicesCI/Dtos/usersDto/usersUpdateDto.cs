@@ -18,4 +18,9 @@ namespace ControlIDMvc.ServicesCI.Dtos.usersDto
     {
         public int id { get; set; }
     }
+    public class usersResponseUpdateDto
+    {
+        public int changes { get; set; }
+    }
+
 }

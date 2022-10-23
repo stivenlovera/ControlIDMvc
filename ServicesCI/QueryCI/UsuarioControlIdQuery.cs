@@ -20,7 +20,6 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         {
             this._httpClientService = httpClientService;
             this._ApiRutas = new ApiRutas();
-
         }
 
         public void Params(int port, string controlador, string user, string password, string session)
@@ -38,10 +37,10 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 new usersCreateDto{
                     begin_time=2,
                     end_time=2,
-                    password="",
+                    password=personaCreateDto.ControlIdPassword,
                     name=personaCreateDto.Nombre,
-                    registration="",
-                    salt="",
+                    registration=personaCreateDto.ControlIdRegistration,
+                    salt=personaCreateDto.ControlIdSalt,
 
                 }
             };
@@ -54,67 +53,80 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             return response;
         }
 
-        public BodyUpdateObject UpdateUser(int id, usersCreateDto users)
+        public async Task<ResponseUserUpdate> Update(Persona persona)
         {
             BodyUpdateObject body = new BodyUpdateObject()
             {
                 objeto = "users",
-                values = users,
+                values = new usersCreateDto
+                {
+                    begin_time = persona.ControlIdBegin_time,
+                    end_time = persona.ControlIdEnd_time,
+                    name = persona.ControlIdName,
+                    password = persona.ControlIdPassword,
+                    registration = persona.ControlIdRegistration,
+                    salt = persona.ControlIdSalt
+                },
                 where = new
                 {
                     users = new
                     {
-                        id = id
+                        id = persona.ControlId
                     }
                 }
             };
-            return body;
+            var response = await this.RunUpdate(body);
+            return response;
         }
-        public BodyUpdateObject MostrarUnoUser(int id)
+        public async Task<ResponseUserShow> MostrarUnoUser(Persona persona)
         {
-            BodyUpdateObject body = new BodyUpdateObject()
+            BodyShowObject body = new BodyShowObject()
             {
                 objeto = "users",
                 where = new
                 {
                     users = new
                     {
-                        id = id
+                        id = persona.ControlId
                     }
                 }
             };
-            return body;
+            var response = await this.RunShow(body);
+            return response;
         }
-        public BodyUpdateObject MostrarTodoUser()
+        public async Task<ResponseUserShow> MostrarTodoUser()
         {
-            BodyUpdateObject body = new BodyUpdateObject()
+            BodyShowObject body = new BodyShowObject()
             {
                 objeto = "users"
             };
-            return body;
+            var response = await this.RunShow(body);
+            return response;
         }
-        public BodyUpdateObject DeleteTodoUser()
+        public async Task<ResponseUserDelete> DeleteAll()
         {
-            BodyUpdateObject body = new BodyUpdateObject()
+            BodyDeleteObject body = new BodyDeleteObject()
             {
                 objeto = "users"
             };
-            return body;
+            var response = await this.RunDelete(body);
+            return response;
         }
-        public BodyUpdateObject DeleteUnoUser(int id)
+        public async Task<ResponseUserDelete> Delete(Persona persona)
         {
-            BodyUpdateObject body = new BodyUpdateObject()
+            BodyDeleteObject body = new BodyDeleteObject()
             {
                 objeto = "users",
                 where = new
                 {
                     users = new
                     {
-                        id = id
+                        id = persona.ControlId
                     }
                 }
             };
-            return body;
+            var response = await this.RunDelete(body);
+            return response;
         }
         private async Task<ResponseUserCreate> RunCreate(BodyCreateObject bodyCreateObject)
         {
@@ -123,7 +135,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyCreateObject, this.session);
             if (responseAddUsers.estado)
             {
-                usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseAddUsers.data);
+                usersResponseCreateDto responseUser = JsonConvert.DeserializeObject<usersResponseCreateDto>(responseAddUsers.data);
                 responseCreate.status = responseAddUsers.estado;
                 responseCreate.ids = responseUser.ids;
             }
@@ -132,6 +144,57 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 responseCreate.status = responseAddUsers.estado;
             }
             return responseCreate;
+        }
+        private async Task<ResponseUserShow> RunShow(BodyShowObject bodyShowAllObject)
+        {
+            ResponseUserShow responseShow = new ResponseUserShow();
+
+            Response responseUpdate = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
+            if (responseUpdate.estado)
+            {
+                usersResponseDto responseUser = JsonConvert.DeserializeObject<usersResponseDto>(responseUpdate.data);
+                responseShow.status = responseUpdate.estado;
+                responseShow.usersDto = responseUser.usersDtos;
+            }
+            else
+            {
+                responseShow.status = responseUpdate.estado;
+            }
+            return responseShow;
+        }
+        private async Task<ResponseUserUpdate> RunUpdate(BodyUpdateObject bodyUpdateObject)
+        {
+            ResponseUserUpdate responseCreate = new ResponseUserUpdate();
+
+            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlUpdate, bodyUpdateObject, this.session);
+            if (responseAddUsers.estado)
+            {
+                usersResponseUpdateDto responseUser = JsonConvert.DeserializeObject<usersResponseUpdateDto>(responseAddUsers.data);
+                responseCreate.status = responseAddUsers.estado;
+                responseCreate.changes = responseUser.changes;
+            }
+            else
+            {
+                responseCreate.status = responseAddUsers.estado;
+            }
+            return responseCreate;
+        }
+        private async Task<ResponseUserDelete> RunDelete(BodyDeleteObject bodyDeleteObject)
+        {
+            ResponseUserDelete responsedelete = new ResponseUserDelete();
+
+            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlDelete, bodyDeleteObject, this.session);
+            if (responseAddUsers.estado)
+            {
+                usersResponseDeleteDto responseUser = JsonConvert.DeserializeObject<usersResponseDeleteDto>(responseAddUsers.data);
+                responsedelete.status = responseAddUsers.estado;
+                responsedelete.changes = responseUser.changes;
+            }
+            else
+            {
+                responsedelete.status = responseAddUsers.estado;
+            }
+            return responsedelete;
         }
     }
     /*clases de ayuda*/
@@ -142,6 +205,17 @@ namespace ControlIDMvc.ServicesCI.QueryCI
     }
     public class ResponseUserShow
     {
-        public List<int> ids { get; set; }
+        public bool status { get; set; }
+        public List<usersDto> usersDto { get; set; }
+    }
+    public class ResponseUserUpdate
+    {
+        public bool status { get; set; }
+        public int changes { get; set; }
+    }
+    public class ResponseUserDelete
+    {
+        public bool status { get; set; }
+        public int changes { get; set; }
     }
 }

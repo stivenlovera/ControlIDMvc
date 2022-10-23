@@ -97,11 +97,45 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             }
             return responseCreate;
         }
-        private async Task<ResponseAccesoRulesShow> Runshow(BodyShowAllObject bodyShowAllObject)
+        private async Task<ResponseAccesoRulesShow> RunShow(BodyShowAllObject bodyShowAllObject)
         {
             ResponseAccesoRulesShow responseCreate = new ResponseAccesoRulesShow();
 
             Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
+            if (responseAddUsers.estado)
+            {
+                responseApiAccessRulesDto responseUser = JsonConvert.DeserializeObject<responseApiAccessRulesDto>(responseAddUsers.data);
+                responseCreate.status = responseAddUsers.estado;
+                responseCreate.accessRulesDtos = responseUser.accessRulesDtos;
+            }
+            else
+            {
+                responseCreate.status = responseAddUsers.estado;
+            }
+            return responseCreate;
+        }
+        private async Task<ResponseAccesoRulesShow> RunUpdate(BodyUpdateObject bodyUpdateObject)
+        {
+            ResponseAccesoRulesShow responseCreate = new ResponseAccesoRulesShow();
+
+            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlUpdate, bodyUpdateObject, this.session);
+            if (responseAddUsers.estado)
+            {
+                responseApiAccessRulesDto responseUser = JsonConvert.DeserializeObject<responseApiAccessRulesDto>(responseAddUsers.data);
+                responseCreate.status = responseAddUsers.estado;
+                responseCreate.accessRulesDtos = responseUser.accessRulesDtos;
+            }
+            else
+            {
+                responseCreate.status = responseAddUsers.estado;
+            }
+            return responseCreate;
+        }
+        private async Task<ResponseAccesoRulesShow> RunDelete(BodyDeleteObject bodyDeleteObject)
+        {
+            ResponseAccesoRulesShow responseCreate = new ResponseAccesoRulesShow();
+
+            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlDelete, bodyDeleteObject, this.session);
             if (responseAddUsers.estado)
             {
                 responseApiAccessRulesDto responseUser = JsonConvert.DeserializeObject<responseApiAccessRulesDto>(responseAddUsers.data);
@@ -123,7 +157,17 @@ namespace ControlIDMvc.ServicesCI.QueryCI
     }
     public class ResponseAccesoRulesShow
     {
-          public bool status { get; set; }
+        public bool status { get; set; }
         public List<accessRulesDto> accessRulesDtos { get; set; }
+    }
+     public class ResponseAccesoRulesUpdate
+    {
+        public bool status { get; set; }
+        public string changes { get; set; }
+    }
+     public class ResponseAccesoRulesDelete
+    {
+        public bool status { get; set; }
+        public string changes { get; set; }
     }
 }

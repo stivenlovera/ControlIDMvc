@@ -1,8 +1,7 @@
-namespace ControlIDMvc.Dtos
+namespace ControlIDMvc.Dtos.Persona
 {
     public class PersonaDto
     {
-
         public int Id { get; set; }
         public string Ci { get; set; }
         public string Nombre { get; set; }
@@ -19,7 +18,8 @@ namespace ControlIDMvc.Dtos
         public string ControlIdRegistration { get; set; }
         public string Sincronizacion { get; set; }
         public string ControlId { get; set; }
-        public List<int> card { get; set; }
+        public List<string> Area { get; set; }
+        public List<string> Codigo { get; set; }
         public int ControlIdBegin_time { get; set; }
         public int ControlIdEnd_time { get; set; }
     }

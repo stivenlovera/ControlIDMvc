@@ -1,5 +1,5 @@
 using AutoMapper;
-using ControlIDMvc.Dtos;
+
 using ControlIDMvc.Dtos.Accion;
 using ControlIDMvc.Dtos.Area;
 using ControlIDMvc.Dtos.AreaReglaAccesoCreateDto;
@@ -9,6 +9,7 @@ using ControlIDMvc.Dtos.Egreso;
 using ControlIDMvc.Dtos.HorarioReglaAcceso;
 using ControlIDMvc.Dtos.Inscripcion;
 using ControlIDMvc.Dtos.Paquete;
+using ControlIDMvc.Dtos.Persona;
 using ControlIDMvc.Dtos.PersonaReglasAcceso;
 using ControlIDMvc.Dtos.Portal;
 using ControlIDMvc.Dtos.PortalReglaAcceso;

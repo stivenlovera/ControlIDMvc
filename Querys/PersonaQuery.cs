@@ -1,5 +1,5 @@
 using AutoMapper;
-using ControlIDMvc.Dtos;
+using ControlIDMvc.Dtos.Persona;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +16,9 @@ namespace ControlIDMvc.Querys
             this._dbContext = dbContext;
             this._mapper = mapper;
         }
-        public async Task<PersonaDto> Show(int id)
+        public async Task<Persona> Show(int id)
         {
-            var persona = await _dbContext.Persona.Where(p => p.Id == id).FirstOrDefaultAsync();
-            return _mapper.Map<PersonaDto>(persona);
+            return await _dbContext.Persona.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
         public async Task<Persona> Store(PersonaCreateDto personaCreateDto)
         {
@@ -28,13 +27,10 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return persona;
         }
-        public async Task<List<PersonaDto>> GetAll()
+        public async Task<List<Persona>> GetAll()
         {
-            var personas = await this._dbContext.Persona.ToListAsync();
-            var resultado = _mapper.Map<List<PersonaDto>>(personas);
-            return resultado;
+             return await this._dbContext.Persona.ToListAsync();
         }
-
         public async Task<List<Persona>> GetAllByID(List<int> usuarios_id)
         {
             var personas = await this._dbContext.Persona.Where(persona => usuarios_id.Contains(persona.Id)).ToListAsync();
@@ -104,6 +100,17 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
+         public async Task<bool> ValidateExistExceptoId(string ci,int id)
+        {
+            System.Console.WriteLine(ci);
+            var persona = await _dbContext.Persona.Where(persona => persona.Ci == ci).Where(persona => persona.Id != id).FirstOrDefaultAsync();
+
+            if (persona == null)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task<Persona> EditOne(int id)
         {
             var persona = await _dbContext.Persona.FindAsync(id);
@@ -115,17 +122,25 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return persona;
         }
-        public async Task<List<PersonaDto>> GetAllLikeCi(int value)
+        public async Task<List<Persona>> GetAllLikeCi(int value)
         {
-            var personas = await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).ToListAsync();
-            var resultado = _mapper.Map<List<PersonaDto>>(personas);
-            return resultado;
+          return await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).ToListAsync();
         }
-        public async Task<List<PersonaDto>> GetAllLikeId(int value)
+        public async Task<List<Persona>> GetAllLikeId(int value)
         {
             var personas = await this._dbContext.Persona.Where(p => p.Id.ToString().Contains(value.ToString())).ToListAsync();
-            var resultado = _mapper.Map<List<PersonaDto>>(personas);
-            return resultado;
+            return personas;
+        }
+        public async Task<bool> Delete(int id)
+        {
+            var persona = await _dbContext.Persona.Where(x => x.Id == id).FirstAsync();
+            if (persona!=null)
+            {
+                _dbContext.Persona.Remove(persona);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }
