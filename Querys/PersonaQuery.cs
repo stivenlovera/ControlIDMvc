@@ -29,7 +29,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<List<Persona>> GetAll()
         {
-             return await this._dbContext.Persona.ToListAsync();
+            return await this._dbContext.Persona.ToListAsync();
         }
         public async Task<List<Persona>> GetAllByID(List<int> usuarios_id)
         {
@@ -100,7 +100,7 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
-         public async Task<bool> ValidateExistExceptoId(string ci,int id)
+        public async Task<bool> ValidateExistExceptoId(string ci, int id)
         {
             System.Console.WriteLine(ci);
             var persona = await _dbContext.Persona.Where(persona => persona.Ci == ci).Where(persona => persona.Id != id).FirstOrDefaultAsync();
@@ -120,11 +120,11 @@ namespace ControlIDMvc.Querys
         {
             _dbContext.Entry(persona).CurrentValues.SetValues(persona);
             await _dbContext.SaveChangesAsync();
-            return persona;
+            return await _dbContext.Persona.Where(p => p.Id == persona.Id).FirstAsync();
         }
         public async Task<List<Persona>> GetAllLikeCi(int value)
         {
-          return await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).ToListAsync();
+            return await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).ToListAsync();
         }
         public async Task<List<Persona>> GetAllLikeId(int value)
         {
@@ -134,7 +134,7 @@ namespace ControlIDMvc.Querys
         public async Task<bool> Delete(int id)
         {
             var persona = await _dbContext.Persona.Where(x => x.Id == id).FirstAsync();
-            if (persona!=null)
+            if (persona != null)
             {
                 _dbContext.Persona.Remove(persona);
                 await _dbContext.SaveChangesAsync();
