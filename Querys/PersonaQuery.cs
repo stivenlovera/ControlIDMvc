@@ -118,7 +118,18 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Persona> UpdateOne(Persona persona)
         {
-            _dbContext.Entry(persona).CurrentValues.SetValues(persona);
+            _dbContext.Entry(await _dbContext.Persona.FirstOrDefaultAsync(x => x.Id == persona.Id)).CurrentValues.SetValues(new
+            {
+                Id = persona.Id,
+                Nombre = persona.Nombre,
+                Apellido = persona.Apellido,
+                Ci = persona.Ci,
+                Fecha_nac = persona.Fecha_nac,
+                Email = persona.Email,
+                Celular = persona.Celular,
+                Dirrecion = persona.Dirrecion,
+                Observaciones = persona.Observaciones
+            });
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Persona.Where(p => p.Id == persona.Id).FirstAsync();
         }
