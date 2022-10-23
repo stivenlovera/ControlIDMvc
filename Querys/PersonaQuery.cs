@@ -118,7 +118,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Persona> UpdateOne(Persona persona)
         {
-            _dbContext.Update(persona);
+            _dbContext.Entry(persona).CurrentValues.SetValues(persona);
             await _dbContext.SaveChangesAsync();
             return persona;
         }

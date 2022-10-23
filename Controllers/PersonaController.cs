@@ -100,6 +100,7 @@ public class PersonaController : Controller
                 /*insertar*/
                 personaCreateDto.ControlIdSalt = "";
                 personaCreateDto.ControlIdRegistration = "";
+                personaCreateDto.ControlIdName=personaCreateDto.Nombre;
                 var persona = await this._personaQuery.Store(personaCreateDto);
                 if (personaCreateDto.Area != null)
                 {
@@ -188,6 +189,7 @@ public class PersonaController : Controller
                     Dirrecion = personaDto.Dirrecion,
                     Fecha_nac = personaDto.Fecha_nac,
                     ControlIdPassword = personaDto.ControlIdPassword,
+                    
                 };
                 var persona = await this._personaQuery.UpdateOne(personaUpdate);
                 await this.UpdateDispositivo(persona);
