@@ -8,7 +8,9 @@ namespace ControlIDMvc.Dtos.Tarjeta
         public int Area { get; set; }
         public int Codigo { get; set; }
         public int PersonaId { get; set; }
-        public string ControlId { get; set; }
-        public string Sincronizacion { get; set; }
+        public int ControlId { get; set; }
+        public long ControlIdValue { get; set; }
+        public int ControlIdUserId { get; set; }
+        public string ControlIdsecret { get; set; }
     }
 }

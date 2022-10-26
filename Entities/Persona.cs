@@ -18,10 +18,9 @@ namespace ControlIDMvc.Entities
         public string ControlIdName { get; set; }
         public string ControlIdSalt { get; set; }
         public string ControlIdRegistration { get; set; }
-        public string Sincronizacion { get; set; }
         public int ControlId { get; set; }
-        public int ControlIdBegin_time { get; set; }
-        public int ControlIdEnd_time { get; set; }
+        public long ControlIdBegin_time { get; set; }
+        public long ControlIdEnd_time { get; set; }
         public List<Tarjeta> card { get; set; }
         public List<ImagenDocumento> documentos { get; set; }
         public List<ImagenPerfil> perfiles { get; set; }

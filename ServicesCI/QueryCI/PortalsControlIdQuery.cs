@@ -32,7 +32,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             this.password = password;
             this.session = session;
         }
-        public async Task<ResponsePortalShow> ShowPortals()
+        public async Task<ResponsePortalShow> ShowAll()
         {
             BodyShowAllObject body = new BodyShowAllObject()
             {

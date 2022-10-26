@@ -19,19 +19,15 @@ namespace ControlIDMvc.Querys
             this._mapper = mapper;
             this._dBContext = dBContext;
         }
-        public async Task<List<PortalDto>> GetAll()
+        public async Task<List<Portal>> GetAll()
         {
-
-            var list_portals = await this._dBContext.Portal.ToListAsync();
-            var portals = _mapper.Map<List<PortalDto>>(list_portals);
-            return portals;
+            return await this._dBContext.Portal.ToListAsync();
         }
-        public async Task<bool> store(PortalCreateDto portalCreateDto)
+        public async Task<bool> StoreAll(List<Portal> portals)
         {
-            var portal = _mapper.Map<Portal>(portalCreateDto);
-            await _dBContext.AddAsync(portal);
-            var resultado = await _dBContext.SaveChangesAsync();
-            if (resultado == 1)
+            await _dBContext.AddRangeAsync(portals);
+            var response = await _dBContext.SaveChangesAsync();
+            if (response > 0)
             {
                 return true;
             }
@@ -69,6 +65,10 @@ namespace ControlIDMvc.Querys
             {
                 return false;
             }
+        }
+        public async Task<Portal> SearchControlId(int ControlId)
+        {
+            return await _dBContext.Portal.Where(p => p.ControlId == ControlId).FirstOrDefaultAsync();
         }
     }
 

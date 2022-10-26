@@ -213,11 +213,9 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ControlIdRegistration = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Sincronizacion = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ControlId = table.Column<int>(type: "int", nullable: false),
-                    ControlIdBegin_time = table.Column<int>(type: "int", nullable: false),
-                    ControlIdEnd_time = table.Column<int>(type: "int", nullable: false)
+                    ControlIdBegin_time = table.Column<long>(type: "bigint", nullable: false),
+                    ControlIdEnd_time = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -443,7 +441,9 @@ namespace ControlIDMvc.Migrations
                     codigo = table.Column<int>(type: "int", nullable: false),
                     PersonaId = table.Column<int>(type: "int", nullable: false),
                     ControlId = table.Column<int>(type: "int", nullable: false),
-                    Sincronizacion = table.Column<string>(type: "longtext", nullable: true)
+                    ControlIdValue = table.Column<long>(type: "bigint", nullable: false),
+                    ControlIdUserId = table.Column<int>(type: "int", nullable: false),
+                    ControlIdsecret = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -634,7 +634,7 @@ namespace ControlIDMvc.Migrations
                     ControlIdPortalId = table.Column<int>(type: "int", nullable: false),
                     portalId = table.Column<int>(type: "int", nullable: false),
                     AccionId = table.Column<int>(type: "int", nullable: false),
-                    ControlIdAreaId = table.Column<int>(type: "int", nullable: false)
+                    ControlActionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

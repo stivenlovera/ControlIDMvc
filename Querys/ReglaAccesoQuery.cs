@@ -69,12 +69,18 @@ namespace ControlIDMvc.Querys
             };
         }
 
-        public async Task<ReglaAcceso> Store(ReglaAccesoCreateDto reglaAccesoCreateDto)
+        public async Task<bool> StoreAll(List<ReglaAcceso> reglaAccesos)
         {
-            var reglaAcceso = _mapper.Map<ReglaAcceso>(reglaAccesoCreateDto);
-            var resultado = _dbContext.ReglaAcceso.Add(reglaAcceso);
-            await _dbContext.SaveChangesAsync();
-            return reglaAcceso;
+            await _dbContext.AddRangeAsync(reglaAccesos);
+            var response = await _dbContext.SaveChangesAsync();
+            if (response > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

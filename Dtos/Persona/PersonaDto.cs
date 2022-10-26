@@ -16,11 +16,10 @@ namespace ControlIDMvc.Dtos.Persona
         public string ControlIdName { get; set; }
         public string ControlIdSalt { get; set; }
         public string ControlIdRegistration { get; set; }
-        public string Sincronizacion { get; set; }
         public int ControlId { get; set; }
         public List<string> Area { get; set; }
         public List<string> Codigo { get; set; }
-        public int ControlIdBegin_time { get; set; }
-        public int ControlIdEnd_time { get; set; }
+        public DateTime ControlIdBegin_time { get; set; }
+        public DateTime ControlIdEnd_time { get; set; }
     }
 }

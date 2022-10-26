@@ -41,7 +41,6 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                     name=personaCreateDto.Nombre,
                     registration=personaCreateDto.ControlIdRegistration,
                     salt=personaCreateDto.ControlIdSalt,
-
                 }
             };
             BodyCreateObject body = new BodyCreateObject()

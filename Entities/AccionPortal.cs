@@ -12,7 +12,7 @@ namespace ControlIDMvc.Entities
         public int portalId { get; set; }
         public Portal Area { get; set; }
         public int AccionId { get; set; }
-        public int ControlIdAreaId { get; set; }
+        public int ControlActionId { get; set; }
         public Accion Puerta { get; set; }
     }
 }

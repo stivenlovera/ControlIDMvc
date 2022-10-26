@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ControlIDMvc.Dtos.AccionPortal;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -18,12 +19,11 @@ namespace ControlIDMvc.Querys
             this._mapper = mapper;
             this._dBContext = dBContext;
         }
-        public async Task<bool> store(AccionPortalCreateDto accionPortalCreateDto)
+        public async Task<bool> storeAll(List<AccionPortal> accionPortals)
         {
-            var accionPortal = _mapper.Map<AccionPortal>(accionPortalCreateDto);
-            await _dBContext.AddAsync(accionPortal);
-            var resultado = await _dBContext.SaveChangesAsync();
-            if (resultado == 1)
+            await _dBContext.AddRangeAsync(accionPortals);
+            var response = await _dBContext.SaveChangesAsync();
+            if (response > 0)
             {
                 return true;
             }
@@ -32,5 +32,6 @@ namespace ControlIDMvc.Querys
                 return false;
             }
         }
+        
     }
 }

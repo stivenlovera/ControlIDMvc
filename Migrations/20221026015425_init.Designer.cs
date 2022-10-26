@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221023231420_init")]
+    [Migration("20221026015425_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("AccionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ControlIdAreaId")
+                    b.Property<int>("ControlActionId")
                         .HasColumnType("int");
 
                     b.Property<int>("ControlIdPortalId")
@@ -509,11 +509,11 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("ControlId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ControlIdBegin_time")
-                        .HasColumnType("int");
+                    b.Property<long>("ControlIdBegin_time")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("ControlIdEnd_time")
-                        .HasColumnType("int");
+                    b.Property<long>("ControlIdEnd_time")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ControlIdName")
                         .HasColumnType("longtext");
@@ -540,9 +540,6 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Observaciones")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Sincronizacion")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -770,11 +767,17 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("ControlId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonaId")
+                    b.Property<int>("ControlIdUserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Sincronizacion")
+                    b.Property<long>("ControlIdValue")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ControlIdsecret")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("PersonaId")
+                        .HasColumnType("int");
 
                     b.Property<int>("area")
                         .HasColumnType("int");

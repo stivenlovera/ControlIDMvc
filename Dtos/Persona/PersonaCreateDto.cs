@@ -23,11 +23,12 @@ namespace ControlIDMvc.Dtos.Persona
         public string Dirrecion { get; set; }
         public string Observaciones { get; set; }
         public string Usuario { get; set; }
-        public string Sincronizacion { get; set; }
         public int ControlId { get; set; }
         public string ControlIdPassword { get; set; }
         public string ControlIdName { get; set; }
         public string ControlIdSalt { get; set; }
+        public DateTime ControlIdBegin_time { get; set; }
+        public DateTime ControlIdEnd_time { get; set; }
         public string ControlIdRegistration { get; set; }
         [JsonProperty(PropertyName = "cards")]
         public List<string> Area { get; set; }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ControlIDMvc.Dtos.Accion;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -18,12 +19,17 @@ namespace ControlIDMvc.Querys
             this._mapper = mapper;
             this._dBContext = dBContext;
         }
-        public async Task<bool> store(AccionCreateDto accionCreateDto)
+        public async Task<Accion> store(Accion accion)
         {
-            var accion = _mapper.Map<Accion>(accionCreateDto);
             await _dBContext.AddAsync(accion);
-            var resultado = await _dBContext.SaveChangesAsync();
-            if (resultado == 1)
+            await _dBContext.SaveChangesAsync();
+            return accion;
+        }
+        public async Task<bool> AllStore(List<Accion> accions)
+        {
+            await _dBContext.AddRangeAsync(accions);
+            var response = await _dBContext.SaveChangesAsync();
+            if (response > 0)
             {
                 return true;
             }
@@ -31,6 +37,16 @@ namespace ControlIDMvc.Querys
             {
                 return false;
             }
+        }
+        public async Task<Accion> GetAll(Accion accion)
+        {
+            await _dBContext.AddAsync(accion);
+            await _dBContext.SaveChangesAsync();
+            return accion;
+        }
+        public async Task<Accion> SearchControlId(int ControlId)
+        {
+            return await _dBContext.Accion.Where(a => a.ControlId == ControlId).FirstOrDefaultAsync();
         }
     }
 }

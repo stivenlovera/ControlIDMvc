@@ -10,6 +10,6 @@ namespace ControlIDMvc.Dtos.AccionPortal
         public int ControlIdPortalId { get; set; }
         public int portalId { get; set; }
         public int AccionId { get; set; }
-        public int ControlIdAreaId { get; set; }
+        public int ControlActionId { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 @model ControlIDMvc.Dtos.Persona.PersonaDto
 @{
     ViewData["Title"] = "Editar Persona";
+    string format = "yyyy-MM-dd";
+    var tarjetas = ViewData["tarjetas"] as List<ControlIDMvc.Entities.Tarjeta>;
 }
 
 <div class="right_col" role="main">
@@ -323,19 +325,19 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                   @* @foreach (var card in Model.card)
+                                                   @foreach (var tarjeta in tarjetas)
                                                    {
-                                                     <tr>
-                                                        <td>@card.area,@card.codigo</td>
+                                                    <tr>
+                                                        <td>@tarjeta.area,@tarjeta.codigo</td>
                                                         <td>
-                                                            <input name="area" type="text" value="@card.area" hidden >
-                                                            <input name="codigo" type="text" value="@card.codigo" hidden >
-                                                            <button class="btn btn-danger btn-xs remove_tarjeta" role="button">
-                                                                <i class="fa fa fa-trash"></i>
-                                                            </button>
+                                                            <input name="area" type="text" value="@tarjeta.area" hidden>
+                                                            <input name="codigo" type="text" value="@tarjeta.area" hidden>
+                                                            <button class="btn btn-danger btn-xs remove_tarjeta"
+                                                                role="button"><i class="fa fa fa-trash"></i></button>
                                                         </td>
                                                     </tr>
-                                                   } *@
+                                                     
+                                                   }
                                                 </tbody>
                                             </table>
                                             <!-- end user projects -->
@@ -396,46 +398,22 @@
                                                 <div class="col-md-6">
                                                     <div class="item form-group">
                                                         <label
-                                                            class="col-form-label col-md-4 col-sm-4 label-align">Inicio
-                                                            del permiso<span class="required">*</span>
+                                                            class="col-form-label col-md-4 col-sm-4 label-align">Inicio del permiso<span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-6 col-sm-8">
-                                                            <input id="inicio_permiso" class="date-picker form-control"
-                                                                placeholder="dd-mm-yyyy" type="date"
-                                                                onfocus="this.type='date'"
-                                                                onmouseover="this.type='date'"
-                                                                onclick="this.type='date'" onblur="this.type='text'"
-                                                                onmouseout="timeFunctionLong(this)">
-                                                            <script>
-                                                                function timeFunctionLong(input) {
-                                                                    setTimeout(function () {
-                                                                        input.type = 'text';
-                                                                    }, 60000);
-                                                                }
-                                                            </script>
+                                                            <input id="inicio_permiso" class="form-control" 
+                                                                type="date" name="ControlIdBegin_time" value="@Model.ControlIdBegin_time.ToString(format)" >
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="item form-group">
-                                                        <label class="col-form-label col-md-4 col-sm-4 label-align">Fin
-                                                            del
-                                                            permiso<span class="required">*</span>
+                                                        <label class="col-form-label col-md-4 col-sm-4 label-align">Fin del permiso<span class="required">*</span>
                                                         </label>
                                                         <div class="col-md-8 col-sm-8">
-                                                            <input id="fin_permiso" class="date-picker form-control"
-                                                                placeholder="dd-mm-yyyy" type="date"
-                                                                onfocus="this.type='date'"
-                                                                onmouseover="this.type='date'"
-                                                                onclick="this.type='date'" onblur="this.type='text'"
-                                                                onmouseout="timeFunctionLong(this)">
-                                                            <script>
-                                                                function timeFunctionLong(input) {
-                                                                    setTimeout(function () {
-                                                                        input.type = 'text';
-                                                                    }, 60000);
-                                                                }
-                                                            </script>
+                                                            <input id="fin_permiso" class="form-control"
+                                                                type="date" name="ControlIdBegin_time"
+                                                                value="@Model.ControlIdBegin_time.ToString(format)">
                                                         </div>
                                                     </div>
                                                 </div>

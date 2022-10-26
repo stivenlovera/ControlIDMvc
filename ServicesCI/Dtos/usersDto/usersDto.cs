@@ -12,8 +12,8 @@ namespace ControlIDMvc.ServicesCI.Dtos.usersDto
         public string name { get; set; }
         public string password { get; set; }
         public string salt { get; set; }
-        public int begin_time { get; set; } = 2;
-        public int end_time { get; set; } = 2;
+        public long begin_time { get; set; }
+        public long end_time { get; set; }
     }
     public class usersResponseDto
     {

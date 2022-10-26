@@ -100,8 +100,24 @@ public class PersonaController : Controller
                 /*insertar*/
                 personaCreateDto.ControlIdSalt = "";
                 personaCreateDto.ControlIdRegistration = "";
-                personaCreateDto.ControlIdName=personaCreateDto.Nombre;
-                var persona = await this._personaQuery.Store(personaCreateDto);
+                personaCreateDto.ControlIdName = personaCreateDto.Nombre;
+                var persona = await this._personaQuery.Store(new Persona
+                {
+                    Ci = personaCreateDto.Ci,
+                    Nombre = personaCreateDto.Nombre,
+                    Apellido = personaCreateDto.Apellido,
+                    Celular = personaCreateDto.Celular,
+                    Dirrecion = personaCreateDto.Dirrecion,
+                    Fecha_nac = personaCreateDto.Fecha_nac,
+                    Email = personaCreateDto.Email,
+                    Observaciones = personaCreateDto.Observaciones,
+                    ControlIdBegin_time = this.DateTimeToUnix(personaCreateDto.ControlIdBegin_time),
+                    ControlIdEnd_time = this.DateTimeToUnix(personaCreateDto.ControlIdEnd_time),
+                    ControlIdName = personaCreateDto.Nombre,
+                    ControlIdPassword = personaCreateDto.ControlIdPassword,
+                    ControlIdRegistration = "",
+                    ControlIdSalt = "",
+                });
                 if (personaCreateDto.Area != null)
                 {
                     int index = 0;
@@ -111,9 +127,11 @@ public class PersonaController : Controller
                         {
                             Area = Convert.ToInt32(area),
                             Codigo = Convert.ToInt32(personaCreateDto.Area[index]),
-                            ControlId = "",
+                            ControlId = 0,
                             PersonaId = persona.Id,
-                            Sincronizacion = "no"
+                            ControlIdsecret = "",
+                            ControlIdValue = 0,
+                            ControlIdUserId = 0
                         };
                         await this._tarjetaQuery.Store(tarjetaCreateDto);
                         index++;
@@ -144,6 +162,7 @@ public class PersonaController : Controller
     [HttpGet("editar/{id:int}")]
     public async Task<ActionResult> Edit(int id)
     {
+        ViewData["tarjetas"] = await this._tarjetaQuery.GetAllByPersona(id);
         var persona = await this._personaQuery.GetOne(id);
         if (persona == null)
         {
@@ -164,7 +183,9 @@ public class PersonaController : Controller
                 Email = persona.Email,
                 Fecha_nac = persona.Fecha_nac,
                 Observaciones = persona.Observaciones,
-                ControlIdPassword = persona.ControlIdPassword
+                ControlIdPassword = persona.ControlIdPassword,
+                ControlIdBegin_time = this.UnixTimeStampToDateTime(persona.ControlIdBegin_time),
+                ControlIdEnd_time = this.UnixTimeStampToDateTime(persona.ControlIdEnd_time)
             };
             return View("~/Views/Persona/Edit.cshtml", editPersona);
         }
@@ -189,9 +210,29 @@ public class PersonaController : Controller
                     Dirrecion = personaDto.Dirrecion,
                     Fecha_nac = personaDto.Fecha_nac,
                     ControlIdPassword = personaDto.ControlIdPassword,
-                    
                 };
                 var persona = await this._personaQuery.UpdateOne(personaUpdate);
+
+                if (personaDto.Area != null)
+                {
+                    int index = 0;
+                    foreach (var area in personaDto.Area)
+                    {
+                        TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
+                        {
+                            Area = Convert.ToInt32(area),
+                            Codigo = Convert.ToInt32(personaDto.Area[index]),
+                            ControlId = 0,
+                            PersonaId = persona.Id,
+                        };
+                        var verificar = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaDto.Area[index]));
+                        if (!verificar)
+                        {
+                            await this._tarjetaQuery.Store(tarjetaCreateDto);
+                        }
+                        index++;
+                    }
+                }
                 await this.UpdateDispositivo(persona);
                 return RedirectToAction(nameof(Index));
             }
@@ -248,7 +289,24 @@ public class PersonaController : Controller
     [HttpPost("store-ajax")]
     public async Task<ActionResult> StoreAjax(PersonaCreateDto personaCreateDto)
     {
-        var storePersona = await this._personaQuery.Store(personaCreateDto);
+
+        var storePersona = await this._personaQuery.Store(new Persona
+        {
+            Ci = personaCreateDto.Ci,
+            Nombre = personaCreateDto.Nombre,
+            Apellido = personaCreateDto.Apellido,
+            Celular = personaCreateDto.Celular,
+            Dirrecion = personaCreateDto.Dirrecion,
+            Email = personaCreateDto.Email,
+            Fecha_nac = personaCreateDto.Fecha_nac,
+            Observaciones = personaCreateDto.Observaciones,
+            ControlIdBegin_time = this.DateTimeToUnix(personaCreateDto.ControlIdBegin_time),
+            ControlIdEnd_time = this.DateTimeToUnix(personaCreateDto.ControlIdEnd_time),
+            ControlIdName = personaCreateDto.Nombre,
+            ControlIdPassword = personaCreateDto.ControlIdPassword,
+            ControlIdRegistration = "",
+            ControlIdSalt = "",
+        });
         return Json(
             new
             {
@@ -269,11 +327,26 @@ public class PersonaController : Controller
 
     private long DateTimeToUnix(DateTime MyDateTime)
     {
-        TimeSpan timeSpan = MyDateTime - new DateTime(2022, 9, 10, 0, 0, 0);
-
-        return (long)timeSpan.TotalSeconds;
+        TimeSpan timeSpan = MyDateTime - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+        var data = (long)timeSpan.TotalSeconds;
+        System.Console.WriteLine(data);
+        return data;
     }
+    public DateTime UnixTimeStampToDateTime2(double unixTimeStamp)
+    {
+        // Unix timestamp is seconds past epoch
+        System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+        dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+        return dtDateTime;
+    }
+    private long ConvertCard(string area, string codigo)
+    {
+        int area_convert = Int32.Parse(area);
+        int area_codigo = Int32.Parse(codigo);
+        long calculo = (area_convert * Convert.ToInt64((Math.Pow(2, 32)))) + area_codigo;
 
+        return calculo;
+    }
     /*
         *CARGAR DATA CONTROL ID 
     */
@@ -339,19 +412,19 @@ public class PersonaController : Controller
         {
             foreach (var card in persona.card)
             {
-                var newCard = this.ConvertCard(Convert.ToInt32(persona.ControlId), card.area.ToString(), card.codigo.ToString());
-                cardsCreateDto.Add(newCard);
-                var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
+                var createCard = await this._cardControlIdQuery.CreateAll(persona.card);
                 if (createCard.status)
                 {
                     card.ControlId = createCard.ids[0];
-                    var updateCard = await this._tarjetaQuery.UpdateOne(card);
+                    card.ControlIdsecret = "";
+                    card.ControlIdUserId = persona.ControlId;
+                    card.ControlIdValue = this.ConvertCard(card.area.ToString(),card.codigo.ToString());
+                    var updateCard = await this._tarjetaQuery.UpdateOneControlId(card);
                 }
             }
         }
         return true;
     }
-
     /*
        *UPDATE DATA CONTROL ID 
    */
@@ -369,7 +442,7 @@ public class PersonaController : Controller
                 //crear tarjetas si hay 
                 if (persona.card != null)
                 {
-                    //await this.CardUpdateControlId(persona);
+                    await this.CardUpdateControlId(persona);
                 }
             }
         }
@@ -391,17 +464,19 @@ public class PersonaController : Controller
     private async Task<bool> CardUpdateControlId(Persona persona)
     {
         List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
-        if (persona.card.Count > 0)
+
+        foreach (var card in persona.card)
         {
-            foreach (var card in persona.card)
+            if (card.ControlId != 0)
             {
-                var newCard = this.ConvertCard(Convert.ToInt32(persona.ControlId), card.area.ToString(), card.codigo.ToString());
-                cardsCreateDto.Add(newCard);
-                var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
-                if (createCard.status)
+                var update = await this._cardControlIdQuery.Create(card);
+                if (update.status)
                 {
-                    card.ControlId = createCard.ids[0];
-                    var updateCard = await this._tarjetaQuery.UpdateOne(card);
+                    card.ControlId = update.ids[0];
+                    card.ControlIdsecret = "";
+                    card.ControlIdUserId = persona.ControlId;
+                    card.ControlIdValue = this.ConvertCard(card.area.ToString(),card.codigo.ToString());
+                    var updateCard = await this._tarjetaQuery.UpdateOneControlId(card);
                 }
             }
         }
@@ -448,7 +523,7 @@ public class PersonaController : Controller
             {
                 var newCard = this.ConvertCard(Convert.ToInt32(persona.ControlId), card.area.ToString(), card.codigo.ToString());
                 cardsCreateDto.Add(newCard);
-                var createCard = await this._cardControlIdQuery.CreateCards(cardsCreateDto);
+                var createCard = await this._cardControlIdQuery.CreateAll(persona.card);
                 if (createCard.status)
                 {
                     card.ControlId = createCard.ids[0];

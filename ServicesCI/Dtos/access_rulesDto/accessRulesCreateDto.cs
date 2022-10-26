@@ -11,7 +11,7 @@ namespace ControlIDMvc.ServicesCI.Dtos.access_rulesDto
         public int type { get; set; }
         public int priority { get; set; }
     }
-    public class responseApiAccessRulesCreateDto
+    public class AccessRulesCreateResponseDto
     {
         public List<int> ids { get; set; }
     }

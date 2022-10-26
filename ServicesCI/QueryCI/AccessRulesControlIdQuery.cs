@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControlIDMvc.Entities;
 using ControlIDMvc.ServicesCI.Dtos.access_rulesDto;
 using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Newtonsoft.Json;
@@ -42,15 +43,38 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunCreate(body);
             return response;
         }
-        public BodyShowObject MostrarAccessRules()
+        public async Task<ResponseAccesoRulesShow> showAll()
         {
             BodyShowObject body = new BodyShowObject()
             {
                 objeto = "access_rules"
             };
-            return body;
+            var response = await this.RunShow(body);
+            return response;
         }
-        public BodyShowObject MostrarOneAccessRules(int id)
+        public async Task<ResponseAccesoRulesUpdate> Update(ReglaAcceso reglaAcceso)
+        {
+            BodyUpdateObject body = new BodyUpdateObject()
+            {
+                objeto = "access_rules",
+                values = new accessRulesCreateDto
+                {
+                    name = reglaAcceso.ControlIdName,
+                    priority = reglaAcceso.ControlIdType,
+                    type = reglaAcceso.ControlIdType
+                },
+                where = new
+                {
+                    users = new
+                    {
+                        id = reglaAcceso.ControlId
+                    }
+                }
+            };
+            var response = await this.RunUpdate(body);
+            return response;
+        }
+        public async Task<ResponseAccesoRulesShow> ShowOne(ReglaAcceso reglaAcceso)
         {
             BodyShowObject body = new BodyShowObject()
             {
@@ -59,13 +83,14 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     access_rules = new
                     {
-                        id = id
+                        id = reglaAcceso.ControlId
                     }
                 },
             };
-            return body;
+            var response = await this.RunShow(body);
+            return response;
         }
-        public BodyDeleteObject DeleteAccessRules(int id)
+        public async Task<ResponseAccesoRulesDelete> Delete(ReglaAcceso reglaAcceso)
         {
             BodyDeleteObject body = new BodyDeleteObject()
             {
@@ -74,79 +99,80 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     access_rules = new
                     {
-                        id = id
+                        id = reglaAcceso.ControlId
                     }
                 },
             };
-            return body;
+            var response = await this.RunDelete(body);
+            return response;
         }
         private async Task<ResponseAccesoRulesCreate> RunCreate(BodyCreateObject bodyCreateObject)
         {
-            ResponseAccesoRulesCreate responseCreate = new ResponseAccesoRulesCreate();
+            ResponseAccesoRulesCreate apiResponseCreate = new ResponseAccesoRulesCreate();
 
             Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyCreateObject, this.session);
             if (responseAddUsers.estado)
             {
-                responseApiAccessRulesCreateDto responseUser = JsonConvert.DeserializeObject<responseApiAccessRulesCreateDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
-                responseCreate.ids = responseUser.ids;
+                AccessRulesCreateResponseDto responseUser = JsonConvert.DeserializeObject<AccessRulesCreateResponseDto>(responseAddUsers.data);
+                apiResponseCreate.status = responseAddUsers.estado;
+                apiResponseCreate.ids = responseUser.ids;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                apiResponseCreate.status = responseAddUsers.estado;
             }
-            return responseCreate;
+            return apiResponseCreate;
         }
-        private async Task<ResponseAccesoRulesShow> RunShow(BodyShowAllObject bodyShowAllObject)
+        private async Task<ResponseAccesoRulesShow> RunShow(BodyShowObject bodyShowObject)
         {
-            ResponseAccesoRulesShow responseCreate = new ResponseAccesoRulesShow();
+            ResponseAccesoRulesShow apiResponseShow = new ResponseAccesoRulesShow();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
-            if (responseAddUsers.estado)
+            Response responseShowAccesoRules = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowObject, this.session);
+            if (responseShowAccesoRules.estado)
             {
-                responseApiAccessRulesDto responseUser = JsonConvert.DeserializeObject<responseApiAccessRulesDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
-                responseCreate.accessRulesDtos = responseUser.accessRulesDtos;
+                AccessRuleResponseDto responseAccesoRules = JsonConvert.DeserializeObject<AccessRuleResponseDto>(responseShowAccesoRules.data);
+                apiResponseShow.status = responseShowAccesoRules.estado;
+                apiResponseShow.accessRulesDtos = responseAccesoRules.accessRulesDtos;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                apiResponseShow.status = responseShowAccesoRules.estado;
             }
-            return responseCreate;
+            return apiResponseShow;
         }
-        private async Task<ResponseAccesoRulesShow> RunUpdate(BodyUpdateObject bodyUpdateObject)
+        private async Task<ResponseAccesoRulesUpdate> RunUpdate(BodyUpdateObject bodyUpdateObject)
         {
-            ResponseAccesoRulesShow responseCreate = new ResponseAccesoRulesShow();
+            ResponseAccesoRulesUpdate apiResponseUpdate = new ResponseAccesoRulesUpdate();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlUpdate, bodyUpdateObject, this.session);
-            if (responseAddUsers.estado)
+            Response responseUpdateUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlUpdate, bodyUpdateObject, this.session);
+            if (responseUpdateUsers.estado)
             {
-                responseApiAccessRulesDto responseUser = JsonConvert.DeserializeObject<responseApiAccessRulesDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
-                responseCreate.accessRulesDtos = responseUser.accessRulesDtos;
+                access_rulesResponseUpdateDto apiresponseUpdate = JsonConvert.DeserializeObject<access_rulesResponseUpdateDto>(responseUpdateUsers.data);
+                apiResponseUpdate.status = responseUpdateUsers.estado;
+                apiResponseUpdate.changes = apiresponseUpdate.changes;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                apiResponseUpdate.status = responseUpdateUsers.estado;
             }
-            return responseCreate;
+            return apiResponseUpdate;
         }
-        private async Task<ResponseAccesoRulesShow> RunDelete(BodyDeleteObject bodyDeleteObject)
+        private async Task<ResponseAccesoRulesDelete> RunDelete(BodyDeleteObject bodyDeleteObject)
         {
-            ResponseAccesoRulesShow responseCreate = new ResponseAccesoRulesShow();
+            ResponseAccesoRulesDelete responseDelete = new ResponseAccesoRulesDelete();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlDelete, bodyDeleteObject, this.session);
-            if (responseAddUsers.estado)
+            Response APIresponseDelete = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlDelete, bodyDeleteObject, this.session);
+            if (APIresponseDelete.estado)
             {
-                responseApiAccessRulesDto responseUser = JsonConvert.DeserializeObject<responseApiAccessRulesDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
-                responseCreate.accessRulesDtos = responseUser.accessRulesDtos;
+                access_rulesResponseDeleteDto responseDeleteDto = JsonConvert.DeserializeObject<access_rulesResponseDeleteDto>(APIresponseDelete.data);
+                responseDelete.status = APIresponseDelete.estado;
+                responseDelete.changes = responseDeleteDto.changes;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                responseDelete.status = APIresponseDelete.estado;
             }
-            return responseCreate;
+            return responseDelete;
         }
     }
     /*clases de ayuda*/
@@ -160,14 +186,14 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         public bool status { get; set; }
         public List<accessRulesDto> accessRulesDtos { get; set; }
     }
-     public class ResponseAccesoRulesUpdate
+    public class ResponseAccesoRulesUpdate
     {
         public bool status { get; set; }
-        public string changes { get; set; }
+        public int changes { get; set; }
     }
-     public class ResponseAccesoRulesDelete
+    public class ResponseAccesoRulesDelete
     {
         public bool status { get; set; }
-        public string changes { get; set; }
+        public int changes { get; set; }
     }
 }

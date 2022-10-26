@@ -19,12 +19,11 @@ namespace ControlIDMvc.Querys
             this._dBContext = dBContext;
         }
 
-        public async Task<bool> store(PortalReglaAccesoCreateDto portalReglaAccesoCreateDto)
+        public async Task<bool> StoreAll(List<PortalReglaAcceso> portalReglaAcceso)
         {
-            var portalReglaAcceso = _mapper.Map<PortalReglaAcceso>(portalReglaAccesoCreateDto);
-            await _dBContext.AddAsync(portalReglaAcceso);
-            var resultado = await _dBContext.SaveChangesAsync();
-            if (resultado == 1)
+            await _dBContext.AddRangeAsync(portalReglaAcceso);
+            var response = await _dBContext.SaveChangesAsync();
+            if (response > 0)
             {
                 return true;
             }

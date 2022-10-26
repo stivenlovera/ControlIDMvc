@@ -10,4 +10,8 @@ namespace ControlIDMvc.ServicesCI.portalsAccessRulesDto
         public int portal_id { get; set; }
         public int access_rule_id { get; set; }
     }
+    public class portalsAccessRulesResponseDto
+    {
+        public List<int> ids { get; set; }
+    }
 }

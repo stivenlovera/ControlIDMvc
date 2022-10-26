@@ -8,6 +8,8 @@ namespace ControlIDMvc.Entities
         public int PersonaId { get; set; }
         public Persona Persona { get; set; }
         public int ControlId { get; set; }
-        public string Sincronizacion { get; set; }
+        public long ControlIdValue { get; set; }
+        public int ControlIdUserId { get; set; }
+        public string ControlIdsecret { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace ControlIDMvc.Querys
                             Usuario = "buscar origen",
                             Entregado = c.Persona,
                             Tipo = c.Tipo
-                        }).Where(c => c.Tipo == httpRequest.Query["tipo"].ToString());
+                        });
             /*FILTROS POR URL*/
             System.Console.WriteLine("VALOR A EVALUAR: " + httpRequest.Query["tipo"].ToString());
             /* var param=httpRequest.Query["tipo"].ToString();

@@ -16,13 +16,18 @@ namespace ControlIDMvc.Querys
             this._dbContext = dbContext;
             this._mapper = mapper;
         }
+        private long DateTimeToUnix(DateTime MyDateTime)
+        {
+            TimeSpan timeSpan = MyDateTime - new DateTime(2022, 9, 10, 0, 0, 0);
+
+            return (long)timeSpan.TotalSeconds;
+        }
         public async Task<Persona> Show(int id)
         {
             return await _dbContext.Persona.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
-        public async Task<Persona> Store(PersonaCreateDto personaCreateDto)
+        public async Task<Persona> Store(Persona persona)
         {
-            var persona = _mapper.Map<Persona>(personaCreateDto);
             var resultado = _dbContext.Persona.Add(persona);
             await _dbContext.SaveChangesAsync();
             return persona;
@@ -118,7 +123,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Persona> UpdateOne(Persona persona)
         {
-            _dbContext.Entry(await _dbContext.Persona.FirstOrDefaultAsync(x => x.Id == persona.Id)).CurrentValues.SetValues(new 
+            _dbContext.Entry(await _dbContext.Persona.FirstOrDefaultAsync(x => x.Id == persona.Id)).CurrentValues.SetValues(new
             {
                 Id = persona.Id,
                 Nombre = persona.Nombre,
@@ -133,7 +138,7 @@ namespace ControlIDMvc.Querys
                 ControlIdPassword = persona.ControlIdPassword
             });
             await _dbContext.SaveChangesAsync();
-            return await _dbContext.Persona.Where(p => p.Id == persona.Id).FirstAsync();
+            return await _dbContext.Persona.Where(p => p.Id == persona.Id).Include(x => x.card).FirstAsync();
         }
         public async Task<List<Persona>> GetAllLikeCi(int value)
         {

@@ -6,6 +6,9 @@ using AutoMapper;
 using ControlIDMvc.Dtos.Dispositivo;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
+using ControlIDMvc.ServicesCI;
+using ControlIDMvc.ServicesCI.QueryCI;
+using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
@@ -14,7 +17,11 @@ namespace ControlIDMvc.Querys
     {
         private readonly DBContext _dbContext;
         private readonly IMapper _mapper;
-        public DispositivoQuery(DBContext dbContext, IMapper mapper)
+        public DispositivoQuery(
+            HttpClientService httpClientService,
+            DBContext dbContext,
+            IMapper mapper
+            )
         {
             this._dbContext = dbContext;
             this._mapper = mapper;
@@ -28,6 +35,9 @@ namespace ControlIDMvc.Querys
         public string showColumnDir;
         public string searchValue;
         public int pageSize, skip, recordsTotal;
+
+        public AccessRulesControlIdQuery AccessRulesControlIdQuery { get; }
+
         public async Task<List<Dispositivo>> getLoginControlador(int controlador_id, int proyecto_id)
         {
             var dispostivos = await this._dbContext.Dispositivo
@@ -80,14 +90,14 @@ namespace ControlIDMvc.Querys
         }
         public async Task<List<Dispositivo>> GetAll()
         {
-           return await _dbContext.Dispositivo.ToListAsync();
+            return await _dbContext.Dispositivo.ToListAsync();
         }
         public async Task<List<Dispositivo>> GetOne(int id)
         {
-            var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivo.Id==id).ToListAsync();
+            var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivo.Id == id).ToListAsync();
             return dispostivos;
         }
-        
+
         public async Task<List<Dispositivo>> GetAllByID(List<int> dispositivos_id)
         {
             var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivos_id.Contains(dispositivo.Id)).ToListAsync();
@@ -98,6 +108,6 @@ namespace ControlIDMvc.Querys
             var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivo.Id == dispositivos_id).Include(d => d.Portals).ToListAsync();
             return dispostivos;
         }
-
+ 
     }
 }
