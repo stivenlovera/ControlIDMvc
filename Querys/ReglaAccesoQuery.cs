@@ -68,7 +68,10 @@ namespace ControlIDMvc.Querys
                 data = reglasAcceso
             };
         }
-
+        public async Task<ReglaAcceso> SearchControlId(int ControlId)
+        {
+            return await _dbContext.ReglaAcceso.Where(p => p.ControlId == ControlId).FirstOrDefaultAsync();
+        }
         public async Task<bool> StoreAll(List<ReglaAcceso> reglaAccesos)
         {
             await _dbContext.AddRangeAsync(reglaAccesos);

@@ -142,7 +142,7 @@ namespace ControlIDMvc.Controllers
             if (ModelState.IsValid)
             {
                 BodyLogin cuerpo = this._loginControlIdQuery.Login(probarConexionDto.Usuario, probarConexionDto.Password);
-                Response login = await this._httpClientService.LoginRun(probarConexionDto.Ip, this.port, this._apiRutas.ApiUrlLogin, cuerpo, "");
+                Response login = await this._httpClientService.LoginRun(probarConexionDto.Ip, probarConexionDto.Port, this._apiRutas.ApiUrlLogin, cuerpo, "");
                 if (login.estado)
                 {
                     return Json(new
@@ -291,7 +291,7 @@ namespace ControlIDMvc.Controllers
             }
             return apiAccessRules.status;
         }
-        private async Task<bool> portalAccessRulesStoreControlId(int PortalId, int ReglaAccesoId)
+        private async Task<bool> portalAccessRulesStoreControlId()
         {
             var apiportalAccessRules = await this._portalsAccessRulesControlIdQuery.ShowAll();
             if (apiportalAccessRules.status)
@@ -299,12 +299,14 @@ namespace ControlIDMvc.Controllers
                 var portalAccessRule = new List<PortalReglaAcceso>();
                 foreach (var apiPortalAccessRule in apiportalAccessRules.portalAccesoRulesDtos)
                 {
+                    var portal = await this._portalQuery.SearchControlId(apiPortalAccessRule.portal_id);
+                    var ruleAccess = await this._reglaAccesoQuery.SearchControlId(apiPortalAccessRule.access_rule_id);
                     portalAccessRule.Add(new PortalReglaAcceso
                     {
                         ControlIdPortalId = apiPortalAccessRule.portal_id,
                         ControlIdRulesId = apiPortalAccessRule.access_rule_id,
-                        PortalId = PortalId,
-                        ReglaAccesoId = ReglaAccesoId
+                        PortalId = portal.Id,
+                        ReglaAccesoId = ruleAccess.Id
                     });
                 }
                 var updateUsuario = await this._portalReglasAccesoQuery.StoreAll(portalAccessRule);
