@@ -304,7 +304,7 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ControlIdAreaFromId = table.Column<int>(type: "int", nullable: false),
                     ControlIdAreaToId = table.Column<int>(type: "int", nullable: false),
-                    DispositivoId = table.Column<int>(type: "int", nullable: false)
+                    DispositivoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -313,8 +313,7 @@ namespace ControlIDMvc.Migrations
                         name: "FK_Portal_Dispositivo_DispositivoId",
                         column: x => x.DispositivoId,
                         principalTable: "Dispositivo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 

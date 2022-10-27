@@ -593,7 +593,7 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DispositivoId")
+                    b.Property<int?>("DispositivoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -967,9 +967,7 @@ namespace ControlIDMvc.Migrations
                 {
                     b.HasOne("ControlIDMvc.Entities.Dispositivo", "Dispositivo")
                         .WithMany("Portals")
-                        .HasForeignKey("DispositivoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DispositivoId");
 
                     b.Navigation("Dispositivo");
                 });

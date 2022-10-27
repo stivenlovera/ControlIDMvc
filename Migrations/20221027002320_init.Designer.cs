@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221026015425_init")]
+    [Migration("20221027002320_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -595,7 +595,7 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DispositivoId")
+                    b.Property<int?>("DispositivoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
@@ -969,9 +969,7 @@ namespace ControlIDMvc.Migrations
                 {
                     b.HasOne("ControlIDMvc.Entities.Dispositivo", "Dispositivo")
                         .WithMany("Portals")
-                        .HasForeignKey("DispositivoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DispositivoId");
 
                     b.Navigation("Dispositivo");
                 });

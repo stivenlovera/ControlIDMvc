@@ -240,7 +240,6 @@ namespace ControlIDMvc.Controllers
                         ControlIdName = portal.name,
                         ControlIdAreaFromId = portal.area_from_id,
                         ControlIdAreaToId = portal.area_to_id,
-                        DispositivoId = 0
                     });
                 }
                 var storePortals = await this._portalQuery.StoreAll(portals);

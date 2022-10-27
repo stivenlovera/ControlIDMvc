@@ -13,6 +13,5 @@ namespace ControlIDMvc.Dtos.Portal
         public string ControlIdName { get; set; }
         public int ControlIdAreaFromId { get; set; }
         public int ControlIdAreaToId { get; set; }
-        public int DispositivoId { get; set; }
     }
 }
