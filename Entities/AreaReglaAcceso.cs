@@ -10,7 +10,9 @@ namespace ControlIDMvc.Entities
         public int Id { get; set; }
         public int ControlIdAreaId { get; set; }
         public Area Area { get; set; }
+        public int AreaId { get; set; }
         public int ControlidReglaAccesoId { get; set; }
         public ReglaAcceso ReglaAcceso { get; set; }
+        public int ReglaAccesoId { get; set; }
     }
 }

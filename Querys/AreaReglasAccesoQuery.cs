@@ -25,5 +25,18 @@ namespace ControlIDMvc.Querys
             var resultado = await _dBContext.SaveChangesAsync();
             return areaReglaAccesoDto;
         }
+        public async Task<bool> storeAll(List<AreaReglaAcceso> areaReglaAccesos)
+        {
+            await _dBContext.AddRangeAsync(areaReglaAccesos);
+            var resultado = await _dBContext.SaveChangesAsync();
+            if (resultado == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

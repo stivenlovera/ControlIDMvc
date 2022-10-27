@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControlIDMvc.Entities;
 using ControlIDMvc.ServicesCI.Dtos.time_spansDto;
 using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Newtonsoft.Json;
@@ -22,7 +23,6 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         {
             this._httpClientService = httpClientService;
             this._ApiRutas = new ApiRutas();
-
         }
         public void Params(int port, string controlador, string user, string password, string session)
         {
@@ -32,62 +32,212 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             this.password = password;
             this.session = session;
         }
-        public async Task<ResponseDiasCreate> CreateDias(List<time_spansCreateDto> tiempos, int horario)
+        public async Task<ResponseDiasCreate> Create(Dia dia)
         {
-            foreach (var tiempo in tiempos)
+            var data = new List<time_spansCreateDto>();
+            data.Add(new time_spansCreateDto
             {
-                tiempo.time_zone_id = horario;
-            }
+                time_zone_id = dia.ControlTimeZoneId,
+                start = dia.ControlStart,
+                end = dia.ControlEnd,
+                sun = dia.ControlSun,
+                mon = dia.ControlMon,
+                tue = dia.ControlThu,
+                fri = dia.ControlFri,
+                sat = dia.ControlSat,
+                hol1 = dia.ControlHol1,
+                hol2 = dia.ControlHol2,
+                hol3 = dia.ControlHol3
+            });
             BodyCreateObject body = new BodyCreateObject()
             {
                 objeto = "time_spans",
-                values = tiempos
+                values = data
             };
             var response = await this.RunCreate(body);
             return response;
         }
-        public async Task<ResponseDiasShow> ShowDay(List<BodyShowAllObject> tiempos, int horario)
+        public async Task<ResponseDiasCreate> CreateAll(List<Dia> dias)
+        {
+            var data = new List<time_spansCreateDto>();
+            foreach (var dia in dias)
+            {
+                data.Add(new time_spansCreateDto
+                {
+                    time_zone_id = dia.ControlTimeZoneId,
+                    start = dia.ControlStart,
+                    end = dia.ControlEnd,
+                    sun = dia.ControlSun,
+                    mon = dia.ControlMon,
+                    tue = dia.ControlThu,
+                    fri = dia.ControlFri,
+                    sat = dia.ControlSat,
+                    hol1 = dia.ControlHol1,
+                    hol2 = dia.ControlHol2,
+                    hol3 = dia.ControlHol3
+                });
+            }
+            BodyCreateObject body = new BodyCreateObject()
+            {
+                objeto = "time_spans",
+                values = data
+            };
+            var response = await this.RunCreate(body);
+            return response;
+        }
+        public async Task<ResponseDiasShow> ShowAll()
         {
             BodyShowAllObject body = new BodyShowAllObject()
             {
                 objeto = "time_spans"
             };
-            var response = await this.RunShow(body);
+            var response = await this.RunShowAll(body);
             return response;
         }
+        public async Task<ResponseDiasUpdate> Update(Dia dia)
+        {
+            BodyUpdateObject body = new BodyUpdateObject()
+            {
+                objeto = "time_spans",
+                values = new time_spansCreateDto
+                {
+                    time_zone_id = dia.ControlTimeZoneId,
+                    start = dia.ControlStart,
+                    end = dia.ControlEnd,
+                    sun = dia.ControlSun,
+                    mon = dia.ControlMon,
+                    wed = dia.ControlWed,
+                    tue = dia.ControlTue,
+                    thu = dia.ControlThu,
+                    fri = dia.ControlFri,
+                    sat = dia.ControlSat,
+                    hol1 = dia.ControlHol1,
+                    hol2 = dia.ControlHol2,
+                    hol3 = dia.ControlHol3
+                },
+                where = new
+                {
+                    time_spans = new
+                    {
+                        id = dia.ControlId
+                    }
+                }
+            };
+            var response = await this.RunUpdate(body);
+            return response;
+        }
+        public async Task<ResponseDiasDelete> Delete(Dia dia)
+        {
+            BodyDeleteObject body = new BodyDeleteObject()
+            {
+                objeto = "time_spans",
+                where = new
+                {
+                    time_spans = new
+                    {
+                        value = dia.ControlId
+                    }
+                }
+            };
+            var response = await this.RunDelete(body);
+            return response;
+        }
+        public async Task<ResponseDiasDelete> DeleteAll()
+        {
+            BodyDeleteObject body = new BodyDeleteObject()
+            {
+                objeto = "time_spans"
+            };
+            var response = await this.RunDelete(body);
+            return response;
+        }
+
+
+
         private async Task<ResponseDiasCreate> RunCreate(BodyCreateObject bodyCreateObject)
         {
             ResponseDiasCreate responseCreate = new ResponseDiasCreate();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyCreateObject, this.session);
-            if (responseAddUsers.estado)
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyCreateObject, this.session);
+            if (apiResponse.estado)
             {
-                horarioResponseDto responseUser = JsonConvert.DeserializeObject<horarioResponseDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
-                responseCreate.ids = responseUser.ids;
+                horarioResponseDto response = JsonConvert.DeserializeObject<horarioResponseDto>(apiResponse.data);
+                responseCreate.status = apiResponse.estado;
+                responseCreate.ids = response.ids;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                responseCreate.status = apiResponse.estado;
             }
             return responseCreate;
         }
-        private async Task<ResponseDiasShow> RunShow(BodyShowAllObject bodyShowAllObject)
+        private async Task<ResponseDiasShow> RunShow(BodyShowObject bodyShowObject)
         {
-            ResponseDiasShow responseCreate = new ResponseDiasShow();
+            ResponseDiasShow responseShow = new ResponseDiasShow();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
-            if (responseAddUsers.estado)
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowObject, this.session);
+            if (apiResponse.estado)
             {
-                responsetime_spansDto responseUser = JsonConvert.DeserializeObject<responsetime_spansDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
-                responseCreate.time_SpansDtos = responseUser.time_SpansDtos;
+                responsetime_spansDto response = JsonConvert.DeserializeObject<responsetime_spansDto>(apiResponse.data);
+                responseShow.status = apiResponse.estado;
+                responseShow.time_SpansDtos = response.time_SpansDtos;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                responseShow.status = apiResponse.estado;
             }
-            return responseCreate;
+            return responseShow;
+        }
+        private async Task<ResponseDiasShow> RunShowAll(BodyShowAllObject bodyShowAllObject)
+        {
+            ResponseDiasShow responseShow = new ResponseDiasShow();
+
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
+            if (apiResponse.estado)
+            {
+                responsetime_spansDto response = JsonConvert.DeserializeObject<responsetime_spansDto>(apiResponse.data);
+                responseShow.status = apiResponse.estado;
+                responseShow.time_SpansDtos = response.time_SpansDtos;
+            }
+            else
+            {
+                responseShow.status = apiResponse.estado;
+            }
+            return responseShow;
+        }
+        private async Task<ResponseDiasUpdate> RunUpdate(BodyUpdateObject bodyUpdateObject)
+        {
+            ResponseDiasUpdate responseUpdate = new ResponseDiasUpdate();
+
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlUpdate, bodyUpdateObject, this.session);
+            if (apiResponse.estado)
+            {
+                time_spansResponseUpdateDto response = JsonConvert.DeserializeObject<time_spansResponseUpdateDto>(apiResponse.data);
+                responseUpdate.status = apiResponse.estado;
+                responseUpdate.changes = response.changes;
+            }
+            else
+            {
+                responseUpdate.status = apiResponse.estado;
+            }
+            return responseUpdate;
+        }
+        private async Task<ResponseDiasDelete> RunDelete(BodyDeleteObject bodyDeleteObject)
+        {
+            ResponseDiasDelete responseDelete = new ResponseDiasDelete();
+
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlDelete, bodyDeleteObject, this.session);
+            if (apiResponse.estado)
+            {
+                time_spansResponseDeleteDto response = JsonConvert.DeserializeObject<time_spansResponseDeleteDto>(apiResponse.data);
+                responseDelete.status = apiResponse.estado;
+                responseDelete.changes = response.changes;
+            }
+            else
+            {
+                responseDelete.status = apiResponse.estado;
+            }
+            return responseDelete;
         }
     }
     /*clases de ayuda*/
@@ -100,5 +250,15 @@ namespace ControlIDMvc.ServicesCI.QueryCI
     {
         public bool status { get; set; }
         public List<time_spansDto> time_SpansDtos { get; set; }
+    }
+    public class ResponseDiasUpdate
+    {
+        public bool status { get; set; }
+        public int changes { get; set; }
+    }
+    public class ResponseDiasDelete
+    {
+        public bool status { get; set; }
+        public int changes { get; set; }
     }
 }

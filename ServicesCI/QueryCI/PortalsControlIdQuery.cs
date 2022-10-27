@@ -87,4 +87,5 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         public bool status { get; set; }
         public List<portalsDto> portalsDtos { get; set; }
     }
+    
 }

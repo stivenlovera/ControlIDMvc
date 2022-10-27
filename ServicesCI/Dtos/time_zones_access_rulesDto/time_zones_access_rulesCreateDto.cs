@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace ControlIDMvc.ServicesCI.Dtos.time_zones_access_rulesDto
 {
-    public class time_zones_access_rulesDto
+    public class time_zones_access_rulesCreateDto
     {
         public int access_rule_id { get; set; }
         public int time_zone_id { get; set; }
     }
-     public class time_zones_access_rulesResponseDto
+    public class time_zones_access_ResponseCreateDto
     {
-        public List<time_zones_access_rulesDto> time_Zones_Access_RulesDtos { get; set; }
+        public List<int> ids { get; set; }
     }
 }

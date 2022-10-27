@@ -47,7 +47,7 @@ namespace ControlIDMvc.Querys
                 horario.id = item.Id;
                 foreach (var dia in item.Dias)
                 {
-                    switch (dia.Nombre)
+                   /*  switch (dia.Nombre)
                     {
                         case "lunes":
                             horario.lunes = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
@@ -73,7 +73,7 @@ namespace ControlIDMvc.Querys
                         default:
 
                             break;
-                    }
+                    } */
                     horarios.Add(horario);
                 }
             }
@@ -87,7 +87,6 @@ namespace ControlIDMvc.Querys
                 data = horarios
             };
         }
-
         public async Task<bool> store(HorarioCreateDto horarioForm)
         {
             List<Dia> dia = new List<Dia>();
@@ -98,9 +97,9 @@ namespace ControlIDMvc.Querys
                 dia.Add(
                     new Dia()
                     {
-                        Nombre = horarioForm.Dias[i],
+/*                         Nombre = horarioForm.Dias[i],
                         HoraFin = hora_fin,
-                        HoraInicio = hora_inicio,
+                        HoraInicio = hora_inicio, */
 
                     });
             }
@@ -120,10 +119,27 @@ namespace ControlIDMvc.Querys
                 return false;
             }
         }
+        public async Task<bool> StoreAll(List<Horario> horarios){
+            await _dbContext.AddRangeAsync(horarios);
+            var resultado=await _dbContext.SaveChangesAsync();
+            if (resultado == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public async Task<List<Horario>> GetAllByID(List<int> horarios_id)
         {
             var horarios = await this._dbContext.Horario.Where(horario => horarios_id.Contains(horario.Id)).ToListAsync();
             return horarios;
         }
+        public async Task<Horario> SearchControlId(int ControlId)
+        {
+            return await _dbContext.Horario.Where(p => p.ControlId == ControlId).FirstOrDefaultAsync();
+        }
+        
     }
 }

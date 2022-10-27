@@ -40,12 +40,17 @@ namespace ControlIDMvc.Controllers
         private readonly ReglaAccesoQuery _reglaAccesoQuery;
         private readonly HorarioReglaAccesoQuery _horarioReglaAccesoQuery;
         private readonly HorarioQuery _horarioQuery;
+        private readonly DiaQuery _diaQuery;
+        private readonly AreaQuery _areaQuery;
+        private readonly AreaReglasAccesoQuery _areaReglasAccesoQuery;
         private readonly PortalsControlIdQuery _portalsControlIdQuery;
         private readonly PortalsAccessRulesControlIdQuery _portalsAccessRulesControlIdQuery;
         private readonly HorarioControlIdQuery _horarioControlIdQuery;
         private readonly DiasControlIdQuery _diasControlIdQuery;
         private readonly AccessRulesControlIdQuery _accessRulesControlIdQuery;
         private readonly HorarioAccessRulesControlIdQuery _horarioAccessRulesControlIdQuery;
+        private readonly AreaControlIdQuery _areaControlIdQuery;
+        private readonly AreaAccesRuleControlIdQuery _areaAccesRuleControlIdQuery;
         private readonly HttpClientService _httpClientService;
         ApiRutas _apiRutas;
         public DispositivoController(
@@ -58,7 +63,8 @@ namespace ControlIDMvc.Controllers
             HorarioControlIdQuery horarioControlIdQuery,
             DiasControlIdQuery diasControlIdQuery,
             HorarioAccessRulesControlIdQuery horarioAccessRulesControlIdQuery,
-
+            AreaControlIdQuery areaControlIdQuery,
+            AreaAccesRuleControlIdQuery areaAccesRuleControlIdQuery,
             //sistema
             DispositivoQuery dispositivoQuery,
             AccionQuery accionQuery,
@@ -68,6 +74,9 @@ namespace ControlIDMvc.Controllers
             ReglaAccesoQuery reglaAccesoQuery,
             HorarioReglaAccesoQuery horarioReglaAccesoQuery,
             HorarioQuery horarioQuery,
+            DiaQuery diaQuery,
+            AreaQuery areaQuery,
+            AreaReglasAccesoQuery areaReglasAccesoQuery,
             HttpClientService httpClientService
          )
         {
@@ -81,6 +90,9 @@ namespace ControlIDMvc.Controllers
             this._reglaAccesoQuery = reglaAccesoQuery;
             this._horarioReglaAccesoQuery = horarioReglaAccesoQuery;
             this._horarioQuery = horarioQuery;
+            this._diaQuery = diaQuery;
+            this._areaQuery = areaQuery;
+            this._areaReglasAccesoQuery = areaReglasAccesoQuery;
             this._actionsControlIdQuery = actionsControlIdQuery;
             this._portalsActionsControlIdQuery = portalsActionsControlIdQuery;
             this._accessRulesControlIdQuery = accessRulesControlIdQuery;
@@ -89,6 +101,8 @@ namespace ControlIDMvc.Controllers
             this._horarioControlIdQuery = horarioControlIdQuery;
             this._diasControlIdQuery = diasControlIdQuery;
             this._horarioAccessRulesControlIdQuery = horarioAccessRulesControlIdQuery;
+            this._areaControlIdQuery = areaControlIdQuery;
+            this._areaAccesRuleControlIdQuery = areaAccesRuleControlIdQuery;
             this._apiRutas = new ApiRutas();
         }
 
@@ -312,79 +326,86 @@ namespace ControlIDMvc.Controllers
             }
             return apiportalAccessRules.status;
         }
-        /* private async Task<bool> HorarioStoreControlId()
+        //dia
+        private async Task<bool> DiaStoreControlId()
         {
-            var actions = await this._actionsControlIdQuery.ShowAll();
-            if (actions.status)
+            var apiDias = await this._diasControlIdQuery.ShowAll();
+            if (apiDias.status)
             {
-                var acciones = new List<Accion>();
-                foreach (var action in actions.actionsDto)
+                var dias = new List<Dia>();
+                foreach (var time_SpansDtos in apiDias.time_SpansDtos)
                 {
-                    acciones.Add(new Accion{
-                        ControlId=action.id,
-                        ControlIdAction=action.action,
-                        ControlIdParametrers=action.parameters,
-                        ControlIdName=action.name,
-                        ControlIdRunAt=action.run_at,
-                        Nombre=action.name,
+                    dias.Add(new Dia
+                    {
+                        ControlTimeZoneId = time_SpansDtos.time_zone_id,
+                        ControlStart = time_SpansDtos.start,
+                        ControlEnd = time_SpansDtos.end,
+                        ControlSun = time_SpansDtos.sun,
+                        ControlMon = time_SpansDtos.mon,
+                        ControlWed = time_SpansDtos.wed,
+                        ControlTue = time_SpansDtos.thu,
+                        ControlFri = time_SpansDtos.fri,
+                        ControlSat = time_SpansDtos.sat,
+                        ControlHol1 = time_SpansDtos.hol1,
+                        ControlHol2 = time_SpansDtos.hol2,
+                        ControlHol3 = time_SpansDtos.hol3
                     });
                 }
-                var updateUsuario = await this._accionQuery.AllStore(acciones);
+                var updateUsuario = await this._diaQuery.StoreAll(dias);
             }
-            return actions.status;
+            return apiDias.status;
         }
-        private async Task<bool> HorarioDiaStoreControlId()
+        private async Task<bool> HorarioStoreControlId()
         {
-            var actions = await this._actionsControlIdQuery.ShowAll();
-            if (actions.status)
+            var apiHorario = await this._horarioControlIdQuery.ShowAll();
+            if (apiHorario.status)
             {
-                var acciones = new List<Accion>();
-                foreach (var action in actions.actionsDto)
+                var horarios = new List<Horario>();
+                foreach (var timezoneDto in apiHorario.timezoneDtos)
                 {
-                    acciones.Add(new Accion{
-                        ControlId=action.id,
-                        ControlIdAction=action.action,
-                        ControlIdParametrers=action.parameters,
-                        ControlIdName=action.name,
-                        ControlIdRunAt=action.run_at,
-                        Nombre=action.name,
+                    horarios.Add(new Horario
+                    {
+                        ControlId = timezoneDto.id,
+                        ControlIdName = timezoneDto.name,
+                        Descripcion = timezoneDto.name,
+                        Nombre = timezoneDto.name
                     });
                 }
-                var updateUsuario = await this._accionQuery.AllStore(acciones);
+                var updateHorario = await this._horarioQuery.StoreAll(horarios);
             }
-            return actions.status;
+            return apiHorario.status;
         }
-         private async Task<bool> DiaStoreControlId()
+        private async Task<bool> HorarioAccessRulesControlId()
         {
-            var actions = await this._actionsControlIdQuery.ShowAll();
-            if (actions.status)
+            var apiHorario = await this._horarioAccessRulesControlIdQuery.ShowAll();
+            if (apiHorario.status)
             {
-                var acciones = new List<Accion>();
-                foreach (var action in actions.actionsDto)
+                var horarioAccessRules = new List<HorarioReglaAcceso>();
+                foreach (var time_Zones_Access_Rules in apiHorario.time_Zones_Access_RulesDtos)
                 {
-                    acciones.Add(new Accion{
-                        ControlId=action.id,
-                        ControlIdAction=action.action,
-                        ControlIdParametrers=action.parameters,
-                        ControlIdName=action.name,
-                        ControlIdRunAt=action.run_at,
-                        Nombre=action.name,
+                    var reglasAcceso = await this._horarioQuery.SearchControlId(time_Zones_Access_Rules.time_zone_id);
+                    var horario = await this._reglaAccesoQuery.SearchControlId(time_Zones_Access_Rules.access_rule_id);
+                    horarioAccessRules.Add(new HorarioReglaAcceso
+                    {
+                        ControlIdAccessRulesId = time_Zones_Access_Rules.access_rule_id,
+                        ControlIdTimeZoneId = time_Zones_Access_Rules.time_zone_id,
+                        HorarioId = horario.Id,
+                        ReglasAccesoId = reglasAcceso.Id
                     });
                 }
-                var updateUsuario = await this._accionQuery.AllStore(acciones);
+                var updateHorario = await this._horarioReglaAccesoQuery.StoreAll(horarioAccessRules);
             }
-            return actions.status;
+            return apiHorario.status;
         }
-        
         private async Task<bool> ApiAreaStore()
         {
             var areas = await this._areaControlIdQuery.ShowAll();
             if (areas.status)
             {
-                List<AreaCreateDto> new_area = new List<AreaCreateDto>();
+                List<AreaCreateDto> data = new List<AreaCreateDto>();
                 foreach (var area in areas.areaResponseDtos)
                 {
-                    new_area.Add(
+                    data.Add(
                         new AreaCreateDto
                         {
                             ControlId = area.id,
@@ -394,13 +415,42 @@ namespace ControlIDMvc.Controllers
                         }
                     );
                 }
-                var updateUsuario = await this._areaQuery.StoreAll(new_area);
+                var updateUsuario = await this._areaQuery.StoreAll(data);
                 return areas.status;
             }
             else
             {
                 return areas.status;
             }
-        } */
+        }
+        private async Task<bool> ApiAreaReglasAccesoStore()
+        {
+            var areas = await this._areaAccesRuleControlIdQuery.ShowAll();
+            if (areas.status)
+            {
+                
+                List<AreaReglaAcceso> data = new List<AreaReglaAcceso>();
+                foreach (var area_Access_Rules in areas.area_Access_RulesControlDtos)
+                {
+                    var reglasAcceso = await this._horarioQuery.SearchControlId(area_Access_Rules.access_rule_id);
+                    var area = await this._areaQuery.SearchControlId(area_Access_Rules.area_id);
+                    data.Add(
+                        new AreaReglaAcceso
+                        {
+                            ControlIdAreaId = area_Access_Rules.area_id,
+                            ControlidReglaAccesoId = area_Access_Rules.access_rule_id,
+                            AreaId=area.Id,
+                            ReglaAccesoId=reglasAcceso.Id
+                        }
+                    );
+                }
+                var updateUsuario = await this._areaReglasAccesoQuery.storeAll(data);
+                return areas.status;
+            }
+            else
+            {
+                return areas.status;
+            }
+        }
     }
 }

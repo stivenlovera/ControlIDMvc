@@ -4,7 +4,7 @@ namespace ControlIDMvc.ServicesCI.Dtos.time_zonesDto
     {
         public string name { get; set; }
     }
-    public class time_zonesResponseDto
+    public class time_zonesResponseCreateDto
     {
         public List<int> ids { get; set; }
     }

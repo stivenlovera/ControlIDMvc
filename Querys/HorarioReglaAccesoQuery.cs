@@ -18,12 +18,25 @@ namespace ControlIDMvc.Querys
             this._mapper = mapper;
             this._dBContext = dBContext;
         }
-        public async Task<HorarioReglaAcceso> Store(HorarioReglaAccesoCreateDto horarioReglaAccesoCreateDto)
+        public async Task<bool> StoreAll(List<HorarioReglaAcceso> horarioReglaAccesos)
         {
-            var horarioReglaAcceso = _mapper.Map<HorarioReglaAcceso>(horarioReglaAccesoCreateDto);
+            await _dBContext.AddRangeAsync(horarioReglaAccesos);
+            var resultado = await _dBContext.SaveChangesAsync();
+            if (resultado == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public async Task<HorarioReglaAcceso> Store(HorarioReglaAcceso horarioReglaAcceso)
+        {
             var resultado = _dBContext.HorarioReglaAcceso.Add(horarioReglaAcceso);
             await _dBContext.SaveChangesAsync();
             return horarioReglaAcceso;
         }
+        
     }
 }

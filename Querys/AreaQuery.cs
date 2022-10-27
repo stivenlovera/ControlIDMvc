@@ -106,5 +106,12 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return area;
         }
+        public async Task<Area> SearchControlId(int ControlId)
+        {
+            return await _dbContext.Area.Where(a => a.ControlId == ControlId).FirstOrDefaultAsync();
+        }
+
+
+
     }
 }

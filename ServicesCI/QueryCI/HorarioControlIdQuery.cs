@@ -1,7 +1,9 @@
+using ControlIDMvc.Entities;
 using ControlIDMvc.ServicesCI.Dtos.time_spansDto;
 using ControlIDMvc.ServicesCI.Dtos.time_zonesDto;
 using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Newtonsoft.Json;
+using static ControlIDMvc.ServicesCI.Dtos.time_zonesDto.timezoneDelete;
 
 namespace ControlIDMvc.ServicesCI.QueryCI
 {
@@ -31,11 +33,14 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             this.password = password;
             this.session = session;
         }
-      
-        public async Task<ResponseHorarioCreate> CreateHorario(time_zonesCreateDto horario)
+
+        public async Task<ResponseHorarioCreate> Create(Horario horario)
         {
             List<time_zonesCreateDto> horarios = new List<time_zonesCreateDto>();
-            horarios.Add(horario);
+            horarios.Add(new time_zonesCreateDto
+            {
+                name = horario.ControlIdName
+            });
             BodyCreateObject body = new BodyCreateObject()
             {
                 objeto = "time_zones",
@@ -44,52 +49,175 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunCreate(body);
             return response;
         }
-
-        public async Task<ResponseHorarioShow> Show()
+        public async Task<ResponseHorarioCreate> CreateAll(List<Horario> horarios)
         {
-            BodyUpdateObject body = new BodyUpdateObject()
+            List<time_zonesCreateDto> data = new List<time_zonesCreateDto>();
+            foreach (var horario in horarios)
             {
-                objeto = "users"
+                data.Add(new time_zonesCreateDto
+                {
+                    name = horario.ControlIdName
+                });
+            }
+            BodyCreateObject body = new BodyCreateObject()
+            {
+                objeto = "time_zones",
+                values = data
             };
-          var response = await this.RunShow(body);
+            var response = await this.RunCreate(body);
             return response;
         }
 
+        public async Task<ResponseHorarioShow> Show()
+        {
+            BodyShowObject body = new BodyShowObject()
+            {
+                objeto = "time_zones"
+            };
+            var response = await this.RunShow(body);
+            return response;
+        }
+
+        public async Task<ResponseHorarioShow> ShowAll()
+        {
+            BodyShowAllObject body = new BodyShowAllObject()
+            {
+                objeto = "time_zones"
+            };
+            var response = await this.RunShowAll(body);
+            return response;
+        }
+        public async Task<ResponseHorarioUpdate> Update(Horario horario)
+        {
+            BodyUpdateObject body = new BodyUpdateObject()
+            {
+                objeto = "time_zones",
+                values = new time_zonesCreateDto
+                {
+                    name = horario.ControlIdName
+                },
+                where = new
+                {
+                    time_zones = new
+                    {
+                        id = horario.ControlId
+                    }
+                }
+            };
+            var response = await this.RunUpdate(body);
+            return response;
+        }
+        public async Task<ResponseHorarioDelete> Delete(Horario horario)
+        {
+            BodyDeleteObject body = new BodyDeleteObject()
+            {
+                objeto = "time_zones",
+                where = new
+                {
+                    time_zones = new
+                    {
+                        id = horario.ControlId
+                    }
+                }
+            };
+            var response = await this.RunDelete(body);
+            return response;
+        }
+        public async Task<ResponseHorarioDelete> DeleteAll()
+        {
+            BodyDeleteObject body = new BodyDeleteObject()
+            {
+                objeto = "time_zones",
+            };
+            var response = await this.RunDelete(body);
+            return response;
+        }
         private async Task<ResponseHorarioCreate> RunCreate(BodyCreateObject bodyCreateObject)
         {
             ResponseHorarioCreate responseCreate = new ResponseHorarioCreate();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyCreateObject, this.session);
-            if (responseAddUsers.estado)
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyCreateObject, this.session);
+            if (apiResponse.estado)
             {
-                time_zonesResponseDto responseUser = JsonConvert.DeserializeObject<time_zonesResponseDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
+                time_zonesResponseCreateDto responseUser = JsonConvert.DeserializeObject<time_zonesResponseCreateDto>(apiResponse.data);
+                responseCreate.status = apiResponse.estado;
                 responseCreate.ids = responseUser.ids;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                responseCreate.status = apiResponse.estado;
             }
             return responseCreate;
         }
-        private async Task<ResponseHorarioShow> RunShow(BodyUpdateObject bodyUpdateObject)
+        private async Task<ResponseHorarioShow> RunShow(BodyShowObject bodyShowObject)
         {
             ResponseHorarioShow responseShow = new ResponseHorarioShow();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyUpdateObject, this.session);
-            if (responseAddUsers.estado)
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowObject, this.session);
+            if (apiResponse.estado)
             {
-                responsetimezoneDto responseUser = JsonConvert.DeserializeObject<responsetimezoneDto>(responseAddUsers.data);
-                responseShow.status = responseAddUsers.estado;
-                responseShow.timezoneDtos = responseUser.timezoneDtos;
+                time_zonesResponseDto response = JsonConvert.DeserializeObject<time_zonesResponseDto>(apiResponse.data);
+                responseShow.status = apiResponse.estado;
+                responseShow.timezoneDtos = response.timezoneDtos;
             }
             else
             {
-                responseShow.status = responseAddUsers.estado;
+                responseShow.status = apiResponse.estado;
             }
             return responseShow;
         }
 
+        private async Task<ResponseHorarioShow> RunShowAll(BodyShowAllObject bodyShowObject)
+        {
+            ResponseHorarioShow responseShow = new ResponseHorarioShow();
+
+            Response apiResponseHorario = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowObject, this.session);
+            if (apiResponseHorario.estado)
+            {
+                time_zonesResponseDto apiResponse = JsonConvert.DeserializeObject<time_zonesResponseDto>(apiResponseHorario.data);
+                responseShow.status = apiResponseHorario.estado;
+                responseShow.timezoneDtos = apiResponse.timezoneDtos;
+            }
+            else
+            {
+                responseShow.status = apiResponseHorario.estado;
+            }
+            return responseShow;
+        }
+        private async Task<ResponseHorarioUpdate> RunUpdate(BodyUpdateObject bodyUpdateObject)
+        {
+            ResponseHorarioUpdate responseUpdate = new ResponseHorarioUpdate();
+
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlUpdate, bodyUpdateObject, this.session);
+            if (apiResponse.estado)
+            {
+                timezoneResponseUpdateDto response = JsonConvert.DeserializeObject<timezoneResponseUpdateDto>(apiResponse.data);
+                responseUpdate.status = apiResponse.estado;
+                responseUpdate.changes = response.changes;
+            }
+            else
+            {
+                responseUpdate.status = apiResponse.estado;
+            }
+            return responseUpdate;
+        }
+        private async Task<ResponseHorarioDelete> RunDelete(BodyDeleteObject bodyDeleteObject)
+        {
+            ResponseHorarioDelete responseDelete = new ResponseHorarioDelete();
+
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlDelete, bodyDeleteObject, this.session);
+            if (apiResponse.estado)
+            {
+                timezoneResponseDeleteDto response = JsonConvert.DeserializeObject<timezoneResponseDeleteDto>(apiResponse.data);
+                responseDelete.status = apiResponse.estado;
+                responseDelete.changes = response.changes;
+            }
+            else
+            {
+                responseDelete.status = apiResponse.estado;
+            }
+            return responseDelete;
+        }
     }
     /*clases de ayuda*/
     public class ResponseHorarioCreate
@@ -101,5 +229,15 @@ namespace ControlIDMvc.ServicesCI.QueryCI
     {
         public bool status { get; set; }
         public List<timezoneDto> timezoneDtos { get; set; }
+    }
+    public class ResponseHorarioUpdate
+    {
+        public bool status { get; set; }
+        public int changes { get; set; }
+    }
+    public class ResponseHorarioDelete
+    {
+        public bool status { get; set; }
+        public int changes { get; set; }
     }
 }
