@@ -56,7 +56,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         {
             BodyShowAllObject body = new BodyShowAllObject()
             {
-                objeto = "portals"
+                objeto = "portal_actions"
             };
             var response = await this.RunShow(body);
             return response;
