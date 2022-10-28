@@ -70,7 +70,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 responsePortalsActionsDto responseUser = JsonConvert.DeserializeObject<responsePortalsActionsDto>(apiResponse.data);
                 responseShow.status = apiResponse.estado;
-                responseShow.portalsActionsDtos = responseUser.portalsActionsDto;
+                responseShow.portalsActionsDtos = responseUser.portal_actions;
             }
             else
             {
