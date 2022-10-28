@@ -366,6 +366,7 @@ namespace ControlIDMvc.Controllers
                 var dias = new List<Dia>();
                 foreach (var time_SpansDtos in apiDias.time_SpansDtos)
                 {
+                    var time_zone = await this._portalQuery.SearchControlId(time_SpansDtos.time_zone_id);
                     dias.Add(new Dia
                     {
                         ControlTimeZoneId = time_SpansDtos.time_zone_id,
@@ -374,12 +375,16 @@ namespace ControlIDMvc.Controllers
                         ControlSun = time_SpansDtos.sun,
                         ControlMon = time_SpansDtos.mon,
                         ControlWed = time_SpansDtos.wed,
-                        ControlTue = time_SpansDtos.thu,
+                        ControlThu = time_SpansDtos.thu,
+                        ControlTue = time_SpansDtos.tue,
                         ControlFri = time_SpansDtos.fri,
                         ControlSat = time_SpansDtos.sat,
                         ControlHol1 = time_SpansDtos.hol1,
                         ControlHol2 = time_SpansDtos.hol2,
-                        ControlHol3 = time_SpansDtos.hol3
+                        ControlHol3 = time_SpansDtos.hol3,
+                        HorarioId=time_zone.ControlId,
+                        Nombre=$"default {time_SpansDtos.time_zone_id}"
+                        
                     });
                 }
                 var updateUsuario = await this._diaQuery.StoreAll(dias);
