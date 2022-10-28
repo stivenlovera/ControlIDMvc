@@ -180,7 +180,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 responsetime_spansDto response = JsonConvert.DeserializeObject<responsetime_spansDto>(apiResponse.data);
                 responseShow.status = apiResponse.estado;
-                responseShow.time_SpansDtos = response.time_SpansDtos;
+                responseShow.time_SpansDtos = response.time_spans;
             }
             else
             {
@@ -197,7 +197,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 responsetime_spansDto response = JsonConvert.DeserializeObject<responsetime_spansDto>(apiResponse.data);
                 responseShow.status = apiResponse.estado;
-                responseShow.time_SpansDtos = response.time_SpansDtos;
+                responseShow.time_SpansDtos = response.time_spans;
             }
             else
             {

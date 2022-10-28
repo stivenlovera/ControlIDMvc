@@ -199,7 +199,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 cardsResponseDto responseUser = JsonConvert.DeserializeObject<cardsResponseDto>(responseUpdate.data);
                 responseShow.status = responseUpdate.estado;
-                responseShow.cardsDtos = responseUser.cardsDtos;
+                responseShow.cardsDtos = responseUser.cards;
             }
             else
             {

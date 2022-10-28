@@ -158,7 +158,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 time_zonesResponseDto response = JsonConvert.DeserializeObject<time_zonesResponseDto>(apiResponse.data);
                 responseShow.status = apiResponse.estado;
-                responseShow.timezoneDtos = response.timezoneDtos;
+                responseShow.timezoneDtos = response.time_zones;
             }
             else
             {
@@ -176,7 +176,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 time_zonesResponseDto apiResponse = JsonConvert.DeserializeObject<time_zonesResponseDto>(apiResponseHorario.data);
                 responseShow.status = apiResponseHorario.estado;
-                responseShow.timezoneDtos = apiResponse.timezoneDtos;
+                responseShow.timezoneDtos = apiResponse.time_zones;
             }
             else
             {

@@ -12,6 +12,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.time_zonesDto
     }
      public class time_zonesResponseDto
     {
-       public List<timezoneDto> timezoneDtos { get; set; }
+       public List<timezoneDto> time_zones { get; set; }
     }
 }

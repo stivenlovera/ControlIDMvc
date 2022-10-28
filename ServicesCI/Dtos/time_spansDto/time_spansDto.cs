@@ -24,6 +24,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.time_spansDto
     }
     public class responsetime_spansDto
     {
-        public List<time_spansDto> time_SpansDtos { get; set; }
+        public List<time_spansDto> time_spans { get; set; }
     }
 }

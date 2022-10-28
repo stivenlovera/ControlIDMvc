@@ -14,6 +14,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.access_rulesDto
     }
     public class AccessRuleResponseDto
     {
-        public List<accessRulesDto> accessRulesDtos { get; set; }
+        public List<accessRulesDto> access_rules { get; set; }
     }
 }

@@ -132,7 +132,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 AccessRuleResponseDto responseAccesoRules = JsonConvert.DeserializeObject<AccessRuleResponseDto>(responseShowAccesoRules.data);
                 apiResponseShow.status = responseShowAccesoRules.estado;
-                apiResponseShow.accessRulesDtos = responseAccesoRules.accessRulesDtos;
+                apiResponseShow.accessRulesDtos = responseAccesoRules.access_rules;
             }
             else
             {
@@ -149,7 +149,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 AccessRuleResponseDto responseAccesoRules = JsonConvert.DeserializeObject<AccessRuleResponseDto>(responseShowAccesoRules.data);
                 apiResponseShow.status = responseShowAccesoRules.estado;
-                apiResponseShow.accessRulesDtos = responseAccesoRules.accessRulesDtos;
+                apiResponseShow.accessRulesDtos = responseAccesoRules.access_rules;
             }
             else
             {

@@ -14,6 +14,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.cardsDto
     }
     public class cardsResponseDto
     {
-        public List<cardsDto> cardsDtos { get; set; }
+        public List<cardsDto> cards { get; set; }
     }
 }
