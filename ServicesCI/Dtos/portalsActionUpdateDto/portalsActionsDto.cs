@@ -12,6 +12,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.portalsActionUpdateDto
     }
     public class responsePortalsActionsDto
     {
-public List<portalsActionsDto> portalsActionsDtos { get; set; }
+        public List<portalsActionsDto> portalsActionsDto { get; set; }
     }
 }

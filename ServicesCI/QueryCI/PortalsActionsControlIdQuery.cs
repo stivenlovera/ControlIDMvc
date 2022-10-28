@@ -63,20 +63,20 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         }
         private async Task<ResponsePortalActionShow> RunShow(BodyShowAllObject bodyShowAllObject)
         {
-            ResponsePortalActionShow responseCreate = new ResponsePortalActionShow();
+            ResponsePortalActionShow responseShow = new ResponsePortalActionShow();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject , this.session);
-            if (responseAddUsers.estado)
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject , this.session);
+            if (apiResponse.estado)
             {
-                responsePortalsActionsDto responseUser = JsonConvert.DeserializeObject<responsePortalsActionsDto>(responseAddUsers.data);
-                responseCreate.status = responseAddUsers.estado;
-                responseCreate.portalsActionsDtos = responseUser.portalsActionsDtos;
+                responsePortalsActionsDto responseUser = JsonConvert.DeserializeObject<responsePortalsActionsDto>(apiResponse.data);
+                responseShow.status = apiResponse.estado;
+                responseShow.portalsActionsDtos = responseUser.portalsActionsDto;
             }
             else
             {
-                responseCreate.status = responseAddUsers.estado;
+                responseShow.status = apiResponse.estado;
             }
-            return responseCreate;
+            return responseShow;
         }
         /*clases de ayuda*/
         public class ResponsePortalActionCreate
