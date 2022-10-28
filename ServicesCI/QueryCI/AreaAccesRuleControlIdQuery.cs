@@ -74,11 +74,11 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         }
         public async Task<ResponseAreaReglasAccessShow> ShowAll()
         {
-            BodyShowObject body = new BodyShowObject()
+            BodyShowAllObject body = new BodyShowAllObject()
             {
                 objeto = "area_access_rules",
             };
-            var response = await this.RunShow(body);
+            var response = await this.RunShowAll(body);
             return response;
         }
         public async Task<ResponseAreaReglasAccessUpdate> Update(AreaReglaAcceso areaReglaAcceso)
