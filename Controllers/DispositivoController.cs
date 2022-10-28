@@ -191,6 +191,9 @@ namespace ControlIDMvc.Controllers
             Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
             /*valido si es el login fue ok*/
             this._actionsControlIdQuery.Params(port, ip, user, password, login.data);
+            this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
+            this._portalsActionsControlIdQuery.Params(port, ip, user, password, login.data);
+            
             this._accessRulesControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsAccessRulesControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
