@@ -218,8 +218,8 @@ namespace ControlIDMvc.Controllers
 
                 await this.AccessRulesStoreControlId();
                 await this.portalAccessRulesStoreControlId();
-                await this.DiaStoreControlId();
                 await this.HorarioStoreControlId();
+                await this.DiaStoreControlId();
                 await this.HorarioAccessRulesControlId();
                 await this.AreaStore();
                 await this.AreaReglasAccesoStore();
@@ -338,6 +338,26 @@ namespace ControlIDMvc.Controllers
             return apiportalAccessRules.status;
         }
         //dia
+        private async Task<bool> HorarioStoreControlId()
+        {
+            var apiHorario = await this._horarioControlIdQuery.ShowAll();
+            if (apiHorario.status)
+            {
+                var horarios = new List<Horario>();
+                foreach (var timezoneDto in apiHorario.timezoneDtos)
+                {
+                    horarios.Add(new Horario
+                    {
+                        ControlId = timezoneDto.id,
+                        ControlIdName = timezoneDto.name,
+                        Descripcion = timezoneDto.name,
+                        Nombre = timezoneDto.name
+                    });
+                }
+                var updateHorario = await this._horarioQuery.StoreAll(horarios);
+            }
+            return apiHorario.status;
+        }
         private async Task<bool> DiaStoreControlId()
         {
             var apiDias = await this._diasControlIdQuery.ShowAll();
@@ -366,26 +386,7 @@ namespace ControlIDMvc.Controllers
             }
             return apiDias.status;
         }
-        private async Task<bool> HorarioStoreControlId()
-        {
-            var apiHorario = await this._horarioControlIdQuery.ShowAll();
-            if (apiHorario.status)
-            {
-                var horarios = new List<Horario>();
-                foreach (var timezoneDto in apiHorario.timezoneDtos)
-                {
-                    horarios.Add(new Horario
-                    {
-                        ControlId = timezoneDto.id,
-                        ControlIdName = timezoneDto.name,
-                        Descripcion = timezoneDto.name,
-                        Nombre = timezoneDto.name
-                    });
-                }
-                var updateHorario = await this._horarioQuery.StoreAll(horarios);
-            }
-            return apiHorario.status;
-        }
+        
         private async Task<bool> HorarioAccessRulesControlId()
         {
             var apiHorario = await this._horarioAccessRulesControlIdQuery.ShowAll();
