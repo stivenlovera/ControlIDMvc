@@ -191,7 +191,7 @@ namespace ControlIDMvc.Controllers
             *CARGAR DESDE CONTROL ID 
         */
         /*login dispositivo*/
-        private async Task<bool> LoginControlId(string ip, int port, string user, string api, string password)
+        private async Task<bool> LoginControlId(string ip, int port, string user,  string password, string api)
         {
             BodyLogin cuerpo = _loginControlIdQuery.Login(user, password);
             Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
