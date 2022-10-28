@@ -43,6 +43,7 @@ namespace ControlIDMvc.Controllers
         private readonly DiaQuery _diaQuery;
         private readonly AreaQuery _areaQuery;
         private readonly AreaReglasAccesoQuery _areaReglasAccesoQuery;
+        private readonly DispositivoControlIdQuery _dispositivoControlIdQuery;
         private readonly PortalsControlIdQuery _portalsControlIdQuery;
         private readonly PortalsAccessRulesControlIdQuery _portalsAccessRulesControlIdQuery;
         private readonly HorarioControlIdQuery _horarioControlIdQuery;
@@ -77,6 +78,7 @@ namespace ControlIDMvc.Controllers
             DiaQuery diaQuery,
             AreaQuery areaQuery,
             AreaReglasAccesoQuery areaReglasAccesoQuery,
+            DispositivoControlIdQuery dispositivoControlIdQuery,
             HttpClientService httpClientService
          )
         {
@@ -93,6 +95,7 @@ namespace ControlIDMvc.Controllers
             this._diaQuery = diaQuery;
             this._areaQuery = areaQuery;
             this._areaReglasAccesoQuery = areaReglasAccesoQuery;
+            this._dispositivoControlIdQuery = dispositivoControlIdQuery;
             this._actionsControlIdQuery = actionsControlIdQuery;
             this._portalsActionsControlIdQuery = portalsActionsControlIdQuery;
             this._accessRulesControlIdQuery = accessRulesControlIdQuery;
@@ -130,8 +133,11 @@ namespace ControlIDMvc.Controllers
         [HttpPost("store")]
         public async Task<ActionResult> Store(DispositivoCreateDto dispositivoCreateDto)
         {
-            await this.SaveDispositivo(dispositivoCreateDto.Ip, dispositivoCreateDto.Puerto, dispositivoCreateDto.Usuario, dispositivoCreateDto.Password);
-
+            if (ModelState.IsValid)
+            {
+                await this.SaveDispositivo(dispositivoCreateDto);
+                return RedirectToAction(nameof(Index));
+            }
             return View("~/Views/Dispositivo/Create.cshtml", dispositivoCreateDto);
         }
 
@@ -193,7 +199,6 @@ namespace ControlIDMvc.Controllers
             this._actionsControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsActionsControlIdQuery.Params(port, ip, user, password, login.data);
-
             this._accessRulesControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsAccessRulesControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
@@ -203,14 +208,16 @@ namespace ControlIDMvc.Controllers
             this._horarioAccessRulesControlIdQuery.Params(port, ip, user, password, login.data);
             this._areaControlIdQuery.Params(port, ip, user, password, login.data);
             this._areaAccesRuleControlIdQuery.Params(port, ip, user, password, login.data);
+
+            this._dispositivoControlIdQuery.Params(port, ip, user, password, login.data);
             return login.estado;
         }
         /*------USUARIO------*/
-        private async Task<bool> SaveDispositivo(string Ip, int Puerto, string Usuario, string Password)
+        private async Task<bool> SaveDispositivo(DispositivoCreateDto dispositivoCreateDto)
         {
             /*consutar por dispositivos*/
 
-            var loginStatus = await this.LoginControlId(Ip, Puerto, Usuario, this._apiRutas.ApiUrlLogin, Password);
+            var loginStatus = await this.LoginControlId(dispositivoCreateDto.Ip, dispositivoCreateDto.Puerto, dispositivoCreateDto.Usuario, dispositivoCreateDto.Password, this._apiRutas.ApiUrlLogin);
             if (loginStatus)
             {
                 //crear usuario
@@ -225,7 +232,9 @@ namespace ControlIDMvc.Controllers
                 await this.HorarioAccessRulesControlId();
                 await this.AreaStore();
                 await this.AreaReglasAccesoStore();
-                //crear tarjetas si hay 
+                await this.DipositivoStore(dispositivoCreateDto);
+                //save data dispositivo
+
             }
             return true;
         }
@@ -384,16 +393,16 @@ namespace ControlIDMvc.Controllers
                         ControlHol1 = time_SpansDtos.hol1,
                         ControlHol2 = time_SpansDtos.hol2,
                         ControlHol3 = time_SpansDtos.hol3,
-                        HorarioId=time_zone.ControlId,
-                        Nombre=$"default {time_SpansDtos.time_zone_id}"
-                        
+                        HorarioId = time_zone.ControlId,
+                        Nombre = $"default {time_SpansDtos.time_zone_id}"
+
                     });
                 }
                 var updateUsuario = await this._diaQuery.StoreAll(dias);
             }
             return apiDias.status;
         }
-        
+
         private async Task<bool> HorarioAccessRulesControlId()
         {
             var apiHorario = await this._horarioAccessRulesControlIdQuery.ShowAll();
@@ -461,6 +470,41 @@ namespace ControlIDMvc.Controllers
                             AreaId = area.Id,
                             ReglaAccesoId = reglasAcceso.Id
                         }
+                    );
+                }
+                var updateUsuario = await this._areaReglasAccesoQuery.storeAll(data);
+                return areas.status;
+            }
+            else
+            {
+                return areas.status;
+            }
+        }
+        private async Task<bool> DipositivoStore(DispositivoCreateDto dispositivoCreateDto)
+        {
+            var dispostivos = await this._dispositivoControlIdQuery.ShowAll();
+            if (dispostivos.status)
+            {
+
+                List<Dispositivo> data = new List<Dispositivo>();
+                foreach (var dispositivoDto in dispostivos.dispositivoDtos)
+                {
+                    data.Add(
+                        new Dispositivo
+                        {
+                            ControlId = dispositivoDto.id,
+                            ControlIdIp = dispositivoDto.ip,
+                            ControlIdPublicKey = dispositivoDto.public_key,
+                            ControlIdName = dispositivoDto.name,
+                            Ip = dispositivoDto.ip,
+                            Modelo = dispositivoCreateDto.Modelo,
+                            NumeroSerie = dispositivoCreateDto.NumeroSerie,
+                            Puerto = dispositivoCreateDto.Puerto,
+                            Password = dispositivoCreateDto.Password,
+                            Nombre = dispositivoCreateDto.Nombre,
+                            Usuario = dispositivoCreateDto.Usuario
+                        };
+                    await this._dispositivoQuery.Store(data);
                     );
                 }
                 var updateUsuario = await this._areaReglasAccesoQuery.storeAll(data);

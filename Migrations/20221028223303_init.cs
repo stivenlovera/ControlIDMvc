@@ -143,7 +143,9 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Descripcion = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ControlId = table.Column<int>(type: "int", nullable: false)
+                    ControlId = table.Column<int>(type: "int", nullable: false),
+                    ControlIdName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -325,11 +327,21 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    HoraInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    HoraFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     HorarioId = table.Column<int>(type: "int", nullable: false),
-                    ControlId = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    ControlId = table.Column<int>(type: "int", nullable: false),
+                    ControlTimeZoneId = table.Column<int>(type: "int", nullable: false),
+                    ControlStart = table.Column<int>(type: "int", nullable: false),
+                    ControlEnd = table.Column<int>(type: "int", nullable: false),
+                    ControlSun = table.Column<int>(type: "int", nullable: false),
+                    ControlMon = table.Column<int>(type: "int", nullable: false),
+                    ControlTue = table.Column<int>(type: "int", nullable: false),
+                    ControlWed = table.Column<int>(type: "int", nullable: false),
+                    ControlThu = table.Column<int>(type: "int", nullable: false),
+                    ControlFri = table.Column<int>(type: "int", nullable: false),
+                    ControlSat = table.Column<int>(type: "int", nullable: false),
+                    ControlHol1 = table.Column<int>(type: "int", nullable: false),
+                    ControlHol2 = table.Column<int>(type: "int", nullable: false),
+                    ControlHol3 = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -519,9 +531,9 @@ namespace ControlIDMvc.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ControlIdAreaId = table.Column<int>(type: "int", nullable: false),
-                    AreaId = table.Column<int>(type: "int", nullable: true),
+                    AreaId = table.Column<int>(type: "int", nullable: false),
                     ControlidReglaAccesoId = table.Column<int>(type: "int", nullable: false),
-                    ReglaAccesoId = table.Column<int>(type: "int", nullable: true)
+                    ReglaAccesoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -530,12 +542,14 @@ namespace ControlIDMvc.Migrations
                         name: "FK_AreaReglaAcceso_Area_AreaId",
                         column: x => x.AreaId,
                         principalTable: "Area",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AreaReglaAcceso_ReglaAcceso_ReglaAccesoId",
                         column: x => x.ReglaAccesoId,
                         principalTable: "ReglaAcceso",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -545,9 +559,9 @@ namespace ControlIDMvc.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ControlIdAccessRulesId = table.Column<int>(type: "int", nullable: false),
                     ReglasAccesoId = table.Column<int>(type: "int", nullable: false),
                     HorarioId = table.Column<int>(type: "int", nullable: false),
+                    ControlIdAccessRulesId = table.Column<int>(type: "int", nullable: false),
                     ControlIdTimeZoneId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

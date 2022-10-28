@@ -20,6 +20,5 @@ namespace ControlIDMvc.Entities
         public string ControlIdName { get; set; }
         public string ControlIdIp { get; set; }
         public string ControlIdPublicKey { get; set; }
-        public List<Portal> Portals { get; set; }
     }
 }

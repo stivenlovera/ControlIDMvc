@@ -81,12 +81,18 @@ namespace ControlIDMvc.Querys
                 data = dispositivo
             };
         }
-        public async Task<Dispositivo> Store(DispositivoCreateDto dispositivoCreateDto)
+        public async Task<bool> Store(List<Dispositivo> dispositivo)
         {
-            var dispositivo = _mapper.Map<Dispositivo>(dispositivoCreateDto);
-            await _dbContext.AddAsync(dispositivo);
+            await _dbContext.AddRangeAsync(dispositivo);
             var resultado = await _dbContext.SaveChangesAsync();
-            return dispositivo;
+            if (resultado == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public async Task<List<Dispositivo>> GetAll()
         {
@@ -103,11 +109,5 @@ namespace ControlIDMvc.Querys
             var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivos_id.Contains(dispositivo.Id)).ToListAsync();
             return dispostivos;
         }
-        public async Task<List<Dispositivo>> GetAllPuertas(int dispositivos_id)
-        {
-            var dispostivos = await this._dbContext.Dispositivo.Where(dispositivo => dispositivo.Id == dispositivos_id).Include(d => d.Portals).ToListAsync();
-            return dispostivos;
-        }
- 
     }
 }

@@ -104,7 +104,7 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AreaId")
+                    b.Property<int>("AreaId")
                         .HasColumnType("int");
 
                     b.Property<int>("ControlIdAreaId")
@@ -113,7 +113,7 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("ControlidReglaAccesoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReglaAccesoId")
+                    b.Property<int>("ReglaAccesoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -186,14 +186,47 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ControlId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("ControlEnd")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("HoraFin")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int>("ControlFri")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("HoraInicio")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int>("ControlHol1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlHol2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlHol3")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlMon")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlSat")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlStart")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlSun")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlThu")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlTimeZoneId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlTue")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ControlWed")
+                        .HasColumnType("int");
 
                     b.Property<int>("HorarioId")
                         .HasColumnType("int");
@@ -321,6 +354,9 @@ namespace ControlIDMvc.Migrations
 
                     b.Property<int>("ControlId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ControlIdName")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
@@ -836,11 +872,15 @@ namespace ControlIDMvc.Migrations
                 {
                     b.HasOne("ControlIDMvc.Entities.Area", "Area")
                         .WithMany("AreaReglaAcceso")
-                        .HasForeignKey("AreaId");
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglaAcceso")
                         .WithMany("AreaSReglaAccesos")
-                        .HasForeignKey("ReglaAccesoId");
+                        .HasForeignKey("ReglaAccesoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Area");
 
