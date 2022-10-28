@@ -74,11 +74,11 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         }
         public async Task<ResponsPortalAccessRulesShow> ShowAll()
         {
-            BodyShowObject body = new BodyShowObject()
+            BodyShowAllObject body = new BodyShowAllObject()
             {
                 objeto = "portal_access_rules",
             };
-            var response = await this.RunShow(body);
+            var response = await this.RunShowAll(body);
             return response;
         }
         public async Task<ResponsePortalAccessRulesDelete> DeleteAccessRulesId(List<PortalReglaAcceso> portalReglaAccesos)
@@ -129,6 +129,23 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             return responsePortalAccessRules;
         }
         private async Task<ResponsPortalAccessRulesShow> RunShow(BodyShowObject bodyShowAllObject)
+        {
+            ResponsPortalAccessRulesShow responseShow = new ResponsPortalAccessRulesShow();
+
+            Response apiResponseUpdate = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
+            if (apiResponseUpdate.estado)
+            {
+                portalAccesoRulesResponseDto response = JsonConvert.DeserializeObject<portalAccesoRulesResponseDto>(apiResponseUpdate.data);
+                responseShow.status = apiResponseUpdate.estado;
+                responseShow.portalAccesoRulesDtos = response.portal_access_rules;
+            }
+            else
+            {
+                responseShow.status = apiResponseUpdate.estado;
+            }
+            return responseShow;
+        }
+        private async Task<ResponsPortalAccessRulesShow> RunShowAll(BodyShowAllObject bodyShowAllObject)
         {
             ResponsPortalAccessRulesShow responseShow = new ResponsPortalAccessRulesShow();
 

@@ -45,11 +45,11 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         }
         public async Task<ResponseAccesoRulesShow> showAll()
         {
-            BodyShowObject body = new BodyShowObject()
+            BodyShowAllObject body = new BodyShowAllObject()
             {
                 objeto = "access_rules"
             };
-            var response = await this.RunShow(body);
+            var response = await this.RunShowAll(body);
             return response;
         }
         public async Task<ResponseAccesoRulesUpdate> Update(ReglaAcceso reglaAcceso)
@@ -128,6 +128,23 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             ResponseAccesoRulesShow apiResponseShow = new ResponseAccesoRulesShow();
 
             Response responseShowAccesoRules = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowObject, this.session);
+            if (responseShowAccesoRules.estado)
+            {
+                AccessRuleResponseDto responseAccesoRules = JsonConvert.DeserializeObject<AccessRuleResponseDto>(responseShowAccesoRules.data);
+                apiResponseShow.status = responseShowAccesoRules.estado;
+                apiResponseShow.accessRulesDtos = responseAccesoRules.accessRulesDtos;
+            }
+            else
+            {
+                apiResponseShow.status = responseShowAccesoRules.estado;
+            }
+            return apiResponseShow;
+        }
+         private async Task<ResponseAccesoRulesShow> RunShowAll(BodyShowAllObject bodyShowAllObject)
+        {
+            ResponseAccesoRulesShow apiResponseShow = new ResponseAccesoRulesShow();
+
+            Response responseShowAccesoRules = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject, this.session);
             if (responseShowAccesoRules.estado)
             {
                 AccessRuleResponseDto responseAccesoRules = JsonConvert.DeserializeObject<AccessRuleResponseDto>(responseShowAccesoRules.data);
