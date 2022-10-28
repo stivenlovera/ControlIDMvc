@@ -485,7 +485,6 @@ namespace ControlIDMvc.Controllers
             var dispostivos = await this._dispositivoControlIdQuery.ShowAll();
             if (dispostivos.status)
             {
-
                 List<Dispositivo> data = new List<Dispositivo>();
                 foreach (var dispositivoDto in dispostivos.dispositivoDtos)
                 {
@@ -503,16 +502,15 @@ namespace ControlIDMvc.Controllers
                             Password = dispositivoCreateDto.Password,
                             Nombre = dispositivoCreateDto.Nombre,
                             Usuario = dispositivoCreateDto.Usuario
-                        };
-                    await this._dispositivoQuery.Store(data);
+                        }
                     );
                 }
-                var updateUsuario = await this._areaReglasAccesoQuery.storeAll(data);
-                return areas.status;
+                var create = await this._dispositivoQuery.Store(data);
+                return dispostivos.status;
             }
             else
             {
-                return areas.status;
+                return dispostivos.status;
             }
         }
     }
