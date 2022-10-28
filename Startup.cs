@@ -77,6 +77,7 @@ namespace ControlIDMvc
             Services.Services.AddTransient<AreaControlIdQuery>();
             Services.Services.AddTransient<DiasControlIdQuery>();
             Services.Services.AddTransient<AreaAccesRuleControlIdQuery>();
+            Services.Services.AddTransient<DispositivoControlIdQuery>();
 
             Services.Services.AddAutoMapper(typeof(Startup));
         }
