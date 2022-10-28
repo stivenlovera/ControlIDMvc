@@ -411,8 +411,8 @@ namespace ControlIDMvc.Controllers
                 var horarioAccessRules = new List<HorarioReglaAcceso>();
                 foreach (var time_Zones_Access_Rules in apiHorario.time_Zones_Access_RulesDtos)
                 {
-                    var reglasAcceso = await this._horarioQuery.SearchControlId(time_Zones_Access_Rules.time_zone_id);
-                    var horario = await this._reglaAccesoQuery.SearchControlId(time_Zones_Access_Rules.access_rule_id);
+                    var horario = await this._horarioQuery.SearchControlId(time_Zones_Access_Rules.time_zone_id);
+                    var reglasAcceso= await this._reglaAccesoQuery.SearchControlId(time_Zones_Access_Rules.access_rule_id);
                     horarioAccessRules.Add(new HorarioReglaAcceso
                     {
                         ControlIdAccessRulesId = time_Zones_Access_Rules.access_rule_id,
