@@ -65,7 +65,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         {
             ResponsePortalActionShow responseCreate = new ResponsePortalActionShow();
 
-            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlCreate, bodyShowAllObject , this.session);
+            Response responseAddUsers = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlMostrar, bodyShowAllObject , this.session);
             if (responseAddUsers.estado)
             {
                 responsePortalsActionsDto responseUser = JsonConvert.DeserializeObject<responsePortalsActionsDto>(responseAddUsers.data);
