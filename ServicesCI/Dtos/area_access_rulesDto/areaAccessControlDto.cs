@@ -12,6 +12,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.area_access_rulesDto
     }
     public class area_access_rulesResponseDto
     {
-        public List<area_access_rulesControlDto> area_Access_RulesControlDtos { get; set; }
+        public List<area_access_rulesControlDto> area_access_rules { get; set; }
     }
 }

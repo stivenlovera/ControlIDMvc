@@ -163,7 +163,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 time_zones_access_rulesResponseDto response = JsonConvert.DeserializeObject<time_zones_access_rulesResponseDto>(apiResponse.data);
                 responseShow.status = apiResponse.estado;
-                responseShow.time_Zones_Access_RulesDtos = response.time_Zones_Access_RulesDtos;
+                responseShow.time_Zones_Access_RulesDtos = response.access_rule_time_zones;
             }
             else
             {
@@ -181,7 +181,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 time_zones_access_rulesResponseDto apiResponse = JsonConvert.DeserializeObject<time_zones_access_rulesResponseDto>(apiResponseHorario.data);
                 responseShow.status = apiResponseHorario.estado;
-                responseShow.time_Zones_Access_RulesDtos = apiResponse.time_Zones_Access_RulesDtos;
+                responseShow.time_Zones_Access_RulesDtos = apiResponse.access_rule_time_zones;
             }
             else
             {

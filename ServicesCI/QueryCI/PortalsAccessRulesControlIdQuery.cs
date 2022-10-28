@@ -137,7 +137,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 portalAccesoRulesResponseDto response = JsonConvert.DeserializeObject<portalAccesoRulesResponseDto>(apiResponseUpdate.data);
                 responseShow.status = apiResponseUpdate.estado;
-                responseShow.portalAccesoRulesDtos = response.portalAccesoRulesDtos;
+                responseShow.portalAccesoRulesDtos = response.portal_access_rules;
             }
             else
             {

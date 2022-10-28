@@ -12,6 +12,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.portalsAccessRulesDto
     }
     public class portalAccesoRulesResponseDto
     {
-        public List<portalAccesoRulesDto> portalAccesoRulesDtos { get; set; }
+        public List<portalAccesoRulesDto> portal_access_rules { get; set; }
     }
 }

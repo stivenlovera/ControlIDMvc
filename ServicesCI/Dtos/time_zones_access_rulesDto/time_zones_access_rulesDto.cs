@@ -12,6 +12,6 @@ namespace ControlIDMvc.ServicesCI.Dtos.time_zones_access_rulesDto
     }
      public class time_zones_access_rulesResponseDto
     {
-        public List<time_zones_access_rulesDto> time_Zones_Access_RulesDtos { get; set; }
+        public List<time_zones_access_rulesDto> access_rule_time_zones { get; set; }
     }
 }

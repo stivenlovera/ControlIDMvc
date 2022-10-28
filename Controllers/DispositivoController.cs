@@ -193,7 +193,7 @@ namespace ControlIDMvc.Controllers
             this._actionsControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsActionsControlIdQuery.Params(port, ip, user, password, login.data);
-            
+
             this._accessRulesControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsAccessRulesControlIdQuery.Params(port, ip, user, password, login.data);
             this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
@@ -215,6 +215,14 @@ namespace ControlIDMvc.Controllers
                 await this.ActionsStoreControlId();
                 await this.PortalStoreControlId();
                 await this.ActionsPortalStoreControlId();
+
+                await this.AccessRulesStoreControlId();
+                await this.portalAccessRulesStoreControlId();
+                await this.DiaStoreControlId();
+                await this.HorarioStoreControlId();
+                await this.HorarioAccessRulesControlId();
+                await this.AreaStore();
+                await this.AreaReglasAccesoStore();
                 //crear tarjetas si hay 
             }
             return true;
@@ -400,7 +408,7 @@ namespace ControlIDMvc.Controllers
             }
             return apiHorario.status;
         }
-        private async Task<bool> ApiAreaStore()
+        private async Task<bool> AreaStore()
         {
             var areas = await this._areaControlIdQuery.ShowAll();
             if (areas.status)
@@ -426,12 +434,12 @@ namespace ControlIDMvc.Controllers
                 return areas.status;
             }
         }
-        private async Task<bool> ApiAreaReglasAccesoStore()
+        private async Task<bool> AreaReglasAccesoStore()
         {
             var areas = await this._areaAccesRuleControlIdQuery.ShowAll();
             if (areas.status)
             {
-                
+
                 List<AreaReglaAcceso> data = new List<AreaReglaAcceso>();
                 foreach (var area_Access_Rules in areas.area_Access_RulesControlDtos)
                 {
@@ -442,8 +450,8 @@ namespace ControlIDMvc.Controllers
                         {
                             ControlIdAreaId = area_Access_Rules.area_id,
                             ControlidReglaAccesoId = area_Access_Rules.access_rule_id,
-                            AreaId=area.Id,
-                            ReglaAccesoId=reglasAcceso.Id
+                            AreaId = area.Id,
+                            ReglaAccesoId = reglasAcceso.Id
                         }
                     );
                 }

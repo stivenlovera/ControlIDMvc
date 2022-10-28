@@ -155,7 +155,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 area_access_rulesResponseDto response = JsonConvert.DeserializeObject<area_access_rulesResponseDto>(apiResponse.data);
                 responseShow.status = apiResponse.estado;
-                responseShow.area_Access_RulesControlDtos = response.area_Access_RulesControlDtos;
+                responseShow.area_Access_RulesControlDtos = response.area_access_rules;
             }
             else
             {
@@ -172,7 +172,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 area_access_rulesResponseDto response = JsonConvert.DeserializeObject<area_access_rulesResponseDto>(apiResponse.data);
                 responseShow.status = apiResponse.estado;
-                responseShow.area_Access_RulesControlDtos = response.area_Access_RulesControlDtos;
+                responseShow.area_Access_RulesControlDtos = response.area_access_rules;
             }
             else
             {
