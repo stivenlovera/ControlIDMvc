@@ -201,6 +201,8 @@ namespace ControlIDMvc.Controllers
             this._horarioControlIdQuery.Params(port, ip, user, password, login.data);
             this._diasControlIdQuery.Params(port, ip, user, password, login.data);
             this._horarioAccessRulesControlIdQuery.Params(port, ip, user, password, login.data);
+            this._areaControlIdQuery.Params(port, ip, user, password, login.data);
+            this._areaAccesRuleControlIdQuery.Params(port, ip, user, password, login.data);
             return login.estado;
         }
         /*------USUARIO------*/
