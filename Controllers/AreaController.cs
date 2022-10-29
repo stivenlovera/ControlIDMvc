@@ -83,7 +83,12 @@ namespace ControlIDMvc.Controllers
             {
                 if (await this._areaQuery.ValidarNombre(areaCreateDto.Nombre))
                 {
-                    var area = await this._areaQuery.Store(areaCreateDto);
+                    var area=new Area{
+                        Descripcion=areaCreateDto.Nombre,
+                        Nombre=areaCreateDto.Nombre,
+
+                    };
+                    var insert = await this._areaQuery.Store(area);
                     await this.StoreArea(area);
                     return RedirectToAction(nameof(Index));
                 }
@@ -101,15 +106,15 @@ namespace ControlIDMvc.Controllers
             return View("~/Views/Area/Edit.cshtml", area);
         }
 
-        [HttpPut("edit")]
-        public async Task<ActionResult> Update()
+        [HttpPut("update/{id:int}")]
+        public async Task<ActionResult> Update(int id, AreaDto areaDto)
         {
             var puertas = await this._portalQuery.GetAll();
             ViewData["puertas"] = puertas;
             return View("~/Views/Area/Create.cshtml");
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<ActionResult> Delete()
         {
             var puertas = await this._portalQuery.GetAll();

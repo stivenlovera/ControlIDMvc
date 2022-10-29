@@ -1,8 +1,8 @@
 @model ControlIDMvc.Dtos.Area.AreaCreateDto;
-@using ControlIDMvc.Dtos.Portal;
+@using ControlIDMvc.Entities;
 @{
     ViewData["Title"] = "Create Area";
-    var puertas = ViewData["puertas"] as List<PortalDto>;
+    var puertas = ViewData["puertas"] as List<Portal>;
 }
 
 <div class="right_col" role="main">

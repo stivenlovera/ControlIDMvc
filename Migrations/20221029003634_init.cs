@@ -119,7 +119,7 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Password = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ControlId = table.Column<int>(type: "int", nullable: false),
+                    ControlId = table.Column<long>(type: "bigint", nullable: false),
                     ControlIdName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ControlIdIp = table.Column<string>(type: "longtext", nullable: true)

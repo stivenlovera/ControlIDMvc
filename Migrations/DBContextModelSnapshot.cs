@@ -247,8 +247,8 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ControlId")
-                        .HasColumnType("int");
+                    b.Property<long>("ControlId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ControlIdIp")
                         .HasColumnType("longtext");
@@ -1006,7 +1006,7 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.Portal", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Dispositivo", "Dispositivo")
-                        .WithMany("Portals")
+                        .WithMany()
                         .HasForeignKey("DispositivoId");
 
                     b.Navigation("Dispositivo");
@@ -1099,11 +1099,6 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.Area", b =>
                 {
                     b.Navigation("AreaReglaAcceso");
-                });
-
-            modelBuilder.Entity("ControlIDMvc.Entities.Dispositivo", b =>
-                {
-                    b.Navigation("Portals");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Horario", b =>
