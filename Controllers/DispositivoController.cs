@@ -221,6 +221,7 @@ namespace ControlIDMvc.Controllers
             if (loginStatus)
             {
                 //crear usuario
+                await this.AreaStore();
                 await this.ActionsStoreControlId();
                 await this.PortalStoreControlId();
                 await this.ActionsPortalStoreControlId();
@@ -230,7 +231,7 @@ namespace ControlIDMvc.Controllers
                 await this.HorarioStoreControlId();
                 await this.DiaStoreControlId();
                 await this.HorarioAccessRulesControlId();
-                await this.AreaStore();
+                
                 await this.AreaReglasAccesoStore();
                 await this.DipositivoStore(dispositivoCreateDto);
                 //save data dispositivo
