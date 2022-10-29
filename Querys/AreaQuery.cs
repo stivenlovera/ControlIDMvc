@@ -86,6 +86,10 @@ namespace ControlIDMvc.Querys
         {
             return await _dbContext.Area.FindAsync(id);
         }
+        public async Task<Area> GetControlId(int ControlId)
+        {
+            return await _dbContext.Area.Where(a => a.ControlId == ControlId).FirstOrDefaultAsync();
+        }
         public async Task<List<Area>> StoreAll(List<AreaCreateDto> areaCreateDtos)
         {
             var area = _mapper.Map<List<Area>>(areaCreateDtos);
@@ -101,9 +105,9 @@ namespace ControlIDMvc.Querys
         //revisar esta funcion
         public async Task<Area> Update(Area area)
         {
-            _dbContext.Entry(await _dbContext.Area.FirstOrDefaultAsync(a => a.Id == area.Id)).CurrentValues.SetValues(new Area
+            _dbContext.Entry(await _dbContext.Area.FirstOrDefaultAsync(a => a.Id == area.Id)).CurrentValues.SetValues(new
             {
-                ControlId=area.ControlId
+                ControlId = area.ControlId
             });
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Area.Where(a => a.Id == area.Id).FirstAsync();

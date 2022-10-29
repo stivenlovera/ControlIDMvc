@@ -13,5 +13,7 @@ namespace ControlIDMvc.Dtos.Area
         public string Descripcion { get; set; }
         public int ControlId { get; set; }
         public string ControlIdName { get; set; }
+        public List<string> PuertasSelecionadas { get; set; }
+        public List<string> PuertasDisponibles { get; set; }
     }
 }

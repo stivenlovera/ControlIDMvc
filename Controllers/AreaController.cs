@@ -83,13 +83,27 @@ namespace ControlIDMvc.Controllers
             {
                 if (await this._areaQuery.ValidarNombre(areaCreateDto.Nombre))
                 {
-                    var area=new Area{
-                        Descripcion=areaCreateDto.Nombre,
-                        Nombre=areaCreateDto.Nombre,
+                    var area = new Area
+                    {
+                        Descripcion = areaCreateDto.Nombre,
+                        Nombre = areaCreateDto.Nombre,
 
                     };
-                    var insert = await this._areaQuery.Store(area);
-                    await this.StoreArea(area);
+                    var insertArea = await this._areaQuery.Store(area);
+                    foreach (var PuertasSelecionada in areaCreateDto.PuertasSelecionadas)
+                    {
+                        var update = new Portal
+                        {
+                            Id = insertArea.Id,
+                            ControlIdAreaFromId = insertArea.ControlId,
+                            ControlIdAreaToId = insertArea.ControlId,
+                            AreaFromId = insertArea.Id,
+                            AreaToId = insertArea.Id
+                        };
+                        var updatePortal = await this._portalQuery.UpdateControlId(update);
+                    }
+
+                    await this.StoreArea(insertArea, areaCreateDto);
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -142,7 +156,7 @@ namespace ControlIDMvc.Controllers
             return login.estado;
         }
         /*------Obtener data dispositivo------*/
-        private async Task<bool> StoreArea(Area area)
+        private async Task<bool> StoreArea(Area area, AreaCreateDto areaCreateDto)
         {
             /*buscar por dispositivos*/
             var dispositivos = await this._dispositivoQuery.GetAll();
@@ -153,7 +167,7 @@ namespace ControlIDMvc.Controllers
                 {
                     //crear usuario
                     await this.AreaStore(area);
-                    //crear tarjetas
+                    await this.UpdatePortals(area);
                     //await this.CardStoreControlId(persona);
                 }
             }
@@ -164,6 +178,7 @@ namespace ControlIDMvc.Controllers
             var apiResponseArea = await this._areaControlIdQuery.Store(area);
             if (apiResponseArea.status)
             {
+                //var updatePortal=this._portalsControlIdQuery.Update()
                 area.ControlId = apiResponseArea.ids[0];
                 await this._areaQuery.Update(area);
                 return apiResponseArea.status;
@@ -172,8 +187,29 @@ namespace ControlIDMvc.Controllers
             {
                 return apiResponseArea.status;
             }
-
         }
+        private async Task<bool> UpdatePortals(Area area)
+        {
+            var gePortals = await this._portalQuery.GetAllAreaId(area.Id);
+            foreach (var portal in gePortals)
+            {
+                var apiResponse = await this._portalsControlIdQuery.Update(portal);
+                if (apiResponse.status)
+                {
+                    //var updatePortal=this._portalsControlIdQuery.Update()
+                    portal.ControlIdAreaFromId=area.ControlId;
+                    portal.ControlIdAreaToId=area.ControlId;
+                    await this._portalQuery.UpdateControlId(portal);
+                    return apiResponse.status;
+                }
+                else
+                {
+                    return apiResponse.status;
+                }
+            }
+            return true;
+        }
+
         /*Extras*/
         /*   private async Task<Response> SaveAreaControlId(AreaCreateDto areaCreateDto)
           {

@@ -268,6 +268,7 @@ namespace ControlIDMvc.Controllers
                 var portals = new List<Portal>();
                 foreach (var portal in apiportales.portalsDtos)
                 {
+                    var obtenerArea=await this._areaQuery.GetControlId(portal.id);
                     portals.Add(new Portal
                     {
                         Nombre = portal.name,
@@ -276,6 +277,8 @@ namespace ControlIDMvc.Controllers
                         ControlIdName = portal.name,
                         ControlIdAreaFromId = portal.area_from_id,
                         ControlIdAreaToId = portal.area_to_id,
+                        AreaFromId=obtenerArea.Id,
+                        AreaToId=obtenerArea.Id
                     });
                 }
                 var storePortals = await this._portalQuery.StoreAll(portals);

@@ -40,8 +40,12 @@ namespace ControlIDMvc.Querys
         {
             var portals = await this._dBContext.Portal.Where(area => portals_id.Contains(area.Id)).ToListAsync();
             return portals;
+        }public async Task<List<Portal>> GetAreaId(int ControlId)
+        {
+            var portals = await this._dBContext.Portal.Where(p => p.ControlId==ControlId).ToListAsync();
+            return portals;
         }
-        public async Task<List<Portal>> GetAllArea(int area_id)
+        public async Task<List<Portal>> GetAllAreaId(int area_id)
         {
             var portals = await this._dBContext.Portal
             .Where(portal => portal.ControlIdAreaFromId == area_id)
@@ -49,22 +53,15 @@ namespace ControlIDMvc.Querys
             .ToListAsync();
             return portals;
         }
-        public async Task<bool> UpdateArea(Portal portal, int portal_id)
+        public async Task<Portal> UpdateControlId(Portal portal)
         {
-            if (!await _dBContext.Portal.AnyAsync(portal => portal.Id == portal_id))
+            _dBContext.Entry(await _dBContext.Portal.FirstOrDefaultAsync(p => p.Id == portal.Id)).CurrentValues.SetValues(new
             {
-                return false;
-            }
-            _dBContext.Update(portal);
-            var resultado = await _dBContext.SaveChangesAsync();
-            if (resultado == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                ControlIdAreaFromId=portal.ControlIdAreaFromId,
+                ControlIdAreaToId=portal.ControlIdAreaToId
+            });
+            await _dBContext.SaveChangesAsync();
+            return await _dBContext.Portal.Where(a => a.Id == portal.Id).FirstAsync();
         }
         public async Task<Portal> SearchControlId(int ControlId)
         {

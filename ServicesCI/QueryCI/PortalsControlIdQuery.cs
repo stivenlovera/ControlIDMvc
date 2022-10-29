@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ControlIDMvc.Entities;
 using ControlIDMvc.ServicesCI.Dtos.portalsDto;
 using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Newtonsoft.Json;
@@ -41,21 +42,27 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunShow(body);
             return response;
         }
-        public BodyUpdateObject UpdatePortals(portalsCreateDto portalsCreateDto, int portal_id)
+        public async Task<ResponsePortalUpdate> Update(Portal portal)
         {
             BodyUpdateObject body = new BodyUpdateObject()
             {
                 objeto = "portals",
-                values = portalsCreateDto,
+                values = new portalsCreateDto
+                {
+                    name = portal.Nombre,
+                    area_from_id=portal.ControlIdAreaFromId,
+                    area_to_id=portal.ControlIdAreaToId
+                },
                 where = new
                 {
-                    portals = new
+                    areas = new
                     {
-                        id = portal_id
+                        id = portal.ControlId
                     }
                 }
             };
-            return body;
+            var response = await this.RunUpdate(body);
+            return response;
         }
         private async Task<ResponsePortalShow> RunShow(BodyShowAllObject bodyShowAllObject)
         {
@@ -74,6 +81,23 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             }
             return responseCreate;
         }
+        private async Task<ResponsePortalUpdate> RunUpdate(BodyUpdateObject bodyUpdateObject)
+        {
+            ResponsePortalUpdate responseUpdate = new ResponsePortalUpdate();
+
+            Response apiResponse = await this._httpClientService.Run(this.controlador, this.port, this._ApiRutas.ApiUrlUpdate, bodyUpdateObject, this.session);
+            if (apiResponse.estado)
+            {
+                portalsResposeUpdateDto response = JsonConvert.DeserializeObject<portalsResposeUpdateDto>(apiResponse.data);
+                responseUpdate.status = apiResponse.estado;
+                responseUpdate.changes = response.changes;
+            }
+            else
+            {
+                responseUpdate.status = apiResponse.estado;
+            }
+            return responseUpdate;
+        }
     }
 
     /*clases de ayuda*/
@@ -87,5 +111,10 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         public bool status { get; set; }
         public List<portalsDto> portalsDtos { get; set; }
     }
-    
+    public class ResponsePortalUpdate
+    {
+        public bool status { get; set; }
+        public int changes { get; set; }
+    }
+
 }
