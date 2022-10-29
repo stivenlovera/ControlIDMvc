@@ -20,7 +20,7 @@ namespace ControlIDMvc.ServicesCI.Dtos.dispositivoDto
     }
     public class devices
     {
-        public int id { get; set; }
+        public long id { get; set; }
     }
     public class dispositivoResposeUpdateDto
     {

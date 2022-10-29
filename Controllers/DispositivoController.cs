@@ -460,7 +460,7 @@ namespace ControlIDMvc.Controllers
                 List<AreaReglaAcceso> data = new List<AreaReglaAcceso>();
                 foreach (var area_Access_Rules in areas.area_Access_RulesControlDtos)
                 {
-                    var reglasAcceso = await this._horarioQuery.SearchControlId(area_Access_Rules.access_rule_id);
+                    var reglasAcceso = await this._reglaAccesoQuery.SearchControlId(area_Access_Rules.access_rule_id);
                     var area = await this._areaQuery.SearchControlId(area_Access_Rules.area_id);
                     data.Add(
                         new AreaReglaAcceso
