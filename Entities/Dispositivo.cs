@@ -16,7 +16,7 @@ namespace ControlIDMvc.Entities
         public string NumeroSerie { get; set; }
         public string Usuario { get; set; }
         public string Password { get; set; }
-        public int ControlId { get; set; }
+        public long ControlId { get; set; }
         public string ControlIdName { get; set; }
         public string ControlIdIp { get; set; }
         public string ControlIdPublicKey { get; set; }
