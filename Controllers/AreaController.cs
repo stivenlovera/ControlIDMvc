@@ -303,6 +303,7 @@ namespace ControlIDMvc.Controllers
             Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
             /*valido si es el login fue ok*/
             this._areaControlIdQuery.Params(port, ip, user, password, login.data);
+            this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
             return login.estado;
         }
         /*------Obtener data dispositivo------*/
