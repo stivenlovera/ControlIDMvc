@@ -118,7 +118,7 @@ namespace ControlIDMvc.Querys
         public async Task<List<Portal>> GetAllAreaId(int area_id)
         {
             var portals = await this._dBContext.Portal
-            .Where(portal => portal.ControlIdAreaFromId == area_id || portal.ControlIdAreaToId == area_id)
+            .Where(portal => portal.AreaFromId == area_id || portal.AreaToId == area_id)
             .ToListAsync();
             return portals;
         }
