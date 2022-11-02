@@ -19,6 +19,5 @@ namespace ControlIDMvc.Entities
         public int AreaToId { get; set; }
         public List<AccionPortal> AccionePortal { get; set; }
         public List<PortalReglaAcceso> PortalReglaAcceso { get; set; }
-        public Dispositivo Dispositivo { get; set; }
     }
 }

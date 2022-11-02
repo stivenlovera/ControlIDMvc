@@ -305,7 +305,9 @@ namespace ControlIDMvc.Migrations
                     ControlIdName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ControlIdAreaFromId = table.Column<int>(type: "int", nullable: false),
+                    AreaFromId = table.Column<int>(type: "int", nullable: false),
                     ControlIdAreaToId = table.Column<int>(type: "int", nullable: false),
+                    AreaToId = table.Column<int>(type: "int", nullable: false),
                     DispositivoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

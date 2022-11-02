@@ -614,6 +614,12 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AreaFromId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreaToId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ControlId")
                         .HasColumnType("int");
 

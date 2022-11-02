@@ -1,4 +1,4 @@
-@model ControlIDMvc.Entities.Area;
+@model ControlIDMvc.Dtos.Area.AreaDto;
 @using ControlIDMvc.Dtos.Portal;
 @{
     ViewData["Title"] = "Editar Area";
@@ -72,18 +72,22 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre</th>
+                                                        <th>Entrada (Area)</th>
+                                                        <th>Salida (Area)</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach (var puerta in puertas)
+                                                    @foreach (var disponible in Model.PuertasDisponibleId.Select((value, i) => new { i, value }))
                                                     {
                                                         <tr>
-                                                            <td>@puerta.Nombre</td>
+                                                            <td>@Model.PuertasDisponibleNombre[disponible.i] <input value="@Model.PuertasDisponibleNombre[disponible.i]" name="PuertasDisponibleNombre" hidden> <input value="@disponible.value" name="PuertasDisponibleId" hidden></td>
+                                                            
+                                                            <td>@Model.PuertasDisponibleAreaEntradaNombre[disponible.i]<input value="@Model.PuertasDisponibleAreaEntradaNombre[disponible.i]" name="PuertasDisponibleAreaEntradaNombre" hidden> <input value="@Model.PuertasDisponibleAreaEntrada[disponible.i]" name="PuertasDisponibleAreaEntrada" hidden></td>
+                                                            <td>@Model.PuertasDisponibleAreaSalidaNombre[disponible.i] <input value="@Model.PuertasDisponibleAreaSalidaNombre[disponible.i]" name="PuertasDisponibleAreaSalidaNombre" hidden> <input value="@Model.PuertasDisponibleAreaSalida[disponible.i]" name="PuertasDisponibleAreaSalida" hidden></td>
                                                             <td>
                                                                 <button
-                                                                class="btn btn-success btn-xs añadir_area_seleccionada"
-                                                                data-id="@puerta.Id" data-nombre="@puerta.Nombre"
+                                                                class="btn btn-success btn-xs añadir_area_seleccionada"                 
                                                                 type="button"><i class="fa fa-arrow-right"></i></button>
                                                             </td>
                                                         </tr>
@@ -103,11 +107,26 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre</th>
+                                                        <th>Entrada (Area)</th>
+                                                        <th>Salida (Area)</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
+                                                    @foreach (var selecionada in Model.PuertasSelecionadasId.Select((value, i) => new { i, value }))
+                                                    {
+                                                        <tr>
+                                                            <td>@Model.PuertasSelecionadasNombre[selecionada.i] <input value="@Model.PuertasSelecionadasNombre[selecionada.i]" name="PuertasSelecionadasNombre" hidden> <input value="@selecionada.value" name="PuertasSelecionadasId" hidden></td>
+                                                            
+                                                            <td>@Model.PuertasSelecionadasAreaEntradaNombre[selecionada.i]<input value="@Model.PuertasSelecionadasAreaEntradaNombre[selecionada.i]" name="PuertasSelecionadasAreaEntradaNombre" hidden> <input value="@Model.PuertasSelecionadasAreaEntrada[selecionada.i]" name="PuertasSelecionadasAreaEntrada" hidden></td>
+                                                            <td>@Model.PuertasSelecionadasAreaSalidaNombre[selecionada.i] <input value="@Model.PuertasSelecionadasAreaSalidaNombre[selecionada.i]" name="PuertasSelecionadasAreaSalidaNombre" hidden> <input value="@Model.PuertasSelecionadasAreaSalida[selecionada.i]" name="PuertasSelecionadasAreaSalida" hidden></td>
+                                                            <td>
+                                                                <button
+                                                                class="btn btn-success btn-xs añadir_area_disponible"                 
+                                                                type="button"><i class="fa fa-arrow-left"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    }
                                                 </tbody>
                                             </table>
                                         </div>

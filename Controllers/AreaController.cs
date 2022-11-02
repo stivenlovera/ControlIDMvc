@@ -71,9 +71,45 @@ namespace ControlIDMvc.Controllers
         [HttpGet("create")]
         public async Task<ActionResult> Create()
         {
-            var puertas = await this._portalQuery.GetAll();
-            ViewData["puertas"] = puertas;
-            return View("~/Views/Area/Create.cshtml");
+            var portals = await this._portalQuery.GetAllDetail();
+            //mostrar disponibles
+            var PuertasDisponibleId = new List<string>();
+            var PuertasDisponibleNombre = new List<string>();
+            var PuertasDisponibleAreaSalida = new List<string>();
+            var PuertasDisponibleAreaSalidaNombre = new List<string>();
+            var PuertasDisponibleAreaEntrada = new List<string>();
+            var PuertasDisponibleAreaEntradaNombre = new List<string>();
+
+            foreach (var item in portals)
+            {
+                PuertasDisponibleId.Add(item.Id.ToString());
+                PuertasDisponibleNombre.Add(item.Nombre);
+                PuertasDisponibleAreaEntrada.Add(item.AreaFromId.ToString());
+                PuertasDisponibleAreaEntradaNombre.Add(item.AreaFrom.Nombre);
+                PuertasDisponibleAreaSalida.Add(item.AreaToId.ToString());
+                PuertasDisponibleAreaSalidaNombre.Add(item.AreaTo.Nombre);
+            }
+
+            var areaCreateDto = new AreaCreateDto()
+            {
+                Nombre = "",
+                Descripcion = "",
+
+                PuertasDisponibleId = PuertasDisponibleId,
+                PuertasDisponibleNombre = PuertasDisponibleNombre,
+                PuertasDisponibleAreaSalida = PuertasDisponibleAreaSalida,
+                PuertasDisponibleAreaSalidaNombre = PuertasDisponibleAreaSalidaNombre,
+                PuertasDisponibleAreaEntrada = PuertasDisponibleAreaEntrada,
+                PuertasDisponibleAreaEntradaNombre = PuertasDisponibleAreaEntradaNombre,
+
+                PuertasSelecionadasId = new List<string>(),
+                PuertasSelecionadasNombre = new List<string>(),
+                PuertasSelecionadasAreaEntradaNombre = new List<string>(),
+                PuertasSelecionadasAreaEntrada = new List<string>(),
+                PuertasSelecionadasAreaSalida = new List<string>(),
+                PuertasSelecionadasAreaSalidaNombre = new List<string>()
+            };
+            return View("~/Views/Area/Create.cshtml", areaCreateDto);
         }
 
         [HttpPost("store")]
@@ -90,11 +126,11 @@ namespace ControlIDMvc.Controllers
 
                     };
                     var insertArea = await this._areaQuery.Store(area);
-                    foreach (var PuertasSelecionada in areaCreateDto.PuertasSelecionadas)
+                    foreach (var PuertasSelecionada in areaCreateDto.PuertasSelecionadasId)
                     {
                         var update = new Portal
                         {
-                            Id = insertArea.Id,
+                            Id = Convert.ToInt32(PuertasSelecionada),
                             ControlIdAreaFromId = insertArea.ControlId,
                             ControlIdAreaToId = insertArea.ControlId,
                             AreaFromId = insertArea.Id,
@@ -114,26 +150,140 @@ namespace ControlIDMvc.Controllers
         [HttpGet("edit/{id:int}")]
         public async Task<ActionResult> Edit(int id)
         {
-            var puertas = await this._portalQuery.GetAll();
-            ViewData["puertas"] = puertas;
             var area = await this._areaQuery.GetOne(id);
-            return View("~/Views/Area/Edit.cshtml", area);
+
+            var portalsDisponibles = await this._portalQuery.GetAllDisponibles(id);
+            //mostrar disponibles
+            var PuertasDisponibleId = new List<string>();
+            var PuertasDisponibleNombre = new List<string>();
+            var PuertasDisponibleAreaSalida = new List<string>();
+            var PuertasDisponibleAreaSalidaNombre = new List<string>();
+            var PuertasDisponibleAreaEntrada = new List<string>();
+            var PuertasDisponibleAreaEntradaNombre = new List<string>();
+
+            foreach (var item in portalsDisponibles)
+            {
+                PuertasDisponibleId.Add(item.Id.ToString());
+                PuertasDisponibleNombre.Add(item.Nombre);
+                PuertasDisponibleAreaEntrada.Add(item.AreaFromId.ToString());
+                PuertasDisponibleAreaEntradaNombre.Add(item.AreaFrom.Nombre);
+                PuertasDisponibleAreaSalida.Add(item.AreaToId.ToString());
+                PuertasDisponibleAreaSalidaNombre.Add(item.AreaTo.Nombre);
+            }
+            //mostrar ocupados
+            var portalsSelecionadas = await this._portalQuery.GetAllSelecionadas(id);
+
+            var PuertasSelecionadasId = new List<string>();
+            var PuertasSelecionadasNombre = new List<string>();
+            var PuertasSelecionadasAreaEntrada = new List<string>();
+            var PuertasSelecionadasAreaEntradaNombre = new List<string>();
+            var PuertasSelecionadasAreaSalida = new List<string>();
+            var PuertasSelecionadasAreaSalidaNombre = new List<string>();
+
+            foreach (var item in portalsSelecionadas)
+            {
+                PuertasSelecionadasId.Add(item.Id.ToString());
+                PuertasSelecionadasNombre.Add(item.Nombre);
+                PuertasSelecionadasAreaEntrada.Add(item.AreaFromId.ToString());
+                PuertasSelecionadasAreaEntradaNombre.Add(item.AreaFrom.Nombre);
+                PuertasSelecionadasAreaSalida.Add(item.AreaToId.ToString());
+                PuertasSelecionadasAreaSalidaNombre.Add(item.AreaTo.Nombre);
+            }
+
+            var editar = new AreaDto()
+            {
+                Id = area.Id,
+                Nombre = area.Nombre,
+                Descripcion = area.Descripcion,
+
+                PuertasDisponibleId = PuertasDisponibleId,
+                PuertasDisponibleNombre = PuertasDisponibleNombre,
+                PuertasDisponibleAreaSalida = PuertasDisponibleAreaSalida,
+                PuertasDisponibleAreaSalidaNombre = PuertasDisponibleAreaSalidaNombre,
+                PuertasDisponibleAreaEntrada = PuertasDisponibleAreaEntrada,
+                PuertasDisponibleAreaEntradaNombre = PuertasDisponibleAreaEntradaNombre,
+
+                PuertasSelecionadasId = PuertasSelecionadasId,
+                PuertasSelecionadasNombre = PuertasSelecionadasNombre,
+                PuertasSelecionadasAreaEntradaNombre = PuertasSelecionadasAreaEntradaNombre,
+                PuertasSelecionadasAreaEntrada = PuertasSelecionadasAreaEntrada,
+                PuertasSelecionadasAreaSalida = PuertasSelecionadasAreaSalida,
+                PuertasSelecionadasAreaSalidaNombre = PuertasSelecionadasAreaSalidaNombre
+            };
+
+            return View("~/Views/Area/Edit.cshtml", editar);
         }
 
         [HttpPut("update/{id:int}")]
         public async Task<ActionResult> Update(int id, AreaDto areaDto)
         {
-            var puertas = await this._portalQuery.GetAll();
-            ViewData["puertas"] = puertas;
-            return View("~/Views/Area/Create.cshtml");
+            if (ModelState.IsValid)
+            {
+                if (await this._areaQuery.ValidarNombre(areaDto.Nombre))
+                {
+                    var area = new Area
+                    {
+                        Id = id,
+                        Descripcion = areaDto.Nombre,
+                        Nombre = areaDto.Nombre,
+                        ControlIdName = areaDto.Nombre,
+
+                    };
+                    var updateArea = await this._areaQuery.Update(area);
+                    foreach (var PuertasSelecionada in areaDto.PuertasSelecionadasId)
+                    {
+                        var update = new Portal
+                        {
+                            Id = Convert.ToInt32(PuertasSelecionada),
+                            ControlIdAreaFromId = updateArea.ControlId,
+                            ControlIdAreaToId = updateArea.ControlId,
+                            AreaFromId = updateArea.Id,
+                            AreaToId = updateArea.Id
+                        };
+                        var updatePortal = await this._portalQuery.UpdateControlId(update);
+                    }
+                    //actualizar controlId
+                    await this.UpdateArea(updateArea);
+                    return RedirectToAction(nameof(Index));
+                }
+
+            }
+            return View("~/Views/Area/Create.cshtml", areaDto);
         }
 
         [HttpDelete("delete/{id:int}")]
-        public async Task<ActionResult> Delete()
+        public async Task<ActionResult> Delete(int id)
         {
-            var puertas = await this._portalQuery.GetAll();
-            ViewData["puertas"] = puertas;
-            return View("~/Views/Area/Create.cshtml");
+            var verificar = await this._areaQuery.VerificarDelete(id);
+            if (verificar)
+            {
+                var area=await this._areaQuery.GetOne(id);
+                if (await this._areaQuery.Delete(id))
+                {
+                    await this._areaControlIdQuery.Delete(area);
+                    return Json(new
+                    {
+                        status = "success",
+                        message = "Eliminado correctamente",
+                    });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        status = "error",
+                        message = "Ocurrio un error",
+                    });
+                }
+            }
+            else
+            {
+                return Json(new
+                {
+                    status = "error",
+                    message = "No se puede eliminar por esta siendo usado",
+                });
+            }
         }
         private async Task<Boolean> loginControlId()
         {
@@ -180,7 +330,7 @@ namespace ControlIDMvc.Controllers
             {
                 //var updatePortal=this._portalsControlIdQuery.Update()
                 area.ControlId = apiResponseArea.ids[0];
-                await this._areaQuery.Update(area);
+                await this._areaQuery.UpdateControlId(area);
                 return apiResponseArea.status;
             }
             else
@@ -196,9 +346,8 @@ namespace ControlIDMvc.Controllers
                 var apiResponse = await this._portalsControlIdQuery.Update(portal);
                 if (apiResponse.status)
                 {
-                    //var updatePortal=this._portalsControlIdQuery.Update()
-                    portal.ControlIdAreaFromId=area.ControlId;
-                    portal.ControlIdAreaToId=area.ControlId;
+                    portal.ControlIdAreaFromId = area.ControlId;
+                    portal.ControlIdAreaToId = area.ControlId;
                     await this._portalQuery.UpdateControlId(portal);
                     return apiResponse.status;
                 }
@@ -209,32 +358,39 @@ namespace ControlIDMvc.Controllers
             }
             return true;
         }
-
-        /*Extras*/
-        /*   private async Task<Response> SaveAreaControlId(AreaCreateDto areaCreateDto)
-          {
-              List<areaCreateDto> areaCreateControlIdDto = new List<areaCreateDto>();
-              areaCreateControlIdDto.Add(
-                  new areaCreateDto()
-                  {
-                      name = areaCreateDto.Nombre
-                  }
-              );
-              BodyCreateObject AddHorario = this._areaControlIdQuery.CreateAreas(areaCreateControlIdDto);
-              Response responseAddHorario = await this._httpClientService.Run(controlador, this.port, this._apiRutas.ApiUrlCreate, AddHorario, "");
-              return responseAddHorario;
-          }
-          private async Task<Response> updatePuertaControlId(string nombre, int area_id, int portal_id) 
-          {
-              portalsCreateDto portalsCreateDto = new portalsCreateDto
-              {
-                  name = $"TO : {nombre}",
-                  area_from_id = area_id,
-                  area_to_id = area_id
-              };
-              BodyUpdateObject updatePortal = this._portalsControlIdQuery.UpdatePortals(portalsCreateDto, portal_id);
-              Response responseUpdatePortal = await this._httpClientService.Run(controlador, this.port, this._apiRutas.ApiUrlUpdate, updatePortal, "");
-              return responseUpdatePortal;
-          }*/
+        /*------Obtener data dispositivo------*/
+        private async Task<bool> UpdateArea(Area area)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear usuario
+                    await this.AreaUpdate(area);
+                    await this.UpdatePortals(area);
+                    //await this.CardStoreControlId(persona);
+                }
+            }
+            return true;
+        }
+        private async Task<bool> AreaUpdate(Area area)
+        {
+            var apiResponse = await this._areaControlIdQuery.Update(area);
+            if (apiResponse.status)
+            {
+                if (apiResponse.changes > 0)
+                {
+                    await this._areaQuery.UpdateControlId(area);
+                }
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
     }
 }

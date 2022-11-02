@@ -84,7 +84,18 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Area> GetOne(int id)
         {
-            return await _dbContext.Area.FindAsync(id);
+            return await _dbContext.Area.Where(a => a.Id == id).FirstOrDefaultAsync();
+        }
+        public async Task<List<Portal>> GetPortals(int id)
+        {
+            var area = await this.GetOne(id);
+
+            return await _dbContext.Portal.Where(p => p.AreaFromId == area.Id).ToListAsync();
+        }
+        public async Task<List<Portal>> GetPortalsLibres(int id)
+        {
+            var area = await this.GetOne(id);
+            return await _dbContext.Portal.Where(p => p.AreaFromId != area.Id).ToListAsync();
         }
         public async Task<Area> GetControlId(int ControlId)
         {
@@ -103,11 +114,24 @@ namespace ControlIDMvc.Querys
             return areas;
         }
         //revisar esta funcion
+        public async Task<Area> UpdateControlId(Area area)
+        {
+            _dbContext.Entry(await _dbContext.Area.FirstOrDefaultAsync(a => a.Id == area.Id)).CurrentValues.SetValues(new
+            {
+                ControlId = area.ControlId,
+                ControlIdName = area.Nombre,
+                Descripcion = area.Nombre
+            });
+            await _dbContext.SaveChangesAsync();
+            return await _dbContext.Area.Where(a => a.Id == area.Id).FirstAsync();
+        }
         public async Task<Area> Update(Area area)
         {
             _dbContext.Entry(await _dbContext.Area.FirstOrDefaultAsync(a => a.Id == area.Id)).CurrentValues.SetValues(new
             {
-                ControlId = area.ControlId
+                ControlId = area.ControlId,
+                Nombre = area.Nombre,
+                ControlIdName = area.Nombre
             });
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Area.Where(a => a.Id == area.Id).FirstAsync();
@@ -115,6 +139,22 @@ namespace ControlIDMvc.Querys
         public async Task<Area> SearchControlId(int ControlId)
         {
             return await _dbContext.Area.Where(a => a.ControlId == ControlId).FirstOrDefaultAsync();
+        }
+        public async Task<bool> VerificarDelete(int area_id)
+        {
+            var verificar = await this._dbContext.Portal.Where(portal => portal.ControlIdAreaFromId == area_id || portal.ControlIdAreaToId == area_id).AnyAsync();
+            return verificar;
+        }
+        public async Task<bool> Delete(int area_id)
+        {
+            var area = await _dbContext.Area.Where(x => x.Id == area_id).FirstAsync();
+            if (area != null)
+            {
+                _dbContext.Area.Remove(area);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

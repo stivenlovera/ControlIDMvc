@@ -81,6 +81,9 @@ namespace ControlIDMvc.Controllers
         {
             if (ModelState.IsValid)
             {
+
+
+
                 /*   if (await this.loginControlId())
                   {
                       time_zonesCreateDto time_ZonesCreateDto = new time_zonesCreateDto();
@@ -165,6 +168,31 @@ namespace ControlIDMvc.Controllers
             }
             return View("~/Views/Persona/Edit.cshtml", persona);
         }
+        public void validar(HorarioCreateDto horarioCreateDto)
+        {
+            var validadores = new List<ExtraerDia>();
+            validadores.Add(
+                new ExtraerDia{
+                    dia=horarioCreateDto.lunes,
+                    hora_fin=horarioCreateDto.hora_fin_lunes,
+                    hora_inicio=horarioCreateDto.hora_inicio_lunes
+                }
+            );
+
+            foreach (var validador in validadores)
+            {
+               /*  if (validador.hora_inicio)
+                {
+                    
+                } */
+            }
+        }
         /*fuciones separadas*/
+    }
+    public class ExtraerDia
+    {
+        public string dia { get; set; }
+        public DateTime hora_inicio { get; set; }
+        public DateTime hora_fin { get; set; }
     }
 }

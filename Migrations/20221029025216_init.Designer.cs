@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221029003634_init")]
+    [Migration("20221029025216_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -614,6 +614,12 @@ namespace ControlIDMvc.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreaFromId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreaToId")
                         .HasColumnType("int");
 
                     b.Property<int>("ControlId")

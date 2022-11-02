@@ -87,9 +87,9 @@ namespace ControlIDMvc.Querys
                 data = horarios
             };
         }
-        public async Task<bool> store(HorarioCreateDto horarioForm)
+        public bool store(HorarioCreateDto horarioForm)
         {
-            List<Dia> dia = new List<Dia>();
+            /* List<Dia> dia = new List<Dia>();
             for (int i = 0; i < horarioForm.Dias.Count; i++)
             {
                 DateTime hora_inicio = Convert.ToDateTime(horarioForm.Hora_inicio[i]);
@@ -97,9 +97,9 @@ namespace ControlIDMvc.Querys
                 dia.Add(
                     new Dia()
                     {
-/*                         Nombre = horarioForm.Dias[i],
+                        Nombre = horarioForm.Dias[i],
                         HoraFin = hora_fin,
-                        HoraInicio = hora_inicio, */
+                        HoraInicio = hora_inicio,
 
                     });
             }
@@ -117,7 +117,8 @@ namespace ControlIDMvc.Querys
             else
             {
                 return false;
-            }
+            } */
+            return false;
         }
         public async Task<bool> StoreAll(List<Horario> horarios){
             await _dbContext.AddRangeAsync(horarios);
