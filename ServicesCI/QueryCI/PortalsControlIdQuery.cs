@@ -55,7 +55,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 },
                 where = new
                 {
-                    areas = new
+                    portals = new
                     {
                         id = portal.ControlId
                     }
