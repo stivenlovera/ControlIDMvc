@@ -136,7 +136,7 @@ namespace ControlIDMvc.Controllers
                             AreaFromId = insertArea.Id,
                             AreaToId = insertArea.Id
                         };
-                        var updatePortal = await this._portalQuery.UpdateControlId(update);
+                        var updatePortal = await this._portalQuery.Update(update);
                     }
 
                     await this.StoreArea(insertArea, areaCreateDto);
