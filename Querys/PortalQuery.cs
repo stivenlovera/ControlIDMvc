@@ -122,7 +122,16 @@ namespace ControlIDMvc.Querys
             .ToListAsync();
             return portals;
         }
-
+        public async Task<Portal> Update(Portal portal)
+        {
+            _dBContext.Entry(await _dBContext.Portal.FirstOrDefaultAsync(p => p.Id == portal.Id)).CurrentValues.SetValues(new
+            {
+                AreaFromId = portal.AreaFromId,
+                AreaToId = portal.AreaToId
+            });
+            await _dBContext.SaveChangesAsync();
+            return await _dBContext.Portal.Where(a => a.Id == portal.Id).FirstAsync();
+        }
         public async Task<Portal> UpdateControlId(Portal portal)
         {
             _dBContext.Entry(await _dBContext.Portal.FirstOrDefaultAsync(p => p.Id == portal.Id)).CurrentValues.SetValues(new
