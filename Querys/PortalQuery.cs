@@ -25,7 +25,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<List<AreaPortalHelper>> GetAllSelecionadas(int area_id)
         {
-            var portals = await this._dBContext.Portal.Where(portal => portal.ControlIdAreaFromId == area_id || portal.ControlIdAreaToId == area_id).ToListAsync();
+            var portals = await this._dBContext.Portal.Where(portal => portal.AreaFromId == area_id || portal.AreaToId == area_id).ToListAsync();
             var resultado = new List<AreaPortalHelper>();
             foreach (var portal in portals)
             {
@@ -48,7 +48,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<List<AreaPortalHelper>> GetAllDisponibles(int area_id)
         {
-            var portals = await this._dBContext.Portal.Where(portal => portal.ControlIdAreaFromId != area_id && portal.ControlIdAreaToId != area_id).ToListAsync();
+            var portals = await this._dBContext.Portal.Where(portal => portal.AreaFromId != area_id && portal.AreaToId != area_id).ToListAsync();
             var resultado = new List<AreaPortalHelper>();
             foreach (var portal in portals)
             {
