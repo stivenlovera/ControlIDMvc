@@ -344,6 +344,8 @@ namespace ControlIDMvc.Controllers
             var gePortals = await this._portalQuery.GetAllAreaId(area.Id);
             foreach (var portal in gePortals)
             {
+                portal.ControlIdAreaFromId=area.ControlId;
+                portal.ControlIdAreaToId=area.ControlId;
                 var apiResponse = await this._portalsControlIdQuery.Update(portal);
                 if (apiResponse.status)
                 {
