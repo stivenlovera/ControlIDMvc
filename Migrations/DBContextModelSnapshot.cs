@@ -228,11 +228,47 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("ControlWed")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Fri")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Hol1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Hol2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Hol3")
+                        .HasColumnType("int");
+
                     b.Property<int>("HorarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Mon")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("Sat")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Sun")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Thu")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Tue")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wed")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -635,15 +671,10 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("DispositivoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DispositivoId");
 
                     b.ToTable("Portal");
                 });
@@ -1007,15 +1038,6 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Persona");
 
                     b.Navigation("ReglaAcceso");
-                });
-
-            modelBuilder.Entity("ControlIDMvc.Entities.Portal", b =>
-                {
-                    b.HasOne("ControlIDMvc.Entities.Dispositivo", "Dispositivo")
-                        .WithMany()
-                        .HasForeignKey("DispositivoId");
-
-                    b.Navigation("Dispositivo");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.PortalReglaAcceso", b =>

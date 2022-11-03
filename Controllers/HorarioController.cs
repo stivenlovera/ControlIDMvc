@@ -77,86 +77,63 @@ namespace ControlIDMvc.Controllers
         */
         [HttpPost("store")]
         [ValidateAntiForgeryToken]
-        public ActionResult Store([FromForm] HorarioCreateDto horarioCreateDto)
+        public async Task<ActionResult> Store([FromForm] HorarioCreateDto horarioCreateDto)
         {
             if (ModelState.IsValid)
             {
-
-
-
-                /*   if (await this.loginControlId())
-                  {
-                      time_zonesCreateDto time_ZonesCreateDto = new time_zonesCreateDto();
-                      time_ZonesCreateDto.name = horarioCreateDto.Nombre;
-
-                      BodyCreateObject AddHorario = this._horarioControlIdQuery.CreateHorario(time_ZonesCreateDto);
-                      Response responseAddHorario = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddHorario,"");
-                      if (responseAddHorario.estado)
-                      {
-                          time_zonesResponseDto responseHorario = JsonConvert.DeserializeObject<time_zonesResponseDto>(responseAddHorario.data);
-                          horarioCreateDto.ControlId = responseHorario.ids[0].ToString();
-
-                          List<time_spansCreateDto> dias = new List<time_spansCreateDto>();
-                          int i = 0;
-                          foreach (var dia in horarioCreateDto.Dias)
-                          {
-                              var hora_inicio = Convert.ToDateTime(horarioCreateDto.Hora_inicio[i]);
-                              var hora_fin = Convert.ToDateTime(horarioCreateDto.Hora_fin[i]);
-
-                              var cal_hora_inicio = Convert.ToInt32(hora_inicio.Hour == 00 ? 60 : hora_inicio.Hour) * Convert.ToInt32(hora_inicio.Minute == 00 ? 60 : hora_inicio.Minute * 60) // Convert.ToInt32(hora_inicio.Second) ;
-                              var cal_hora_fin = Convert.ToInt32(hora_fin.Hour == 00 ? 60 : hora_fin.Hour) * Convert.ToInt32(hora_fin.Minute == 00 ? 60 : hora_fin.Minute * 60) //Convert.ToInt32(hora_fin.Second); ;
-                              time_spansCreateDto time_SpansCreateDto = new time_spansCreateDto
-                              {
-                                  start = cal_hora_inicio,
-                                  end = cal_hora_fin,
-                                  sun = dia == "sabado" ? 1 : 0,
-                                  mon = dia == "lunes" ? 1 : 0,
-                                  tue = dia == "martes" ? 1 : 0,
-                                  wed = dia == "miercoles" ? 1 : 0,
-                                  thu = dia == "jueves" ? 1 : 0,
-                                  fri = dia == "viernes" ? 1 : 0,
-                                  sat = dia == "sabado" ? 1 : 0,
-                                  hol1 = 0,
-                                  hol2 = 0,
-                                  hol3 = 0,
-                                  time_zone_id = responseHorario.ids[0]
-                              };
-                              dias.Add(time_SpansCreateDto);
-                              i++;
-                          }
-                          BodyCreateObject AddHorarioDias = this._horarioControlIdQuery.CreateDias(dias, responseHorario.ids[0]);
-                          Response responseAddHorarioDias = await this._httpClientService.Run(controlador,this.port, this._apiRutas.ApiUrlCreate, AddHorarioDias,"");
-
-                          if (responseAddHorario.estado)
-                          {
-                              horarioResponseDto responseHorarioDias = JsonConvert.DeserializeObject<horarioResponseDto>(responseAddHorarioDias.data);
-                              int index = 0;
-                              horarioCreateDto.DiasControlId= new List<string>();
-                              foreach (var dia in horarioCreateDto.Dias)
-                              {
-                                  horarioCreateDto.DiasControlId.Add((responseHorarioDias.ids[index]).ToString());
-                              }
-                              //var storePersona = await this._horarioQuery.store(horarioCreateDto);
-                          }
-                      }
-                  }
-                  else
-                  {
-                      var storePersona = await this._horarioQuery.store(horarioCreateDto);
-                  } */
+                var dias = this.StoreDiaSistema(horarioCreateDto);
+                var insert = new Horario
+                {
+                    Nombre = horarioCreateDto.Nombre,
+                    Descripcion = horarioCreateDto.Descripcion,
+                    ControlIdName = horarioCreateDto.Nombre,
+                    Dias = dias
+                };
+                await this._horarioQuery.store(insert);
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Horario/Create.cshtml");
         }
         [HttpGet("editar/{id:int}")]
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            var persona = _dbContext.Persona.Find(id);
-            if (persona == null)
+            var horario = await this._horarioQuery.GetOne(id);
+            if (horario == null)
             {
                 return NotFound();
             }
-            return View("~/Views/Persona/Edit.cshtml", persona);
+            var edit = new HorarioDto();
+            edit.Nombre = horario.Nombre;
+            edit.Descripcion = horario.Descripcion;
+            foreach (var dia in horario.Dias)
+            {
+                edit.lunes = this.desarmarDias(horario.Dias, "lunes").dia;
+                edit.martes = this.desarmarDias(horario.Dias, "martes").dia;
+                edit.miercoles = this.desarmarDias(horario.Dias, "miercoles").dia;
+                edit.jueves = this.desarmarDias(horario.Dias, "jueves").dia;
+                edit.viernes = this.desarmarDias(horario.Dias, "viernes").dia;
+                edit.sabado = this.desarmarDias(horario.Dias, "sabado").dia;
+                edit.domingo = this.desarmarDias(horario.Dias, "domingo").dia;
+
+                edit.hora_inicio_lunes = this.desarmarDias(horario.Dias, "lunes").hora_inicio;
+                edit.hora_inicio_martes = this.desarmarDias(horario.Dias, "martes").hora_inicio;
+                edit.hora_inicio_miercoles = this.desarmarDias(horario.Dias, "miercoles").hora_inicio;
+                edit.hora_inicio_jueves = this.desarmarDias(horario.Dias, "jueves").hora_inicio;
+                edit.hora_inicio_viernes = this.desarmarDias(horario.Dias, "viernes").hora_inicio;
+                edit.hora_inicio_sabado = this.desarmarDias(horario.Dias, "sabado").hora_inicio;
+                edit.hora_inicio_domingo = this.desarmarDias(horario.Dias, "domingo").hora_inicio;
+
+                edit.hora_fin_lunes = this.desarmarDias(horario.Dias, "lunes").hora_fin;
+                edit.hora_fin_martes = this.desarmarDias(horario.Dias, "martes").hora_fin;
+                edit.hora_fin_miercoles = this.desarmarDias(horario.Dias, "miercoles").hora_fin;
+                edit.hora_fin_jueves = this.desarmarDias(horario.Dias, "jueves").hora_fin;
+                edit.hora_fin_viernes = this.desarmarDias(horario.Dias, "viernes").hora_fin;
+                edit.hora_fin_sabado = this.desarmarDias(horario.Dias, "sabado").hora_fin;
+                edit.hora_fin_domingo = this.desarmarDias(horario.Dias, "domingo").hora_fin;
+
+            }
+
+            return View("~/Views/Persona/Edit.cshtml", edit);
         }
         [HttpGet("update/{id:int}")]
         public ActionResult Update(int id)
@@ -168,26 +145,156 @@ namespace ControlIDMvc.Controllers
             }
             return View("~/Views/Persona/Edit.cshtml", persona);
         }
-        public void validar(HorarioCreateDto horarioCreateDto)
+        public List<ExtraerDia> validar(HorarioCreateDto horarioCreateDto)
         {
             var validadores = new List<ExtraerDia>();
             validadores.Add(
-                new ExtraerDia{
-                    dia=horarioCreateDto.lunes,
-                    hora_fin=horarioCreateDto.hora_fin_lunes,
-                    hora_inicio=horarioCreateDto.hora_inicio_lunes
+                new ExtraerDia
+                {
+                    dia = horarioCreateDto.lunes,
+                    hora_fin = horarioCreateDto.hora_fin_lunes,
+                    hora_inicio = horarioCreateDto.hora_inicio_lunes
                 }
             );
-
-            foreach (var validador in validadores)
-            {
-               /*  if (validador.hora_inicio)
+            validadores.Add(
+                new ExtraerDia
                 {
-                    
-                } */
-            }
+                    dia = horarioCreateDto.martes,
+                    hora_fin = horarioCreateDto.hora_fin_martes,
+                    hora_inicio = horarioCreateDto.hora_inicio_martes
+                }
+            );
+            validadores.Add(
+                new ExtraerDia
+                {
+                    dia = horarioCreateDto.miercoles,
+                    hora_fin = horarioCreateDto.hora_fin_miercoles,
+                    hora_inicio = horarioCreateDto.hora_inicio_miercoles
+                }
+            );
+            validadores.Add(
+               new ExtraerDia
+               {
+                   dia = horarioCreateDto.jueves,
+                   hora_fin = horarioCreateDto.hora_fin_jueves,
+                   hora_inicio = horarioCreateDto.hora_inicio_jueves
+               }
+           );
+            validadores.Add(
+               new ExtraerDia
+               {
+                   dia = horarioCreateDto.viernes,
+                   hora_fin = horarioCreateDto.hora_fin_viernes,
+                   hora_inicio = horarioCreateDto.hora_inicio_viernes
+               }
+           );
+            validadores.Add(
+               new ExtraerDia
+               {
+                   dia = horarioCreateDto.sabado,
+                   hora_fin = horarioCreateDto.hora_fin_sabado,
+                   hora_inicio = horarioCreateDto.hora_inicio_sabado
+               }
+           );
+            validadores.Add(
+                new ExtraerDia
+                {
+                    dia = horarioCreateDto.domingo,
+                    hora_fin = horarioCreateDto.hora_fin_domingo,
+                    hora_inicio = horarioCreateDto.hora_inicio_domingo
+                }
+            );
+            return validadores;
         }
-        /*fuciones separadas*/
+        private List<Dia> StoreDiaSistema(HorarioCreateDto horarioCreateDto)
+        {
+            var dias = this.validar(horarioCreateDto);
+            var insert = new List<Dia>();
+            foreach (var dia in dias)
+            {
+                if (dia.dia != null)
+                {
+                    insert.Add(
+                    new Dia
+                    {
+                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * Convert.ToInt32(dia.hora_fin.Minute * 60),
+                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * Convert.ToInt32(dia.hora_inicio.Minute * 60),
+                        ControlHol1 = 0,
+                        ControlHol2 = 0,
+                        ControlHol3 = 0,
+                        ControlTimeZoneId = 0,
+                        ControlMon = dia.dia == "lunes" ? 1 : 0,
+                        ControlTue = dia.dia == "martes" ? 1 : 0,
+                        ControlWed = dia.dia == "miercoles" ? 1 : 0,
+                        ControlThu = dia.dia == "jueves" ? 1 : 0,
+                        ControlFri = dia.dia == "viernes" ? 1 : 0,
+                        ControlSat = dia.dia == "sabado" ? 1 : 0,
+                        ControlSun = dia.dia == "domingo" ? 1 : 0,
+                        Start = dia.hora_inicio,
+                        End = dia.hora_fin,
+                        Mon = dia.dia == "lunes" ? 1 : 0,
+                        Tue = dia.dia == "martes" ? 1 : 0,
+                        Wed = dia.dia == "miercoles" ? 1 : 0,
+                        Thu = dia.dia == "jueves" ? 1 : 0,
+                        Fri = dia.dia == "viernes" ? 1 : 0,
+                        Sat = dia.dia == "sabado" ? 1 : 0,
+                        Sun = dia.dia == "domingo" ? 1 : 0,
+                        Hol1 = 0,
+                        Hol2 = 0,
+                        Hol3 = 0,
+                        Nombre = dia.dia,
+                        ControlId = 0,
+                    });
+                }
+            }
+            return insert;
+        }
+        private ExtraerDia desarmarDias(List<Dia> dias, string validarDia)
+        {
+            var resultado = new ExtraerDia();
+            foreach (var dia in dias)
+            {
+                if (dia.Nombre == validarDia)
+                {
+                    resultado.dia = dia.Nombre;
+                    resultado.hora_fin = dia.End;
+                    resultado.hora_inicio = dia.Start;
+                }
+            }
+            return resultado;
+        }
+        private int identificarDia(string validar)
+        {
+            int resultado = 0;
+            switch (validar)
+            {
+                case "lunes":
+                    resultado = 1;
+                    break;
+                case "martes":
+                    resultado = 1;
+                    break;
+                case "miercoles":
+                    resultado = 1;
+                    break;
+                case "jueves":
+                    resultado = 1;
+                    break;
+                case "viernes":
+                    resultado = 1;
+                    break;
+                case "sabado":
+                    resultado = 1;
+                    break;
+                case "domingo":
+                    resultado = 1;
+                    break;
+                default:
+                    resultado = 0;
+                    break;
+            }
+            return resultado;
+        }
     }
     public class ExtraerDia
     {

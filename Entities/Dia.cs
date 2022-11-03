@@ -23,5 +23,17 @@ namespace ControlIDMvc.Entities
         public int ControlHol1 { get; set; }
         public int ControlHol2 { get; set; }
         public int ControlHol3 { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public int Sun { get; set; }
+        public int Mon { get; set; }
+        public int Tue { get; set; }
+        public int Wed { get; set; }
+        public int Thu { get; set; }
+        public int Fri { get; set; }
+        public int Sat { get; set; }
+        public int Hol1 { get; set; }
+        public int Hol2 { get; set; }
+        public int Hol3 { get; set; }
     }
 }

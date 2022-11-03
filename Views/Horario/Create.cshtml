@@ -59,7 +59,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="lunes" value="lunes" id="lunes" checked />
+                                                <input type="checkbox" class="check" name="lunes" value="lunes" data-value="lunes" id="lunes" checked />
                                                 Lunes
                                             </div>
                                             <div class="col mt-2">
@@ -93,7 +93,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col"> 
-                                                <input type="checkbox" name="martes" value="martes" checked/>
+                                                <input type="checkbox" class="check" name="martes" value="martes" data-value="martes" checked/>
                                                 Martes
                                             </div>
                                             <div class="col mt-2">
@@ -127,7 +127,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="miercoles" value="miercoles" checked />
+                                                <input type="checkbox" class="check" name="miercoles" value="miercoles" data-value="miercoles" checked />
                                                 Miercoles
                                             </div>
                                             <div class="col mt-2">
@@ -161,7 +161,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="jueves" value="jueves" checked />
+                                                <input type="checkbox" class="check" name="jueves" value="jueves" data-value="jueves" checked />
                                                 Jueves
                                             </div>
                                             <div class="col mt-2">
@@ -195,7 +195,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="viernes" value="viernes" checked />
+                                                <input type="checkbox" class="check" name="viernes" value="viernes" data-value="viernes" checked />
                                                 Viernes
                                             </div>
                                             <div class="col mt-2">
@@ -229,7 +229,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="sabado" value="sabado" checked />
+                                                <input type="checkbox" class="check" name="sabado" value="sabado" data-value="sabado" checked />
                                                 Sabado
                                             </div>
                                             <div class="col mt-2">
@@ -263,7 +263,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" name="domingo" value="domingo" checked />
+                                                <input type="checkbox" class="check" name="domingo" value="domingo" data-value="domingo" checked />
                                                 Domingo
                                             </div>
                                             <div class="col mt-2">
@@ -407,14 +407,16 @@
     }
 </script>
 <script>
-    $(document).on('click', 'input[type=checkbox]', function () {
+    $(document).on('click', '.check', function () {
         if ($(this).is(':checked')) {
             $(this).parent().parent().next().next().find("div").find("input").prop("disabled", false);
             $(this).parent().parent().next().next().next().find("div").find("input").prop("disabled", false);
+            $(this).val($(this).data('value')); 
         }
         else {
             $(this).parent().parent().next().next().find("div").find("input").prop("disabled", true);
             $(this).parent().parent().next().next().next().find("div").find("input").prop("disabled", true);
+            $(this).val('');
         }
     });
 </script>

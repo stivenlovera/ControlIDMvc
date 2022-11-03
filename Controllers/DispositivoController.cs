@@ -398,8 +398,19 @@ namespace ControlIDMvc.Controllers
                         ControlHol2 = time_SpansDtos.hol2,
                         ControlHol3 = time_SpansDtos.hol3,
                         HorarioId = time_zone.ControlId,
+                        Start = new DateTime(2022, 12, 25, 00, 00, 00),
+                        End = new DateTime(2022, 12, 25, 23, 59, 59),
+                        Sun = time_SpansDtos.sun,
+                        Mon = time_SpansDtos.mon,
+                        Wed = time_SpansDtos.wed,
+                        Thu = time_SpansDtos.thu,
+                        Tue = time_SpansDtos.tue,
+                        Fri = time_SpansDtos.fri,
+                        Sat = time_SpansDtos.sat,
+                        Hol1 = time_SpansDtos.hol1,
+                        Hol2 = time_SpansDtos.hol2,
+                        Hol3 = time_SpansDtos.hol3,
                         Nombre = $"default {time_SpansDtos.time_zone_id}"
-
                     });
                 }
                 var updateUsuario = await this._diaQuery.StoreAll(dias);

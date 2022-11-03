@@ -226,6 +226,30 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Portal",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ControlId = table.Column<int>(type: "int", nullable: false),
+                    ControlIdName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ControlIdAreaFromId = table.Column<int>(type: "int", nullable: false),
+                    AreaFromId = table.Column<int>(type: "int", nullable: false),
+                    ControlIdAreaToId = table.Column<int>(type: "int", nullable: false),
+                    AreaToId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Portal", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Proyecto",
                 columns: table => new
                 {
@@ -292,36 +316,6 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Portal",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ControlId = table.Column<int>(type: "int", nullable: false),
-                    ControlIdName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ControlIdAreaFromId = table.Column<int>(type: "int", nullable: false),
-                    AreaFromId = table.Column<int>(type: "int", nullable: false),
-                    ControlIdAreaToId = table.Column<int>(type: "int", nullable: false),
-                    AreaToId = table.Column<int>(type: "int", nullable: false),
-                    DispositivoId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Portal", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Portal_Dispositivo_DispositivoId",
-                        column: x => x.DispositivoId,
-                        principalTable: "Dispositivo",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Dia",
                 columns: table => new
                 {
@@ -343,7 +337,19 @@ namespace ControlIDMvc.Migrations
                     ControlSat = table.Column<int>(type: "int", nullable: false),
                     ControlHol1 = table.Column<int>(type: "int", nullable: false),
                     ControlHol2 = table.Column<int>(type: "int", nullable: false),
-                    ControlHol3 = table.Column<int>(type: "int", nullable: false)
+                    ControlHol3 = table.Column<int>(type: "int", nullable: false),
+                    Start = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    End = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Sun = table.Column<int>(type: "int", nullable: false),
+                    Mon = table.Column<int>(type: "int", nullable: false),
+                    Tue = table.Column<int>(type: "int", nullable: false),
+                    Wed = table.Column<int>(type: "int", nullable: false),
+                    Thu = table.Column<int>(type: "int", nullable: false),
+                    Fri = table.Column<int>(type: "int", nullable: false),
+                    Sat = table.Column<int>(type: "int", nullable: false),
+                    Hol1 = table.Column<int>(type: "int", nullable: false),
+                    Hol2 = table.Column<int>(type: "int", nullable: false),
+                    Hol3 = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -496,6 +502,35 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "AccionPortal",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ControlIdPortalId = table.Column<int>(type: "int", nullable: false),
+                    portalId = table.Column<int>(type: "int", nullable: false),
+                    AccionId = table.Column<int>(type: "int", nullable: false),
+                    ControlActionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccionPortal", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccionPortal_Accion_AccionId",
+                        column: x => x.AccionId,
+                        principalTable: "Accion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccionPortal_Portal_portalId",
+                        column: x => x.portalId,
+                        principalTable: "Portal",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Grupo",
                 columns: table => new
                 {
@@ -614,62 +649,6 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "RolModulo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RolId = table.Column<int>(type: "int", nullable: false),
-                    ModuloId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolModulo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RolModulo_Modulo_ModuloId",
-                        column: x => x.ModuloId,
-                        principalTable: "Modulo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RolModulo_Rol_RolId",
-                        column: x => x.RolId,
-                        principalTable: "Rol",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "AccionPortal",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ControlIdPortalId = table.Column<int>(type: "int", nullable: false),
-                    portalId = table.Column<int>(type: "int", nullable: false),
-                    AccionId = table.Column<int>(type: "int", nullable: false),
-                    ControlActionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccionPortal", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AccionPortal_Accion_AccionId",
-                        column: x => x.AccionId,
-                        principalTable: "Accion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccionPortal_Portal_portalId",
-                        column: x => x.portalId,
-                        principalTable: "Portal",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "PortalReglaAcceso",
                 columns: table => new
                 {
@@ -693,6 +672,33 @@ namespace ControlIDMvc.Migrations
                         name: "FK_PortalReglaAcceso_ReglaAcceso_ReglaAccesoId",
                         column: x => x.ReglaAccesoId,
                         principalTable: "ReglaAcceso",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RolModulo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RolId = table.Column<int>(type: "int", nullable: false),
+                    ModuloId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RolModulo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RolModulo_Modulo_ModuloId",
+                        column: x => x.ModuloId,
+                        principalTable: "Modulo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RolModulo_Rol_RolId",
+                        column: x => x.RolId,
+                        principalTable: "Rol",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -834,11 +840,6 @@ namespace ControlIDMvc.Migrations
                 column: "ReglaAccesoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Portal_DispositivoId",
-                table: "Portal",
-                column: "DispositivoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PortalReglaAcceso_PortalId",
                 table: "PortalReglaAcceso",
                 column: "PortalId");
@@ -896,6 +897,9 @@ namespace ControlIDMvc.Migrations
 
             migrationBuilder.DropTable(
                 name: "Dia");
+
+            migrationBuilder.DropTable(
+                name: "Dispositivo");
 
             migrationBuilder.DropTable(
                 name: "Egreso");
@@ -959,9 +963,6 @@ namespace ControlIDMvc.Migrations
 
             migrationBuilder.DropTable(
                 name: "Usuario");
-
-            migrationBuilder.DropTable(
-                name: "Dispositivo");
 
             migrationBuilder.DropTable(
                 name: "Persona");
