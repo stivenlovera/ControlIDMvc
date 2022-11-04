@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS control_acceso;
 
-    CREATE database
-        control_acceso CHARACTER SET 'UTF8' COLLATE 'utf8_general_ci';
+CREATE database
+    control_acceso CHARACTER SET 'UTF8' COLLATE 'utf8_general_ci';
 
 use control_acceso;
 
@@ -113,6 +113,7 @@ CREATE TABLE
         nombre VARCHAR(350) NULL,
         descripcion TEXT(350) NULL
     );
+
 DROP TABLE IF EXISTS dia;
 
 CREATE TABLE
@@ -122,7 +123,6 @@ CREATE TABLE
         hora_inicio DATE NULL,
         hora_fin DATE NULL,
         horario_id int NULL
-        
     );
 
 /*
@@ -159,4 +159,45 @@ VALUES (
         '',
         '',
         0
+    );
+
+DROP TABLE IF EXISTS persona;
+
+CREATE TABLE
+    cajaNivelUno(
+        id int AUTO_INCREMENT primary key,
+        codigo VARCHAR(350) NOT NULL,
+        descripcion VARCHAR(350) NOT NULL,
+        moneda VARCHAR(350) NOT NULL,
+        nivel VARCHAR(350) NOT NULL
+    );
+
+CREATE TABLE
+    cajaNivelDos(
+        id int AUTO_INCREMENT primary key,
+        codigo VARCHAR(350) NOT NULL,
+        descripcion VARCHAR(350) NOT NULL,
+        moneda VARCHAR(350) NOT NULL,
+        cajaNivelUno int NOT NULL, 
+        FOREIGN KEY (cajaNivelUno) REFERENCES cajaNivelUno(id)
+    );
+
+CREATE TABLE
+    cajaNivelTres(
+        id int AUTO_INCREMENT primary key,
+        codigo VARCHAR(350) NOT NULL,
+        descripcion VARCHAR(350) NOT NULL,
+        moneda VARCHAR(350) NOT NULL,
+        cajaNivelDos int NOT NULL, 
+        FOREIGN KEY (cajaNivelDos) REFERENCES cajaNivelDos(id)
+    );
+
+CREATE TABLE
+    cajaNivelCuatro(
+        id int AUTO_INCREMENT primary key,
+        codigo VARCHAR(350) NOT NULL,
+        descripcion VARCHAR(350) NOT NULL,
+        moneda VARCHAR(350) NOT NULL,
+        cajaNivelTres int NOT NULL,
+        FOREIGN KEY (cajaNivelTres) REFERENCES cajaNivelTres(id)
     );

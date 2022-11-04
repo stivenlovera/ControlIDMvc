@@ -1,0 +1,299 @@
+@model ControlIDMvc.Dtos.ReglaAcceso.ReglaAccesoDto
+@{
+    ViewData["Title"] = "Editar Regla de Acceso";
+}
+@section Estilos {
+
+}
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Editar regla de Acceso</h3>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Seleciona Persona<small></small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="nombre">Nombre
+                                        <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 ">
+                                        <input type="text" id="nombre" name="nombre" value="@Model.Nombre"
+                                            required="required" class="form-control">
+                                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                            <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="quien-tab" data-toggle="tab" href="#quien" role="tab"
+                                        aria-controls="quien" aria-selected="true">Quien</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="cuando-tab" data-toggle="tab" href="#cuando" role="tab"
+                                        aria-controls="cuando" aria-selected="true">Cuando</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="donde-tab" data-toggle="tab" href="#donde" role="tab"
+                                        aria-controls="donde" aria-selected="true">Donde</a>
+                                </li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div class="tab-pane fade show active" id="quien" role="tabpanel"
+                                    aria-labelledby="quien-tab">
+                                    <!-- start recent activity -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="buttons">
+                                                <!-- Standard button -->
+                                                <div class="row">
+                                                    <button class="btn btn-secondary btn-xs" id="open_modal_persona"
+                                                        role="button">Añadir Personas <i
+                                                            class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <table id="datatable_personas"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <input type="checkbox" id="check-all">
+                                                        </th>
+                                                        <th>ID</th>
+                                                        <th>DNI</th>
+                                                        <th>Nombre</th>
+                                                        <th>Apellido</th>
+                                                        <th>Telefono</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model.personasOcupadas != null)
+                                                    {
+                                                        @foreach (var persona in Model.personasOcupadas)
+                                                        {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>@persona.Id</td>
+                                                                <td>@persona.Nombre</td>
+                                                                <td>@persona.Apellido</td>
+                                                                <td>@persona.Celular</td>
+                                                                <td></td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade show" id="cuando" role="tabpanel"
+                                    aria-labelledby="cuando-tab">
+                                    <!-- start recent activity -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="buttons">
+                                                <!-- Standard button -->
+                                                <div class="row">
+                                                    <button class="btn btn-secondary btn-xs" id="añadir_horario"
+                                                        role="button">Añadir horario <i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <table id="datatable_personas"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <input type="checkbox" id="check-all">
+                                                        </th>
+                                                        <th>Id</th>
+                                                        <th>Nombre</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model.horariosOcupadas != null)
+                                                    {
+                                                        @foreach (var horario in Model.horariosOcupadas)
+                                                        {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>@horario.Id</td>
+                                                                <td>@horario.Nombre</td>
+                                                                <td>@horario.Descripcion</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade show" id="donde" role="tabpanel" aria-labelledby="quien-tab">
+                                    <!-- start recent activity -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="buttons">
+                                                <!-- Standard button -->
+                                                <div class="row">
+                                                    <button class="btn btn-secondary btn-xs" id="añadir_area"
+                                                        role="button">Añadir Area <i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <table id="datatable_personas"
+                                                class="table table-striped table-bordered bulk_action"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <input type="checkbox" id="check-all">
+                                                        </th>
+                                                        <th>ID</th>
+                                                        <th>DNI</th>
+                                                        <th>Nombre</th>
+                                                        <th>Apellido</th>
+                                                        <th>Telefono</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (Model.areasOcupadas != null)
+                                                    {
+                                                        @foreach (var area in Model.areasOcupadas)
+                                                        {
+                                                            <tr>
+                                                                <td></td>
+                                                                <td>@area.Id</td>
+                                                                <td>@area.Nombre</td>
+                                                                <td>@area.Descripcion</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Large usuario -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_añadir_persona">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Añadir Persona</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="datatable_personas_disponibles" class="table table-striped table-bordered"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="check-all">
+                                    </th>
+                                    <th>ID</th>
+                                    <th>DNI</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Telefono</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.personasDisponibles != null)
+                                {
+                                    @foreach (var persona in Model.personasDisponibles)
+                                    {
+                                        <tr>
+                                            <td></td>
+                                            <td>@persona.Id</td>
+                                            <td>@persona.Nombre</td>
+                                            <td>@persona.Apellido</td>
+                                            <td>@persona.Celular</td>
+                                            <td></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<!-- Datatables -->
+<script src="~/assets/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/assets/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/assets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/assets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="~/assets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+@* smartWizard *@
+<script src="~/js/reglaAcceso/Editar/dataTablePersona.js"></script>
+<script src="~/js/reglaAcceso/Editar/dataTableHorario.js"></script>
+<script src="~/js/reglaAcceso/Editar/dataTableArea.js"></script>
+}

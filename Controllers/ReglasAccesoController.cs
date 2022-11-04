@@ -23,11 +23,6 @@ namespace ControlIDMvc.Controllers
     public class ReglasAccesoController : Controller
     {
 
-        /* propiedades */
-        public string controlador = "192.168.88.129";
-        public string user = "admin";
-        public string password = "admin";
-        public int port { get; set; }
         private readonly DBContext _dbContext;
         private readonly LoginControlIdQuery _loginControlIdQuery;
         private readonly UsuarioRulesAccessControlIdQuery _usuarioRulesAccessControlIdQuery;
@@ -87,12 +82,6 @@ namespace ControlIDMvc.Controllers
 
             this._apiRutas = new ApiRutas();
         }
-        private async Task<Boolean> loginControlId()
-        {
-            BodyLogin cuerpo = _loginControlIdQuery.Login(this.user, this.password);
-            Response login = await this._httpClientService.LoginRun(this.controlador,this.port, this._apiRutas.ApiUrlLogin, cuerpo,"");
-            return login.estado;
-        }
 
         [HttpGet]
         public ActionResult Index()
@@ -114,14 +103,94 @@ namespace ControlIDMvc.Controllers
         }
 
         [HttpPost("store")]
-        public ActionResult Store(ReglaAccesoCreateDto reglaAccesoCreateDto)
+        public async Task<ActionResult> Store(ReglaAccesoCreateDto reglaAccesoCreateDto)
         {
             if (ModelState.IsValid)
             {
-                
+                //validate nombre
+                if (await this._reglaAccesoQuery.ValidarNombre(reglaAccesoCreateDto.Nombre))
+                {
+                    //regla acceso
+                    var reglaAcceso = new ReglaAcceso
+                    {
+                        Nombre = reglaAccesoCreateDto.Nombre,
+                        Descripcion = reglaAccesoCreateDto.Descripcion,
+                    };
+                    var insert = await this._reglaAccesoQuery.Store(reglaAcceso);
+                    //regla acceso y persona
+                    var reglaAccesoPersona = new List<PersonaReglasAcceso>();
+                    foreach (var persona in reglaAccesoCreateDto.PersonasSelecionadas)
+                    {
+                        reglaAccesoPersona.Add(
+                            new PersonaReglasAcceso
+                            {
+                                PersonaId = Convert.ToInt32(persona),
+                                ReglaAccesoId = insert.Id
+                            }
+                        );
+                    }
+                    var reglasPersona = await this._personaReglaAccesoQuery.StoreAll(reglaAccesoPersona);
+                    //regla acceso y horario
+                    var horarioReglaAccesos = new List<HorarioReglaAcceso>();
+                    foreach (var horario in reglaAccesoCreateDto.HorarioSelecionados)
+                    {
+                        horarioReglaAccesos.Add(
+                            new HorarioReglaAcceso
+                            {
+                                HorarioId = Convert.ToInt32(horario),
+                                ReglasAccesoId = insert.Id
+                            }
+                        );
+                    }
+                    var reglasHorario = await this._horarioReglaAccesoQuery.StoreAll(horarioReglaAccesos);
+                    //regla acceso y area
+                    var AreaReglaAccesos = new List<AreaReglaAcceso>();
+                    foreach (var area in reglaAccesoCreateDto.AreaSelecionadas)
+                    {
+                        AreaReglaAccesos.Add(
+                            new AreaReglaAcceso
+                            {
+                                AreaId = Convert.ToInt32(area),
+                                ReglaAccesoId = insert.Id
+                            }
+                        );
+                    }
+                    var reglasArea = await this._areaReglaAccesoQuery.storeAll(AreaReglaAccesos);
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/ReglasAcceso/Create.cshtml");
+        }
+        [HttpGet("edit/{id:int}")]
+        public async Task<ActionResult> Edit(int id)
+        {
+            var reglasAcceso = await this._reglaAccesoQuery.GetOne(id);
+            //await this._reglaAccesoQuery.ValidarNombre(reglaAccesoDto.Nombre);
+            var edit = new ReglaAccesoDto
+            {
+                Id = reglasAcceso.Id,
+                Nombre = reglasAcceso.Nombre,
+                Descripcion = reglasAcceso.Descripcion,
+                personasOcupadas = await this._reglaAccesoQuery.GetOcupadasPersonaReglaAccesoId(id),
+                horariosOcupadas = await this._reglaAccesoQuery.GetOcupadasHorarioReglaAccesoId(id),
+                areasOcupadas = await this._reglaAccesoQuery.GetOcupadasAreaReglaAccesoId(id),
+                personasDisponibles = await this._reglaAccesoQuery.GetDisponiblePersonaReglaAccesoId(id),
+                horariosDisponibles = await this._reglaAccesoQuery.GetDisponibleHorarioReglaAccesoId(id),
+                areasDisponibles = await this._reglaAccesoQuery.GetDisponibleAreaReglaAccesoId(id)
+            };
+            return View("~/Views/ReglasAcceso/Edit.cshtml", edit);
+        }
+        [HttpPost("update/{id:int}")]
+        public async Task<ActionResult> Update(int id, ReglaAccesoCreateDto reglaAccesoCreateDto)
+        {
+            await this._reglaAccesoQuery.ValidarNombre(reglaAccesoCreateDto.Nombre);
+            return View("~/Views/ReglasAcceso/Edit.cshtml");
+        }
+        [HttpDelete("delete/{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await this._reglaAccesoQuery.ValidarNombre("demo");
+            return View("~/Views/ReglasAcceso/Edit.cshtml");
         }
     }
 }

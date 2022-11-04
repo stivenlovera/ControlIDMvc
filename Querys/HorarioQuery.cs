@@ -89,9 +89,30 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Horario> store(Horario horario)
         {
-            this._dbContext.Horario.Add(horario);
+            this._dbContext.Horario.Update(horario);
             await _dbContext.SaveChangesAsync();
             return horario;
+        }
+        public async Task<Horario> update(Horario horario)
+        {
+            _dbContext.Entry(await _dbContext.Horario.FirstOrDefaultAsync(x => x.Id == horario.Id)).CurrentValues.SetValues(new
+            {
+                Id = horario.Id,
+                Nombre = horario.Nombre,
+                Descripcion = horario.Nombre
+            });
+            await _dbContext.SaveChangesAsync();
+            return await _dbContext.Horario.Where(p => p.Id == horario.Id).Include(x => x.Dias).FirstAsync();
+        }
+        public async Task<Horario> UpdateControlId(Horario horario)
+        {
+            _dbContext.Entry(await _dbContext.Horario.FirstOrDefaultAsync(x => x.Id == horario.Id)).CurrentValues.SetValues(new
+            {
+                Id = horario.Id,
+                ControlIdName = horario.Nombre
+            });
+            await _dbContext.SaveChangesAsync();
+            return await _dbContext.Horario.Where(p => p.Id == horario.Id).Include(x => x.Dias).FirstAsync();
         }
         public async Task<bool> StoreAll(List<Horario> horarios)
         {
@@ -119,5 +140,27 @@ namespace ControlIDMvc.Querys
         {
             return await _dbContext.Horario.Include(h => h.Dias).Where(h => h.Id == horarios_id).FirstOrDefaultAsync();
         }
+        public async Task<bool> DeleteDias(int horario_id)
+        {
+            var dias = await _dbContext.Dia.Where(x => x.HorarioId == horario_id).ToListAsync();
+            if (dias.Count > 0)
+            {
+                _dbContext.Dia.RemoveRange(dias);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Delete(int horario_id)
+        {
+            var dia= await _dbContext.Horario.Where(x => x.Id == horario_id).FirstOrDefaultAsync();
+            if (dia!=null)
+            {
+                _dbContext.Dia.RemoveRange(dia.Dias);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
-} 
+}

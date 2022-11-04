@@ -16,5 +16,6 @@ namespace ControlIDMvc.Entities
         public string Descripcion { get; set; }
         public List<PortalReglaAcceso> PortalReglaAccesos { get; set; }
         public List<AreaReglaAcceso> AreaSReglaAccesos { get; set; }
+        public List<PersonaReglasAcceso> PersonaReglasAcceso { get; set; }
     }
 }

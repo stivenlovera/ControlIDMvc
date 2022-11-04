@@ -34,9 +34,21 @@ namespace ControlIDMvc.Querys
             var resultado = await _dBContext.SaveChangesAsync();
             return dias;
         }
+        public async Task<bool> Delete(int id)
+        {
+            var dia = await _dBContext.Dia.Where(x => x.Id == id).FirstAsync();
+            if (dia != null)
+            {
+                _dBContext.Dia.Remove(dia);
+                await _dBContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+      
         public async Task<List<Dia>> ShowAll(Dia dias)
         {
-           return await _dBContext.Dia.ToListAsync();
+            return await _dBContext.Dia.ToListAsync();
         }
     }
 }

@@ -22,8 +22,7 @@ var personas_disponibles = $("#datatable").DataTable({
             data: "id",
             render: function (data, type, row) {
                 return `
-                <button class="btn btn-success btn-xs añadir" data-id="${data}" role="button"><i class="fa fa-arrow-right"></i></button>
-                `;
+                <a class="btn btn-success btn-xs" href="/regla-acceso/edit/${data}" role="button"><i class="fa fa-arrow-right"></i></a>`;
             }
         }
     ]

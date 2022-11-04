@@ -85,5 +85,88 @@ namespace ControlIDMvc.Querys
                 return false;
             }
         }
+        public async Task<ReglaAcceso> GetOne(int reglaAccesoId)
+        {
+            var reglasAcceso = await _dbContext.ReglaAcceso.Where(ra => ra.Id == reglaAccesoId).FirstOrDefaultAsync();
+            return reglasAcceso;
+        }
+        public async Task<ReglaAcceso> Store(ReglaAcceso reglaAcceso)
+        {
+            await _dbContext.AddRangeAsync(reglaAcceso);
+            await _dbContext.SaveChangesAsync();
+            return reglaAcceso;
+        }
+        public async Task<bool> ValidarNombre(string nombre)
+        {
+            var persona = await _dbContext.Persona.Where(persona => persona.Nombre == nombre).FirstOrDefaultAsync();
+
+            if (persona == null)
+            {
+                return true;
+            }
+            return false;
+        }
+        /*datos ocupados*/
+        public async Task<List<Persona>> GetOcupadasPersonaReglaAccesoId(int reglaAccesoId)
+        {
+            var personasReglasAcceso = await this._dbContext.PersonaReglasAcceso.Where(pr => pr.ReglaAccesoId == reglaAccesoId).Include(x => x.Persona).ToListAsync();
+            var personas = new List<Persona>();
+            foreach (var persona in personasReglasAcceso)
+            {
+                personas.Add(persona.Persona);
+            }
+            return personas;
+        }
+        public async Task<List<Horario>> GetOcupadasHorarioReglaAccesoId(int reglaAccesoId)
+        {
+            var horarioReglasAcceso = await this._dbContext.HorarioReglaAcceso.Where(hra => hra.ReglasAccesoId == reglaAccesoId).Include(x => x.Horario).ToListAsync();
+            var horarios = new List<Horario>();
+            foreach (var horario in horarioReglasAcceso)
+            {
+                horarios.Add(horario.Horario);
+            }
+            return horarios;
+        }
+        public async Task<List<Area>> GetOcupadasAreaReglaAccesoId(int reglaAccesoId)
+        {
+            var areasReglasAcceso = await this._dbContext.AreaReglaAcceso.Where(ara => ara.ReglaAccesoId == reglaAccesoId).Include(x => x.Area).ToListAsync();
+            var areas = new List<Area>();
+            foreach (var area in areasReglasAcceso)
+            {
+                areas.Add(area.Area);
+            }
+            return areas;
+        }
+        /*datos disponibles*/
+        public async Task<List<Persona>> GetDisponiblePersonaReglaAccesoId(int reglaAccesoId)
+        {
+            var personasReglasAcceso = await this._dbContext.PersonaReglasAcceso.Where(pr => pr.ReglaAccesoId != reglaAccesoId).Include(x => x.Persona).ToListAsync();
+            var personas = new List<Persona>();
+            foreach (var persona in personasReglasAcceso)
+            {
+                personas.Add(persona.Persona);
+            }
+            return personas;
+        }
+        public async Task<List<Horario>> GetDisponibleHorarioReglaAccesoId(int reglaAccesoId)
+        {
+            var horarioReglasAcceso = await this._dbContext.HorarioReglaAcceso.Where(hra => hra.ReglasAccesoId == reglaAccesoId).Include(x => x.Horario).ToListAsync();
+            var horarios = new List<Horario>();
+            foreach (var horario in horarioReglasAcceso)
+            {
+                horarios.Add(horario.Horario);
+            }
+            return horarios;
+        }
+        public async Task<List<Area>> GetDisponibleAreaReglaAccesoId(int reglaAccesoId)
+        {
+            var areasReglasAcceso = await this._dbContext.AreaReglaAcceso.Where(ara => ara.ReglaAccesoId != reglaAccesoId).Include(x => x.Area).ToListAsync();
+            var areas = new List<Area>();
+            foreach (var area in areasReglasAcceso)
+            {
+                areas.Add(area.Area);
+            }
+            return areas;
+        }
     }
 }

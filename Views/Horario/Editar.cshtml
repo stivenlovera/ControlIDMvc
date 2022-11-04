@@ -1,6 +1,21 @@
 @model ControlIDMvc.Dtos.Horario.HorarioDto
 @{
-    ViewData["Title"] = "Create Horario";
+    ViewData["Title"] = "Editar Horario";
+    var checkLunes=Model.lunes != null ? "checked" : "";
+    var checkMartes=Model.martes != null ? "checked" : "";
+    var checkMiercoles=Model.miercoles != null ? "checked" : "";
+    var checkJueves=Model.jueves != null ? "checked" : "";
+    var checkViernes=Model.viernes != null ? "checked" : "";
+    var checkSabado=Model.sabado != null ? "checked" : "";
+    var checkDomingo=Model.domingo != null ? "checked" : "";
+
+    var disabledLunes=Model.lunes != null ? "" : "disabled";
+    var disabledMartes=Model.martes != null ? "" : "disabled";
+    var disabledMiercoles=Model.miercoles != null ? "" : "disabled";
+    var disabledJueves=Model.jueves != null ? "" : "disabled";
+    var disabledViernes=Model.viernes != null ? "" : "disabled";
+    var disabledSabado=Model.sabado != null ? "" : "disabled";
+    var disabledDomingo=Model.domingo != null ? "" : "disabled";
 }
 @section Estilos {
 <link href="~/assets/vendors/normalize-css/normalize.css" rel="stylesheet">
@@ -38,7 +53,7 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 ">
-                                            <input type="text" id="nombre" name="nombre" 
+                                            <input type="text" id="nombre" name="nombre" value="@Model.Nombre"
                                                 class="form-control" name="nombre">
                                         </div>
                                     </div>
@@ -50,7 +65,7 @@
                                             <span class="descripcion">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 ">
-                                            <input type="text" id="descripcion" name="descripcion"
+                                            <input type="text" id="descripcion" name="descripcion" value="@Model.Descripcion"
                                                 class="form-control  ">
                                         </div>
                                     </div>
@@ -59,7 +74,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" class="check" name="lunes" value="lunes" data-value="lunes" id="lunes" checked />
+                                                <input type="checkbox" class="check" name="lunes" value="@Model.lunes" data-value="lunes" id="lunes" @checkLunes />
                                                 Lunes
                                             </div>
                                             <div class="col mt-2">
@@ -75,8 +90,8 @@
                                             <label class="col-form-label col-md-3 col-sm-3" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-9 col-sm-9">
-                                                <input type="time" required="hora_inicio" id="hora_inicio_lunes" class="form-control hora_inicio"
-                                                    name="hora_inicio_lunes">
+                                                <input type="time" required="hora_inicio" id="hora_inicio_lunes" class="form-control hora_inicio" 
+                                                    name="hora_inicio_lunes" value='@Model.hora_inicio_lunes.ToString("HH:mm")' @disabledLunes>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -84,7 +99,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_fin_lunes" id="hora_fin_lunes" class="form-control hora_fin"
-                                                    name="hora_fin_lunes">
+                                                    name="hora_fin_lunes" value='@Model.hora_fin_lunes.ToString("HH:mm")' @disabledLunes>
                                             </div>
                                         </div>
                                     </div>
@@ -93,7 +108,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col"> 
-                                                <input type="checkbox" class="check" name="martes" value="martes" data-value="martes" checked/>
+                                                <input type="checkbox" class="check" name="martes" value="@Model.martes" data-value="martes" @checkMartes />
                                                 Martes
                                             </div>
                                             <div class="col mt-2">
@@ -110,7 +125,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_inicio_martes" id="hora_inicio_martes" class="form-control hora_inicio"
-                                                    name="hora_inicio_martes">
+                                                    name="hora_inicio_martes"  value='@Model.hora_inicio_martes.ToString("HH:mm")' @disabledMartes>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -118,7 +133,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_fin_martes" id="hora_fin_martes" class="form-control hora_fin"
-                                                    name="hora_fin_martes">
+                                                    name="hora_fin_martes"  value='@Model.hora_fin_martes.ToString("HH:mm")' @disabledMartes>
                                             </div>
                                         </div>
                                     </div>
@@ -127,7 +142,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" class="check" name="miercoles" value="miercoles" data-value="miercoles" checked />
+                                                <input type="checkbox" class="check" name="miercoles" value="@Model.miercoles" data-value="miercoles" @checkMiercoles />
                                                 Miercoles
                                             </div>
                                             <div class="col mt-2">
@@ -137,22 +152,22 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" id="ion_miercoles" value="ion_miercoles" name="ion_miercoles" />
+                                            <input type="text" id="ion_miercoles" value="ion_miercoles" name="ion_miercoles"/>
                                         </div>
                                         <div class="col-md-2">
                                             <label class="col-form-label col-md-3 col-sm-3" for="barrio">Inicio
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_inicio_miercoles" id="hora_inicio_miercoles" class="form-control hora_inicio"
-                                                    name="hora_inicio_miercoles">
+                                                    name="hora_inicio_miercoles" value='@Model.hora_inicio_miercoles.ToString("HH:mm")' @disabledMiercoles>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <label class="col-form-label col-md-3 col-sm-3" for="barrio">Fin
                                             </label>
                                             <div class="col-md-9 col-sm-9">
-                                                <input type="time" required="hora_fin_miercoles" id="hora_fin_miercoles" class="form-control hora_fin"
-                                                    name="hora_fin_miercoles">
+                                                <input type="time" required="hora_fin_miercoles"  id="hora_fin_miercoles" class="form-control hora_fin"
+                                                    name="hora_fin_miercoles" value='@Model.hora_fin_miercoles.ToString("HH:mm")' @disabledMiercoles>
                                             </div>
                                         </div>
                                     </div>
@@ -161,7 +176,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" class="check" name="jueves" value="jueves" data-value="jueves" checked />
+                                                <input type="checkbox" class="check" name="jueves" value="@Model.jueves" data-value="jueves" @checkJueves/>
                                                 Jueves
                                             </div>
                                             <div class="col mt-2">
@@ -178,7 +193,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_inicio_jueves" id="hora_inicio_jueves" class="form-control hora_inicio"
-                                                    name="hora_inicio_jueves">
+                                                    name="hora_inicio_jueves" value='@Model.hora_inicio_jueves.ToString("HH:mm")' @disabledJueves >
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -186,7 +201,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_fin_jueves" id="hora_fin_jueves" class="form-control hora_fin"
-                                                    name="hora_fin_jueves">
+                                                    name="hora_fin_jueves"  value='@Model.hora_fin_jueves.ToString("HH:mm")' @disabledJueves>
                                             </div>
                                         </div>
                                     </div>
@@ -195,7 +210,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" class="check" name="viernes" value="viernes" data-value="viernes" checked />
+                                                <input type="checkbox" class="check" name="viernes" value="@Model.viernes" data-value="viernes" @checkViernes />
                                                 Viernes
                                             </div>
                                             <div class="col mt-2">
@@ -212,7 +227,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_inicio_viernes" id="hora_inicio_viernes" class="form-control hora_inicio"
-                                                    name="hora_inicio_viernes">
+                                                    name="hora_inicio_viernes" value='@Model.hora_inicio_viernes.ToString("HH:mm")' @disabledViernes>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -220,7 +235,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_fin_viernes" id="hora_fin_viernes" class="form-control hora_fin"
-                                                    name="hora_fin_viernes">
+                                                    name="hora_fin_viernes" value='@Model.hora_fin_viernes.ToString("HH:mm")' @disabledViernes>
                                             </div>
                                         </div>
                                     </div>
@@ -229,7 +244,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" class="check" name="sabado" value="sabado" data-value="sabado" checked />
+                                                <input type="checkbox" class="check" name="sabado" value="@Model.sabado" data-value="sabado" @checkSabado />
                                                 Sabado
                                             </div>
                                             <div class="col mt-2">
@@ -246,7 +261,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_inicio" id="hora_inicio_sabado" class="form-control hora_inicio"
-                                                    name="hora_inicio_sabado">
+                                                    name="hora_inicio_sabado" value='@Model.hora_inicio_sabado.ToString("HH:mm")' @disabledSabado>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -254,7 +269,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_fin" id="hora_fin_sabado" class="form-control hora_fin"
-                                                    name="hora_fin_sabado">
+                                                    name="hora_fin_sabado" value='@Model.hora_fin_sabado.ToString("HH:mm")' @disabledSabado>
                                             </div>
                                         </div>
                                     </div>
@@ -263,7 +278,7 @@
                                     <div class="row border pt-2">
                                         <div class="col-md-2">
                                             <div class="col">
-                                                <input type="checkbox" class="check" name="domingo" value="domingo" data-value="domingo" checked />
+                                                <input type="checkbox" class="check" name="domingo" value="@Model.domingo" data-value="domingo" @checkDomingo />
                                                 Domingo
                                             </div>
                                             <div class="col mt-2">
@@ -280,7 +295,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9"> 
                                                 <input type="time" required="hora_inicio_domingo" class="form-control hora_inicio" id="hora_inicio_domingo"
-                                                    name="hora_inicio_domingo">
+                                                    name="hora_inicio_domingo" value='@Model.hora_inicio_domingo.ToString("HH:mm")' @disabledDomingo>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -288,7 +303,7 @@
                                             </label>
                                             <div class="col-md-9 col-sm-9">
                                                 <input type="time" required="hora_fin_domingo" class="form-control hora_fin" id="hora_fin_domingo"
-                                                    name="hora_fin_domingo">
+                                                    name="hora_fin_domingo" value='@Model.hora_fin_domingo.ToString("HH:mm")' @disabledDomingo>
                                             </div>
                                         </div>
                                     </div>

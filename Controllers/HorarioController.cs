@@ -94,6 +94,7 @@ namespace ControlIDMvc.Controllers
             }
             return View("~/Views/Horario/Create.cshtml");
         }
+
         [HttpGet("editar/{id:int}")]
         public async Task<ActionResult> Edit(int id)
         {
@@ -130,22 +131,109 @@ namespace ControlIDMvc.Controllers
                 edit.hora_fin_viernes = this.desarmarDias(horario.Dias, "viernes").hora_fin;
                 edit.hora_fin_sabado = this.desarmarDias(horario.Dias, "sabado").hora_fin;
                 edit.hora_fin_domingo = this.desarmarDias(horario.Dias, "domingo").hora_fin;
-
             }
-
-            return View("~/Views/Persona/Edit.cshtml", edit);
+            return View("~/Views/Horario/Editar.cshtml", edit);
         }
         [HttpGet("update/{id:int}")]
-        public ActionResult Update(int id)
+        public async Task<ActionResult> Update(int id, HorarioDto horarioDto)
         {
-            var persona = _dbContext.Persona.Find(id);
-            if (persona == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                var deleteDias =await this._horarioQuery.DeleteDias(id);
+                var dias = this.UpdateDiaSistema(horarioDto);
+                var insert = new Horario
+                {
+                    Nombre = horarioDto.Nombre,
+                    Descripcion = horarioDto.Descripcion,
+                    ControlIdName = horarioDto.Nombre,
+                    Dias = dias
+                };
+                var horario=await this._horarioQuery.update(insert);
+                return RedirectToAction(nameof(Index));
             }
-            return View("~/Views/Persona/Edit.cshtml", persona);
+            return View("~/Views/Horario/Editar.cshtml", horarioDto);
         }
-        public List<ExtraerDia> validar(HorarioCreateDto horarioCreateDto)
+         [HttpGet("delete/{id:int}")]
+        public async Task<ActionResult> Delete(int id, HorarioDto horarioDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var deleteDias =await this._horarioQuery.DeleteDias(id);
+                var dias = this.UpdateDiaSistema(horarioDto);
+                var insert = new Horario
+                {
+                    Nombre = horarioDto.Nombre,
+                    Descripcion = horarioDto.Descripcion,
+                    ControlIdName = horarioDto.Nombre,
+                    Dias = dias
+                };
+                var horario=await this._horarioQuery.update(insert);
+                return RedirectToAction(nameof(Index));
+            }
+            return View("~/Views/Horario/Editar.cshtml", horarioDto);
+        }
+        public List<ExtraerDia> validarUpdate(HorarioDto horarioDto)
+        {
+            var validadores = new List<ExtraerDia>();
+            validadores.Add(
+                new ExtraerDia
+                {
+                    dia = horarioDto.lunes,
+                    hora_fin = horarioDto.hora_fin_lunes,
+                    hora_inicio = horarioDto.hora_inicio_lunes
+                }
+            );
+            validadores.Add(
+                new ExtraerDia
+                {
+                    dia = horarioDto.martes,
+                    hora_fin = horarioDto.hora_fin_martes,
+                    hora_inicio = horarioDto.hora_inicio_martes
+                }
+            );
+            validadores.Add(
+                new ExtraerDia
+                {
+                    dia = horarioDto.miercoles,
+                    hora_fin = horarioDto.hora_fin_miercoles,
+                    hora_inicio = horarioDto.hora_inicio_miercoles
+                }
+            );
+            validadores.Add(
+               new ExtraerDia
+               {
+                   dia = horarioDto.jueves,
+                   hora_fin = horarioDto.hora_fin_jueves,
+                   hora_inicio = horarioDto.hora_inicio_jueves
+               }
+           );
+            validadores.Add(
+               new ExtraerDia
+               {
+                   dia = horarioDto.viernes,
+                   hora_fin = horarioDto.hora_fin_viernes,
+                   hora_inicio = horarioDto.hora_inicio_viernes
+               }
+           );
+            validadores.Add(
+               new ExtraerDia
+               {
+                   dia = horarioDto.sabado,
+                   hora_fin = horarioDto.hora_fin_sabado,
+                   hora_inicio = horarioDto.hora_inicio_sabado
+               }
+           );
+            validadores.Add(
+                new ExtraerDia
+                {
+                    dia = horarioDto.domingo,
+                    hora_fin = horarioDto.hora_fin_domingo,
+                    hora_inicio = horarioDto.hora_inicio_domingo
+                }
+            );
+            return validadores;
+        }
+        public List<ExtraerDia> validarCreate(HorarioCreateDto horarioCreateDto)
         {
             var validadores = new List<ExtraerDia>();
             validadores.Add(
@@ -208,7 +296,50 @@ namespace ControlIDMvc.Controllers
         }
         private List<Dia> StoreDiaSistema(HorarioCreateDto horarioCreateDto)
         {
-            var dias = this.validar(horarioCreateDto);
+            var dias = this.validarCreate(horarioCreateDto);
+            var insert = new List<Dia>();
+            foreach (var dia in dias)
+            {
+                if (dia.dia != null)
+                {
+                    insert.Add(
+                    new Dia
+                    {
+                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * Convert.ToInt32(dia.hora_fin.Minute * 60),
+                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * Convert.ToInt32(dia.hora_inicio.Minute * 60),
+                        ControlHol1 = 0,
+                        ControlHol2 = 0,
+                        ControlHol3 = 0,
+                        ControlTimeZoneId = 0,
+                        ControlMon = dia.dia == "lunes" ? 1 : 0,
+                        ControlTue = dia.dia == "martes" ? 1 : 0,
+                        ControlWed = dia.dia == "miercoles" ? 1 : 0,
+                        ControlThu = dia.dia == "jueves" ? 1 : 0,
+                        ControlFri = dia.dia == "viernes" ? 1 : 0,
+                        ControlSat = dia.dia == "sabado" ? 1 : 0,
+                        ControlSun = dia.dia == "domingo" ? 1 : 0,
+                        Start = dia.hora_inicio,
+                        End = dia.hora_fin,
+                        Mon = dia.dia == "lunes" ? 1 : 0,
+                        Tue = dia.dia == "martes" ? 1 : 0,
+                        Wed = dia.dia == "miercoles" ? 1 : 0,
+                        Thu = dia.dia == "jueves" ? 1 : 0,
+                        Fri = dia.dia == "viernes" ? 1 : 0,
+                        Sat = dia.dia == "sabado" ? 1 : 0,
+                        Sun = dia.dia == "domingo" ? 1 : 0,
+                        Hol1 = 0,
+                        Hol2 = 0,
+                        Hol3 = 0,
+                        Nombre = dia.dia,
+                        ControlId = 0,
+                    });
+                }
+            }
+            return insert;
+        }
+        private List<Dia> UpdateDiaSistema(HorarioDto horarioDto)
+        {
+            var dias = this.validarUpdate(horarioDto);
             var insert = new List<Dia>();
             foreach (var dia in dias)
             {

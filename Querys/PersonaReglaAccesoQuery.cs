@@ -21,12 +21,17 @@ namespace ControlIDMvc.Querys
             this._mapper = mapper;
             this._dbContext = dbContext;
         }
-        public async Task<PersonaReglasAcceso> Store(PersonaAccesoReglasCreateDto personaAccesoReglasCreateDto)
+        public async Task<PersonaReglasAcceso> Store(PersonaReglasAcceso personaReglasAcceso)
         {
-            var personaReglaAcceso = _mapper.Map<PersonaReglasAcceso>(personaAccesoReglasCreateDto);
-            var resultado = _dbContext.PersonaReglasAcceso.Add(personaReglaAcceso);
+            var resultado = _dbContext.PersonaReglasAcceso.Add(personaReglasAcceso);
             await _dbContext.SaveChangesAsync();
-            return personaReglaAcceso;
+            return personaReglasAcceso;
+        }
+        public async Task<List<PersonaReglasAcceso>> StoreAll(List<PersonaReglasAcceso> personaReglasAccesos)
+        {
+            await  _dbContext.PersonaReglasAcceso.AddRangeAsync(personaReglasAccesos);
+            await _dbContext.SaveChangesAsync();
+            return personaReglasAccesos;
         }
     }
 }

@@ -332,3 +332,25 @@ INSERT INTO
         `PersonaId`
     )
 VALUES ('admin', 'admin', '1');
+/* cajas*/
+INSERT INTO
+    `cajaNivelUno`(
+        `Codigo`,
+        `Descripcion`,
+        `Dirrecion`,
+        `Fecha_inicio`,
+        `Fecha_fin`,
+        `Telefono`,
+        `Email`,
+        `Estado`
+    )
+VALUES (
+        'casa de sergio',
+        'casas de sergio',
+        '4to anillo radias 13',
+        '2021-09-09',
+        '2020-09-09',
+        '3356690',
+        'sergio@a.com',
+        '1'
+    );

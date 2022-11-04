@@ -160,5 +160,10 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
+        public async Task<List<Persona>> GetAllReglaAccesoId(int reglaAccesoId)
+        {
+            var personas = await this._dbContext.ReglaAcceso.Where(ra => ra.Id == reglaAccesoId).Include(x => x.PersonaReglasAcceso).ToListAsync();
+            return await this._dbContext.Persona.ToListAsync();
+        }
     }
 }
