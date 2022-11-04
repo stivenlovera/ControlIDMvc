@@ -1030,7 +1030,7 @@ namespace ControlIDMvc.Migrations
                         .IsRequired();
 
                     b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglaAcceso")
-                        .WithMany()
+                        .WithMany("PersonaReglasAcceso")
                         .HasForeignKey("ReglaAccesoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1169,6 +1169,8 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.ReglaAcceso", b =>
                 {
                     b.Navigation("AreaSReglaAccesos");
+
+                    b.Navigation("PersonaReglasAcceso");
 
                     b.Navigation("PortalReglaAccesos");
                 });
