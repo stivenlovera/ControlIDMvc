@@ -151,7 +151,7 @@ namespace ControlIDMvc.Querys
         public async Task<ReglaAcceso> UpdateControlId(ReglaAcceso reglaAcceso)
         {
             _dbContext.Entry(await _dbContext.ReglaAcceso.FirstOrDefaultAsync(x => x.Id == reglaAcceso.Id)).CurrentValues.SetValues(
-               new ReglaAcceso
+               new 
                {
                    ControlId = reglaAcceso.ControlId,
                    ControlIdName = reglaAcceso.Nombre,
