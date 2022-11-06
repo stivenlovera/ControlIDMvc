@@ -87,7 +87,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<ReglaAcceso> GetOne(int reglaAccesoId)
         {
-            var reglasAcceso = await _dbContext.ReglaAcceso.Where(ra => ra.Id == reglaAccesoId).Include(x => x.PersonaReglasAcceso).Include(x=>x.AreaSReglaAccesos).Include(x=>x.PortalReglaAccesos).Include(x=>x.HorarioReglasAcceso).FirstOrDefaultAsync();
+            var reglasAcceso = await _dbContext.ReglaAcceso.Where(ra => ra.Id == reglaAccesoId).Include(x => x.PersonaReglasAcceso).Include(x => x.AreaSReglaAccesos).Include(x => x.PortalReglaAccesos).Include(x => x.HorarioReglasAcceso).FirstOrDefaultAsync();
             return reglasAcceso;
         }
         public async Task<ReglaAcceso> Store(ReglaAcceso reglaAcceso)
@@ -151,9 +151,10 @@ namespace ControlIDMvc.Querys
         public async Task<ReglaAcceso> UpdateControlId(ReglaAcceso reglaAcceso)
         {
             _dbContext.Entry(await _dbContext.ReglaAcceso.FirstOrDefaultAsync(x => x.Id == reglaAcceso.Id)).CurrentValues.SetValues(
-               new
+               new ReglaAcceso
                {
-                   ControlIdName = reglaAcceso.ControlIdName,
+                   ControlId = reglaAcceso.ControlId,
+                   ControlIdName = reglaAcceso.Nombre,
                    ControlIdPriority = reglaAcceso.ControlIdPriority,
                    ControlIdType = reglaAcceso.ControlIdType
                });
