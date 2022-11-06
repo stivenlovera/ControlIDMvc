@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221103104011_init")]
+    [Migration("20221106031804_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -972,7 +972,7 @@ namespace ControlIDMvc.Migrations
                         .IsRequired();
 
                     b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglasAcceso")
-                        .WithMany()
+                        .WithMany("HorarioReglasAcceso")
                         .HasForeignKey("ReglasAccesoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1032,7 +1032,7 @@ namespace ControlIDMvc.Migrations
                         .IsRequired();
 
                     b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglaAcceso")
-                        .WithMany()
+                        .WithMany("PersonaReglasAcceso")
                         .HasForeignKey("ReglaAccesoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1171,6 +1171,10 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.ReglaAcceso", b =>
                 {
                     b.Navigation("AreaSReglaAccesos");
+
+                    b.Navigation("HorarioReglasAcceso");
+
+                    b.Navigation("PersonaReglasAcceso");
 
                     b.Navigation("PortalReglaAccesos");
                 });
