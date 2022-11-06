@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ControlIDMvc.Dtos.HorarioReglaAcceso;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -29,6 +30,16 @@ namespace ControlIDMvc.Querys
             await _dBContext.SaveChangesAsync();
             return horarioReglaAcceso;
         }
-       
+        public async Task<bool> DeleteAllReglaAccesoId(int ReglasAccesoId)
+        {
+            var buscar_horarios = await this._dBContext.HorarioReglaAcceso.Where(x => x.ReglasAccesoId == ReglasAccesoId).ToListAsync();
+            _dBContext.HorarioReglaAcceso.RemoveRange(buscar_horarios);
+            var resultado = await _dBContext.SaveChangesAsync();
+            if (resultado > 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

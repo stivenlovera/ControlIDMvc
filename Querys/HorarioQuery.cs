@@ -45,37 +45,51 @@ namespace ControlIDMvc.Querys
                 DatatableHorario horario = new DatatableHorario();
                 horario.nombre = item.Nombre;
                 horario.id = item.Id;
-                foreach (var dia in item.Dias)
+                if (item.ControlId == 1)
                 {
-                    /*  switch (dia.Nombre)
-                     {
-                         case "lunes":
-                             horario.lunes = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
-                             break;
-                         case "martes":
-                             horario.martes = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
-                             break;
-                         case "miercoles":
-                             horario.miercoles = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
-                             break;
-                         case "jueves":
-                             horario.jueves = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
-                             break;
-                         case "viernes":
-                             horario.viernes = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
-                             break;
-                         case "sabado":
-                             horario.sabado = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
-                             break;
-                         case "domingo":
-                             horario.domingo = $"{dia.HoraInicio.ToString("HH:mm")} - {dia.HoraFin.ToString("HH:mm")}";
-                             break;
-                         default:
-
-                             break;
-                     } */
-                    horarios.Add(horario);
+                    horario.lunes=this.PorDefecto();
+                    horario.martes=this.PorDefecto();
+                    horario.miercoles=this.PorDefecto();
+                    horario.jueves=this.PorDefecto();
+                    horario.viernes=this.PorDefecto();
+                    horario.sabado=this.PorDefecto();
+                    horario.domingo=this.PorDefecto();
                 }
+                else
+                {
+                    foreach (var dia in item.Dias)
+                    {
+                        switch (dia.Nombre)
+                        {
+                            case "lunes":
+                                horario.lunes = $"{dia.Start.ToString("HH:mm")} - {dia.End.ToString("HH:mm")}";
+                                break;
+                            case "martes":
+                                horario.martes = $"{dia.Start.ToString("HH:mm")} - {dia.End.ToString("HH:mm")}";
+                                break;
+                            case "miercoles":
+                                horario.miercoles = $"{dia.Start.ToString("HH:mm")} - {dia.End.ToString("HH:mm")}";
+                                break;
+                            case "jueves":
+                                horario.jueves = $"{dia.Start.ToString("HH:mm")} - {dia.End.ToString("HH:mm")}";
+                                break;
+                            case "viernes":
+                                horario.viernes = $"{dia.Start.ToString("HH:mm")} - {dia.End.ToString("HH:mm")}";
+                                break;
+                            case "sabado":
+                                horario.sabado = $"{dia.Start.ToString("HH:mm")} - {dia.End.ToString("HH:mm")}";
+                                break;
+                            case "domingo":
+                                horario.domingo = $"{dia.Start.ToString("HH:mm")} - {dia.End.ToString("HH:mm")}";
+                                break;
+                            default:
+
+                                break;
+                        }
+                    }
+                }
+
+                horarios.Add(horario);
             }
             recordsTotal = horarios.Count();
             horarios = horarios.Skip(skip).Take(pageSize).ToList();
@@ -86,6 +100,10 @@ namespace ControlIDMvc.Querys
                 recordsTotal = recordsTotal,
                 data = horarios
             };
+        }
+        private string PorDefecto()
+        {
+            return "00:00 - 23:59";
         }
         public async Task<Horario> store(Horario horario)
         {
@@ -153,8 +171,8 @@ namespace ControlIDMvc.Querys
         }
         public async Task<bool> Delete(int horario_id)
         {
-            var dia= await _dbContext.Horario.Where(x => x.Id == horario_id).FirstOrDefaultAsync();
-            if (dia!=null)
+            var dia = await _dbContext.Horario.Where(x => x.Id == horario_id).FirstOrDefaultAsync();
+            if (dia != null)
             {
                 _dbContext.Dia.RemoveRange(dia.Dias);
                 await _dbContext.SaveChangesAsync();

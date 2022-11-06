@@ -1,4 +1,4 @@
-var personas_disponibles = $("#datatable").DataTable({
+var reglas_acceso = $("#datatable").DataTable({
     // ServerSide Setups
     processing: true,
     serverSide: true,
@@ -22,7 +22,8 @@ var personas_disponibles = $("#datatable").DataTable({
             data: "id",
             render: function (data, type, row) {
                 return `
-                <a class="btn btn-success btn-xs" href="/regla-acceso/edit/${data}" role="button"><i class="fa fa-arrow-right"></i></a>`;
+                <a class="btn btn-success btn-xs" href="/regla-acceso/edit/${data}" role="button"><i class="fa fa-pencil" title="Editar"></i></a>
+                <button class="btn btn-danger btn-xs delete" data-id="${data}" role="button"><i class="fa fa-trash" title="Eliminar"></i></button>`
             }
         }
     ]

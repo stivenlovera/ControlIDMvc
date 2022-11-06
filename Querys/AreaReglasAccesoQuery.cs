@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ControlIDMvc.Dtos.AreaReglaAccesoCreateDto;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -37,6 +38,17 @@ namespace ControlIDMvc.Querys
             {
                 return false;
             }
+        }
+        public async Task<bool> DeleteAllReglaAccesoId(int ReglaAccesoId)
+        {
+            var buscar_areas = await this._dBContext.AreaReglaAcceso.Where(x => x.ReglaAccesoId == ReglaAccesoId).ToListAsync();
+            _dBContext.AreaReglaAcceso.RemoveRange(buscar_areas);
+            var resultado = await _dBContext.SaveChangesAsync();
+            if (resultado > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

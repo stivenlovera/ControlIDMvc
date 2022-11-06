@@ -110,6 +110,11 @@ namespace ControlIDMvc.Querys
             var portals = await this._dBContext.Portal.Where(area => portals_id.Contains(area.Id)).ToListAsync();
             return portals;
         }
+        public async Task<List<Portal>> GetAllAreaID(List<int> areas_id)
+        {
+            var portals = await this._dBContext.Portal.Where(area => areas_id.Contains(area.AreaFromId) || areas_id.Contains(area.AreaToId)).ToListAsync();
+            return portals;
+        }
         public async Task<List<Portal>> GetAreaId(int ControlId)
         {
             var portals = await this._dBContext.Portal.Where(p => p.ControlId == ControlId).ToListAsync();

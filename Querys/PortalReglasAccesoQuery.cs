@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ControlIDMvc.Dtos.PortalReglaAcceso;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -31,6 +32,17 @@ namespace ControlIDMvc.Querys
             {
                 return false;
             }
+        }
+        public async Task<bool> DeleteAllReglaAccesoId(int ReglaAccesoId)
+        {
+            var buscar_portals = await this._dBContext.PortalReglaAcceso.Where(x => x.ReglaAccesoId == ReglaAccesoId).ToListAsync();
+            _dBContext.PortalReglaAcceso.RemoveRange(buscar_portals);
+            var resultado = await _dBContext.SaveChangesAsync();
+            if (resultado > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

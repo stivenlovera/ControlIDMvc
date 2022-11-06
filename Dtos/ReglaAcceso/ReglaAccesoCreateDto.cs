@@ -16,8 +16,8 @@ namespace ControlIDMvc.Dtos.ReglaAcceso
         public int ControlIdType { get; set; }
         public int ControlIdPriority { get; set; }
 
-        public List<string> PersonasSelecionadas { get; set; }
-        public List<string> HorarioSelecionados { get; set; }
-        public List<string> AreaSelecionadas { get; set; }
+        public List<int> PersonasSelecionadas { get; set; }
+        public List<int> HorarioSelecionados { get; set; }
+        public List<int> AreaSelecionadas { get; set; }
     }
 }

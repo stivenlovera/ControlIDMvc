@@ -87,7 +87,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<ReglaAcceso> GetOne(int reglaAccesoId)
         {
-            var reglasAcceso = await _dbContext.ReglaAcceso.Where(ra => ra.Id == reglaAccesoId).FirstOrDefaultAsync();
+            var reglasAcceso = await _dbContext.ReglaAcceso.Where(ra => ra.Id == reglaAccesoId).Include(x => x.PersonaReglasAcceso).Include(x=>x.AreaSReglaAccesos).Include(x=>x.PortalReglaAccesos).Include(x=>x.HorarioReglasAcceso).FirstOrDefaultAsync();
             return reglasAcceso;
         }
         public async Task<ReglaAcceso> Store(ReglaAcceso reglaAcceso)
@@ -137,36 +137,52 @@ namespace ControlIDMvc.Querys
             }
             return areas;
         }
+        public async Task<ReglaAcceso> Update(ReglaAcceso reglaAcceso)
+        {
+            _dbContext.Entry(await _dbContext.ReglaAcceso.FirstOrDefaultAsync(x => x.Id == reglaAcceso.Id)).CurrentValues.SetValues(
+               new
+               {
+                   Descripcion = reglaAcceso.Descripcion,
+                   Nombre = reglaAcceso.Nombre
+               });
+            await _dbContext.SaveChangesAsync();
+            return await _dbContext.ReglaAcceso.Where(p => p.Id == reglaAcceso.Id).FirstAsync();
+        }
+        public async Task<ReglaAcceso> UpdateControlId(ReglaAcceso reglaAcceso)
+        {
+            _dbContext.Entry(await _dbContext.ReglaAcceso.FirstOrDefaultAsync(x => x.Id == reglaAcceso.Id)).CurrentValues.SetValues(
+               new
+               {
+                   ControlIdName = reglaAcceso.ControlIdName,
+                   ControlIdPriority = reglaAcceso.ControlIdPriority,
+                   ControlIdType = reglaAcceso.ControlIdType
+               });
+            await _dbContext.SaveChangesAsync();
+            return await _dbContext.ReglaAcceso.Where(p => p.Id == reglaAcceso.Id).FirstAsync();
+        }
         /*datos disponibles*/
         public async Task<List<Persona>> GetDisponiblePersonaReglaAccesoId(int reglaAccesoId)
         {
-            var personasReglasAcceso = await this._dbContext.PersonaReglasAcceso.Where(pr => pr.ReglaAccesoId != reglaAccesoId).Include(x => x.Persona).ToListAsync();
-            var personas = new List<Persona>();
-            foreach (var persona in personasReglasAcceso)
-            {
-                personas.Add(persona.Persona);
-            }
-            return personas;
+            return await this._dbContext.Persona.ToListAsync();
         }
         public async Task<List<Horario>> GetDisponibleHorarioReglaAccesoId(int reglaAccesoId)
         {
-            var horarioReglasAcceso = await this._dbContext.HorarioReglaAcceso.Where(hra => hra.ReglasAccesoId == reglaAccesoId).Include(x => x.Horario).ToListAsync();
-            var horarios = new List<Horario>();
-            foreach (var horario in horarioReglasAcceso)
-            {
-                horarios.Add(horario.Horario);
-            }
-            return horarios;
+            return await this._dbContext.Horario.ToListAsync();
         }
         public async Task<List<Area>> GetDisponibleAreaReglaAccesoId(int reglaAccesoId)
         {
-            var areasReglasAcceso = await this._dbContext.AreaReglaAcceso.Where(ara => ara.ReglaAccesoId != reglaAccesoId).Include(x => x.Area).ToListAsync();
-            var areas = new List<Area>();
-            foreach (var area in areasReglasAcceso)
+            return await this._dbContext.Area.ToListAsync();
+        }
+        public async Task<bool> Delete(int reglaAccesoId)
+        {
+            var reglaAcceso = await _dbContext.ReglaAcceso.Where(x => x.Id == reglaAccesoId).FirstAsync();
+            if (reglaAcceso != null)
             {
-                areas.Add(area.Area);
+                _dbContext.ReglaAcceso.Remove(reglaAcceso);
+                await _dbContext.SaveChangesAsync();
+                return true;
             }
-            return areas;
+            return false;
         }
     }
 }
