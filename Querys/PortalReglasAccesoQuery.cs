@@ -20,18 +20,16 @@ namespace ControlIDMvc.Querys
             this._dBContext = dBContext;
         }
 
-        public async Task<bool> StoreAll(List<PortalReglaAcceso> portalReglaAcceso)
+        public async Task<List<PortalReglaAcceso>> StoreAll(List<PortalReglaAcceso> portalReglaAccesos)
         {
-            await _dBContext.AddRangeAsync(portalReglaAcceso);
-            var response = await _dBContext.SaveChangesAsync();
-            if (response > 0)
+            await _dBContext.AddRangeAsync(portalReglaAccesos);
+            await _dBContext.SaveChangesAsync();
+            var ids = new List<int>();
+            foreach (var portalReglaAcceso in portalReglaAccesos)
             {
-                return true;
+                ids.Add(portalReglaAcceso.Id);
             }
-            else
-            {
-                return false;
-            }
+            return await _dBContext.PortalReglaAcceso.Where(pr => ids.Contains(pr.Id)).Include(x => x.Portal).ToListAsync();
         }
         public async Task<bool> DeleteAllReglaAccesoId(int ReglaAccesoId)
         {
@@ -43,6 +41,17 @@ namespace ControlIDMvc.Querys
                 return true;
             }
             return false;
+        }
+        public async Task<PortalReglaAcceso> UpdateControlId(PortalReglaAcceso portalReglaAcceso)
+        {
+            _dBContext.Entry(await _dBContext.PortalReglaAcceso.FirstOrDefaultAsync(x => x.PortalId == portalReglaAcceso.PortalId && x.ReglaAccesoId == portalReglaAcceso.ReglaAccesoId)).CurrentValues.SetValues(
+               new
+               {
+                   ControlIdRulesId = portalReglaAcceso.ControlIdRulesId,
+                   ControlIdPortalId = portalReglaAcceso.ControlIdPortalId
+               });
+            await _dBContext.SaveChangesAsync();
+            return await _dBContext.PortalReglaAcceso.Where(x => x.PortalId == portalReglaAcceso.PortalId && x.ReglaAccesoId == portalReglaAcceso.ReglaAccesoId).FirstAsync();
         }
     }
 }

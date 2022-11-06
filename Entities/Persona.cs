@@ -25,6 +25,7 @@ namespace ControlIDMvc.Entities
         public List<ImagenDocumento> documentos { get; set; }
         public List<ImagenPerfil> perfiles { get; set; }
         public List<Inscripcion> Inscripciones { get; set; }
+        public List<PersonaReglasAcceso> PersonaReglasAccesoId { get; set; }
         public Usuario Usuario { get; set; }
     }
 }

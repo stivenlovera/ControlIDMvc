@@ -67,14 +67,16 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                     time_zone_id = dia.ControlTimeZoneId,
                     start = dia.ControlStart,
                     end = dia.ControlEnd,
-                    sun = dia.ControlSun,
-                    mon = dia.ControlMon,
-                    tue = dia.ControlThu,
-                    fri = dia.ControlFri,
-                    sat = dia.ControlSat,
-                    hol1 = dia.ControlHol1,
-                    hol2 = dia.ControlHol2,
-                    hol3 = dia.ControlHol3
+                    sun = dia.Sun,
+                    mon = dia.Mon,
+                    thu = dia.Thu,
+                    tue = dia.Tue,
+                    fri = dia.Fri,
+                    sat = dia.Sat,
+                    wed = dia.Wed,
+                    hol1 = dia.Hol1,
+                    hol2 = dia.Hol2,
+                    hol3 = dia.Hol3
                 });
             }
             BodyCreateObject body = new BodyCreateObject()

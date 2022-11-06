@@ -26,18 +26,27 @@ namespace ControlIDMvc.Querys
             var resultado = await _dBContext.SaveChangesAsync();
             return areaReglaAccesoDto;
         }
-        public async Task<bool> storeAll(List<AreaReglaAcceso> areaReglaAccesos)
+        public async Task<AreaReglaAcceso> UpdateControlId(AreaReglaAcceso areaReglaAcceso)
+        {
+            _dBContext.Entry(await _dBContext.AreaReglaAcceso.FirstOrDefaultAsync(x => x.AreaId == areaReglaAcceso.AreaId && x.ReglaAccesoId == areaReglaAcceso.ReglaAccesoId)).CurrentValues.SetValues(
+               new
+               {
+                   ControlidReglaAccesoId = areaReglaAcceso.ControlidReglaAccesoId,
+                   ControlIdAreaId = areaReglaAcceso.ControlIdAreaId
+               });
+            await _dBContext.SaveChangesAsync();
+            return await _dBContext.AreaReglaAcceso.Where(x => x.AreaId == areaReglaAcceso.AreaId && x.ReglaAccesoId == areaReglaAcceso.ReglaAccesoId).FirstAsync();
+        }
+        public async Task<List<AreaReglaAcceso>> storeAll(List<AreaReglaAcceso> areaReglaAccesos)
         {
             await _dBContext.AddRangeAsync(areaReglaAccesos);
-            var resultado = await _dBContext.SaveChangesAsync();
-            if (resultado == 1)
+            await _dBContext.SaveChangesAsync();
+            var ids = new List<int>();
+            foreach (var areaReglaAcceso in areaReglaAccesos)
             {
-                return true;
+                ids.Add(areaReglaAcceso.Id);
             }
-            else
-            {
-                return false;
-            }
+            return await _dBContext.AreaReglaAcceso.Where(ar => ids.Contains(ar.Id)).Include(x => x.Area).ToListAsync();
         }
         public async Task<bool> DeleteAllReglaAccesoId(int ReglaAccesoId)
         {

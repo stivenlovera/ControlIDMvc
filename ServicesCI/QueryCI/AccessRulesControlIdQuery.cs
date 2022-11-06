@@ -33,12 +33,21 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             this.password = password;
             this.session = session;
         }
-        public async Task<ResponseAccesoRulesCreate> CreateAccessRules(List<accessRulesCreateDto> accessRules)
+        public async Task<ResponseAccesoRulesCreate> CreateAccessRules(List<ReglaAcceso> reglaAccesos)
         {
+            var accesosRules= new List<accessRulesCreateDto>();
+            foreach (var reglaAcceso in reglaAccesos)
+            {
+                accesosRules.Add(new accessRulesCreateDto{
+                    name=reglaAcceso.Nombre,
+                    priority=0,
+                    type=0
+                });
+            }
             BodyCreateObject body = new BodyCreateObject()
             {
                 objeto = "access_rules",
-                values = accessRules
+                values = accesosRules
             };
             var response = await this.RunCreate(body);
             return response;

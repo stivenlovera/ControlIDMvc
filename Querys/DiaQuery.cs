@@ -34,6 +34,27 @@ namespace ControlIDMvc.Querys
             var resultado = await _dBContext.SaveChangesAsync();
             return dias;
         }
+        public async Task<Dia> UpdateControlId(Dia dia)
+        {
+            _dBContext.Entry(await _dBContext.Dia.FirstOrDefaultAsync(x => x.Id == dia.Id)).CurrentValues.SetValues(
+               new Dia
+               {
+                   ControlId = dia.ControlId,
+                   ControlMon = dia.Mon,
+                   ControlThu = dia.Thu,
+                   ControlWed = dia.Wed,
+                   ControlTue = dia.Tue,
+                   ControlFri = dia.Fri,
+                   ControlSat = dia.Sat,
+                   ControlSun = dia.Sun,
+                   ControlHol1 = dia.Hol1,
+                   ControlHol2 = dia.Hol2,
+                   ControlHol3 = dia.Hol3,
+                   ControlTimeZoneId = dia.ControlTimeZoneId
+               });
+            await _dBContext.SaveChangesAsync();
+            return await _dBContext.Dia.Where(x => x.Id == dia.Id).FirstAsync();
+        }
         public async Task<bool> Delete(int id)
         {
             var dia = await _dBContext.Dia.Where(x => x.Id == id).FirstAsync();
@@ -45,7 +66,7 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
-      
+
         public async Task<List<Dia>> ShowAll(Dia dias)
         {
             return await _dBContext.Dia.ToListAsync();

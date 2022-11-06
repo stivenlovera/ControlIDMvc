@@ -111,7 +111,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunUpdate(body);
             return response;
         }
-        public async Task<ResponseHorarioAccesoRulesDelete> Delete(HorarioReglaAcceso horarioReglaAcceso)
+        public async Task<ResponseHorarioAccesoRulesDelete> DeleteReglasAccesoId(int access_rule_id)
         {
             BodyDeleteObject body = new BodyDeleteObject()
             {
@@ -120,7 +120,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     access_rule_time_zones = new
                     {
-                        access_rule_id = horarioReglaAcceso.ControlIdAccessRulesId
+                        access_rule_id = access_rule_id
                     }
                 }
             };
