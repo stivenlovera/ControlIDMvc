@@ -59,8 +59,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 data.Add(new area_access_rulesCreateDto
                 {
-                    access_rulesid=areaReglaAcceso.ControlidReglaAccesoId,
-                    area_id=areaReglaAcceso.ControlidReglaAccesoId
+                    access_rulesid=areaReglaAcceso.ReglaAcceso.ControlId,
+                    area_id=areaReglaAcceso.Area.ControlId
                 });
             }
             BodyCreateObject body = new BodyCreateObject()

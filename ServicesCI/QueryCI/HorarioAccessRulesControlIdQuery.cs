@@ -58,8 +58,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 data.Add(new HorarioReglaAcceso
                 {
-                    ControlIdAccessRulesId = horarioReglaAcceso.ControlIdAccessRulesId,
-                    ControlIdTimeZoneId=horarioReglaAcceso.ControlIdTimeZoneId
+                    ControlIdAccessRulesId = horarioReglaAcceso.ReglasAcceso.ControlId,
+                    ControlIdTimeZoneId=horarioReglaAcceso.Horario.ControlId
                 });
             }
             BodyCreateObject body = new BodyCreateObject()

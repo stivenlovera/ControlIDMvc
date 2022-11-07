@@ -95,8 +95,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             foreach (var personaCreate in personaCreateDto)
             {
                 usuarios.Add(new userAccessRulesCreateDto{
-                    access_rule_id=personaCreate.ControlIdUserId,
-                    user_id=personaCreate.ControlIdAccessRulesId
+                    access_rule_id=personaCreate.ReglaAcceso.ControlId,
+                    user_id=personaCreate.Persona.ControlId
                 });
             }
             BodyCreateObject body = new BodyCreateObject()

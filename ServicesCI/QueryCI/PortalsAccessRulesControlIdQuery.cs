@@ -59,8 +59,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 data.Add(new portalsAccessRulesCreateDto
                 {
-                    access_rule_id = portalReglaAcceso.ControlIdRulesId,
-                    portal_id = portalReglaAcceso.ControlIdPortalId
+                    access_rule_id = portalReglaAcceso.ReglaAcceso.ControlId,
+                    portal_id = portalReglaAcceso.Portal.ControlId,
                 });
             }
             BodyCreateObject body = new BodyCreateObject()
