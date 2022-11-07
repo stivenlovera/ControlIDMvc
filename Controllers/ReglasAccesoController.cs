@@ -408,7 +408,7 @@ namespace ControlIDMvc.Controllers
                 {
                     horarioReglaAcceso.ControlIdTimeZoneId = horarioReglaAcceso.Horario.ControlId;
                     horarioReglaAcceso.ControlIdAccessRulesId = horarioReglaAcceso.ReglasAcceso.ControlId;
-                    await this._horarioReglaAccesoQuery.Store(horarioReglaAcceso);
+                    await this._horarioReglaAccesoQuery.UpdateControlId(horarioReglaAcceso);
                 }
                 return apiResponse.status;
             }
