@@ -53,13 +53,13 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         }
         public async Task<ResponseHorarioAccesoRulesCreate> CreateAll(List<HorarioReglaAcceso> horarioReglaAccesos)
         {
-            List<HorarioReglaAcceso> data = new List<HorarioReglaAcceso>();
+            List<time_zones_access_rulesCreateDto> data = new List<time_zones_access_rulesCreateDto>();
             foreach (var horarioReglaAcceso in horarioReglaAccesos)
             {
-                data.Add(new HorarioReglaAcceso
+                data.Add(new time_zones_access_rulesCreateDto
                 {
-                    ControlIdAccessRulesId = horarioReglaAcceso.ReglasAcceso.ControlId,
-                    ControlIdTimeZoneId=horarioReglaAcceso.Horario.ControlId
+                    access_rule_id = horarioReglaAcceso.ReglasAcceso.ControlId,
+                    time_zone_id=horarioReglaAcceso.Horario.ControlId
                 });
             }
             BodyCreateObject body = new BodyCreateObject()
