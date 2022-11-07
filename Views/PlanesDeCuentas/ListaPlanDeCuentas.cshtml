@@ -74,27 +74,26 @@
 
                                                 <tbody>
                                                     
-                                                    @foreach (var planCuentaGrupo in Model.planCuentaGrupos)
+                                                    @foreach (var planCuenta in Model.ListaPlanes)
                                                         {
                                                         <tr>
                                                             <td>
                                                             <th><input type="checkbox" id="check-all"></th>
                                                             </td>
-                                                            <td>@planCuentaGrupo.Codigo</td>
-                                                            <td>@planCuentaGrupo.NombreCuenta</td>
-                                                            <td>@planCuentaGrupo.Moneda</td>
-                                                            <td>@planCuentaGrupo.Valor</td>
-                                                            <td>@planCuentaGrupo.Nivel</td> 
+                                                            <td>@planCuenta.Codigo</td>
+                                                            <td>@planCuenta.NombreCuenta</td>
+                                                            <td>@planCuenta.Moneda</td>
+                                                            <td>@planCuenta.Valor</td>
+                                                            <td>@planCuenta.Nivel</td> 
                                                             <td>
-                                                                <a class="glyphicon open_modal_rubro" role="button" data-id="@planCuentaGrupo.Id" ><i style="color:orange" class="glyphicon glyphicon-pencil"  title="Editar"></i></a>
+                                                                <a class="glyphicon open_modal_@planCuenta.Modal" role="button" data-id="@planCuenta.Id" ><i style="color:orange" class="glyphicon glyphicon-pencil"  title="Editar"></i></a>
                                                                 &nbsp;
-                                                                <a class="glyphicon open_modal_rubro" role="button" data-id="@planCuentaGrupo.Id" ><i style="color:forestgreen" class="glyphicon glyphicon-plus" title="Crear"></i></a>
+                                                                <a class="glyphicon open_modal_@planCuenta.Modal" role="button" data-id="@planCuenta.Id" ><i style="color:forestgreen" class="glyphicon glyphicon-plus" title="Crear"></i></a>
                                                             </td>
                                                             <td>U1 U2 U3</td>
                                                         </tr>
                                                         }
-                                                    
-                                                    <tr>
+                                                   @*  <tr>
                                                         <td>
                                                         <th><input type="checkbox" id="check-all"></th>
                                                         </td>
@@ -186,7 +185,7 @@
                                                             <a class="glyphicon" Srole="button" id="open_modal_subcuenta"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a>
                                                         </td>
                                                         <td>$162,700</td>
-                                                    </tr>
+                                                    </tr> *@
                                                 </tbody>
                                             </table>
                                         </div>

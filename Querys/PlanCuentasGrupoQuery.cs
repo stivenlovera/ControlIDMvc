@@ -23,11 +23,11 @@ namespace ControlIDMvc.Querys
         }
         public async Task<List<PlanCuentaGrupo>> GetAll()
         {
-            return await _dBContext.PlanCuentaGrupo.ToListAsync();
+            return await _dBContext.PlanCuentaGrupo.Include(p => p.PlanCuentaRubros).ToListAsync();
         }
-        public async Task<PlanCuentaGrupo> GetOne(int planCuentaGrupoId)
+        public async Task<PlanCuentaGrupo> GetOne(int id)
         {
-            return await _dBContext.PlanCuentaGrupo.Where(p => p.Id == planCuentaGrupoId).FirstOrDefaultAsync();
+            return await _dBContext.PlanCuentaGrupo.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
     }
 }

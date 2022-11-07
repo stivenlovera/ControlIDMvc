@@ -1,4 +1,4 @@
-$(document).on('click', '#open_modal_subcuenta', function () {
+$(document).on('click', '.open_modal_subcuenta', function () {
     $('#modal_subcuenta').modal('show');
 
 

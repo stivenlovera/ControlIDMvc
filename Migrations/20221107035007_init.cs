@@ -235,12 +235,12 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Moneda = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     Nivel = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
+                    Debe = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(20,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -534,12 +534,12 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Moneda = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     Nivel = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Debe = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     PlanCuentaGrupoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -822,12 +822,12 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Moneda = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     Nivel = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Debe = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     PlanCuentaRubroId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -852,12 +852,12 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Moneda = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     Nivel = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Debe = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     PlanCuentaTituloId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

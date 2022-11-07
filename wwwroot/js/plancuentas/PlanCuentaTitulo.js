@@ -1,4 +1,4 @@
-$(document).on('click', '#open_modal_titulo', function () {
+$(document).on('click', '.open_modal_titulo', function () {
     $('#modal_titulo').modal('show');
 
 

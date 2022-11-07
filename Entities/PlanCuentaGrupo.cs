@@ -13,9 +13,12 @@ namespace ControlIDMvc.Entities
         public string NombreCuenta { get; set; }
         [Column(TypeName = "decimal(20,2)")]
         public decimal Moneda { get; set; }
+         [Column(TypeName = "decimal(20,2)")]
         public decimal Valor { get; set; }
         public string Nivel { get; set; }
+         [Column(TypeName = "decimal(20,2)")]
         public decimal Debe { get; set; }
+         [Column(TypeName = "decimal(20,2)")]
         public decimal Haber { get; set; }
         public List<PlanCuentaRubro> PlanCuentaRubros { get; set; }
     }

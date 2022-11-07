@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -19,6 +20,10 @@ namespace ControlIDMvc.Querys
             await this._dBContext.PlanCuentaTitulo.AddAsync(planCuentaTitulo);
             await _dBContext.SaveChangesAsync();
             return planCuentaTitulo;
+        }
+        public async Task<List<PlanCuentaTitulo>> GetOneRubroId(int rubroId)
+        {
+            return await _dBContext.PlanCuentaTitulo.Where(p => p.PlanCuentaRubroId == rubroId).Include(p => p.PlanCuentaCompuesta).ToListAsync();
         }
         public bool Update()
         {

@@ -20,7 +20,6 @@ namespace ControlIDMvc.Querys
             await _dBContext.SaveChangesAsync();
             return planCuentaCompuesta;
         }
-
         public bool Update()
         {
             return true;

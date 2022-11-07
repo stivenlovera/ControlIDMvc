@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221106054402_init")]
+    [Migration("20221107035007_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -656,13 +656,13 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Debe")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Haber")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Moneda")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<string>("Nivel")
                         .HasColumnType("longtext");
@@ -674,7 +674,7 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.HasKey("Id");
 
@@ -693,13 +693,13 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Debe")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Haber")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Moneda")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<string>("Nivel")
                         .HasColumnType("longtext");
@@ -708,7 +708,7 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.HasKey("Id");
 
@@ -725,13 +725,13 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Debe")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Haber")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Moneda")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<string>("Nivel")
                         .HasColumnType("longtext");
@@ -743,7 +743,7 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.HasKey("Id");
 
@@ -799,13 +799,13 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Debe")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Haber")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Moneda")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<string>("Nivel")
                         .HasColumnType("longtext");
@@ -817,7 +817,7 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.HasKey("Id");
 

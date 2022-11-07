@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -20,7 +21,10 @@ namespace ControlIDMvc.Querys
             await _dBContext.SaveChangesAsync();
             return planCuentaSubCuenta;
         }
-
+        public async Task<List<PlanCuentaSubCuenta>> GetOneCompuestaId(int compuestaId)
+        {
+            return await _dBContext.PlanCuentaSubCuenta.Where(p => p.PlanCuentaCompuestaId == compuestaId).ToListAsync();
+        }
         public bool Update()
         {
             return true;
