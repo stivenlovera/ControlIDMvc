@@ -61,7 +61,11 @@ namespace ControlIDMvc
             Services.Services.AddTransient<EgresoQuery>();
             Services.Services.AddTransient<CajaQuery>();
             Services.Services.AddTransient<DiaQuery>();
-
+            Services.Services.AddTransient<PlanCuentasGrupoQuery>();
+            Services.Services.AddTransient<PlanCuentaRubroQuery>();
+            Services.Services.AddTransient<PlanCuentaTituloQuery>();
+            Services.Services.AddTransient<PlanCuentaCompuestaQuery>();
+            Services.Services.AddTransient<PlanCuentaSubCuentaQuery>();
             /*modelo Control ID*/
             Services.Services.AddTransient<LoginControlIdQuery>();
             Services.Services.AddTransient<UsuarioControlIdQuery>();

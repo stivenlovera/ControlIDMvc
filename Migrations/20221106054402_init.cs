@@ -226,6 +226,29 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "PlanCuentaGrupo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Codigo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Nivel = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanCuentaGrupo", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Portal",
                 columns: table => new
                 {
@@ -502,6 +525,36 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "PlanCuentaRubro",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Codigo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Nivel = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    PlanCuentaGrupoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanCuentaRubro", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlanCuentaRubro_PlanCuentaGrupo_PlanCuentaGrupoId",
+                        column: x => x.PlanCuentaGrupoId,
+                        principalTable: "PlanCuentaGrupo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AccionPortal",
                 columns: table => new
                 {
@@ -759,6 +812,96 @@ namespace ControlIDMvc.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "PlanCuentaTitulo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Codigo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Nivel = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    PlanCuentaRubroId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanCuentaTitulo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlanCuentaTitulo_PlanCuentaRubro_PlanCuentaRubroId",
+                        column: x => x.PlanCuentaRubroId,
+                        principalTable: "PlanCuentaRubro",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PlanCuentaCompuesta",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Codigo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Nivel = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    PlanCuentaTituloId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanCuentaCompuesta", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlanCuentaCompuesta_PlanCuentaTitulo_PlanCuentaTituloId",
+                        column: x => x.PlanCuentaTituloId,
+                        principalTable: "PlanCuentaTitulo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PlanCuentaSubCuenta",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Codigo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Nivel = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    PlanCuentaCompuestaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanCuentaSubCuenta", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlanCuentaSubCuenta_PlanCuentaCompuesta_PlanCuentaCompuestaId",
+                        column: x => x.PlanCuentaCompuestaId,
+                        principalTable: "PlanCuentaCompuesta",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AccionPortal_AccionId",
                 table: "AccionPortal",
@@ -838,6 +981,26 @@ namespace ControlIDMvc.Migrations
                 name: "IX_PersonaReglasAcceso_ReglaAccesoId",
                 table: "PersonaReglasAcceso",
                 column: "ReglaAccesoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlanCuentaCompuesta_PlanCuentaTituloId",
+                table: "PlanCuentaCompuesta",
+                column: "PlanCuentaTituloId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlanCuentaRubro_PlanCuentaGrupoId",
+                table: "PlanCuentaRubro",
+                column: "PlanCuentaGrupoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlanCuentaSubCuenta_PlanCuentaCompuestaId",
+                table: "PlanCuentaSubCuenta",
+                column: "PlanCuentaCompuestaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlanCuentaTitulo_PlanCuentaRubroId",
+                table: "PlanCuentaTitulo",
+                column: "PlanCuentaRubroId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PortalReglaAcceso_PortalId",
@@ -923,6 +1086,9 @@ namespace ControlIDMvc.Migrations
                 name: "PersonaReglasAcceso");
 
             migrationBuilder.DropTable(
+                name: "PlanCuentaSubCuenta");
+
+            migrationBuilder.DropTable(
                 name: "PortalReglaAcceso");
 
             migrationBuilder.DropTable(
@@ -950,6 +1116,9 @@ namespace ControlIDMvc.Migrations
                 name: "Paquete");
 
             migrationBuilder.DropTable(
+                name: "PlanCuentaCompuesta");
+
+            migrationBuilder.DropTable(
                 name: "Portal");
 
             migrationBuilder.DropTable(
@@ -965,7 +1134,16 @@ namespace ControlIDMvc.Migrations
                 name: "Usuario");
 
             migrationBuilder.DropTable(
+                name: "PlanCuentaTitulo");
+
+            migrationBuilder.DropTable(
                 name: "Persona");
+
+            migrationBuilder.DropTable(
+                name: "PlanCuentaRubro");
+
+            migrationBuilder.DropTable(
+                name: "PlanCuentaGrupo");
         }
     }
 }

@@ -1,0 +1,211 @@
+
+@{
+    ViewData["Title"] = "Recibo";
+    Layout="_Layout";
+}
+<div class="right_col" role="main">
+                <div class="">
+                    <div class="page-title">
+                        <div class="title_left">
+                            <h3>RECIBO DE EGRESO</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <!-- form date pickers -->
+                            <div class="x_panel" style="font-size:small">
+                                <div class="x_content">
+                                    <form class="form-label-left input_mask">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-1 col-sm-1 ">Usuario : </label>
+                                            <div class="col-md-2 col-sm-2 ">
+                                                <input type="text" class="form-control" disabled="disabled" placeholder="Usuario" style="font-size:small">
+                                            </div>
+                                            <label class="col-form-label col-md-6 col-sm-6 "></label>
+                                            <label class="col-form-label col-md-1 col-sm-1 ">No. Recibo </label>
+                                            <div class="col-md-2 col-sm-2 ">
+                                                <input type="text" class="form-control" disabled="disabled" placeholder="No. Recibo" style="font-size:small">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-1 col-sm-1 ">Fecha : </label>
+                                            <div class="col-md-2 col-sm-2 xdisplay_inputx has-feedback calendar-exibit for">
+                                                <input type="text" class="form-control has-feedback-left" id="single_cal2" placeholder="DD/MM/AAAA" aria-describedby="inputSuccess2Status2" style="font-size:small">
+                                                <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                                <span id="inputSuccess2Status2" class="sr-only">(success)</span>
+                                            </div>
+                                                    <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                    <h4 class="modal-title" id="getCroppedCanvasTitle">Cropped</h4>
+                                                                </div>
+                                                                <div class="modal-body"></div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.png">Download</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <!--MODAL DATE PICKER-->
+                                                    </div>
+                                            <label class="col-form-label col-md-3 col-sm-3 "></label>
+                                            <label class="col-form-label col-md-1 col-sm-1 ">Moneda :</label>
+                                            <div class="col-md-2 col-sm-2 ">
+                                                <select class="form-control" style="font-size:small">
+                                                    <option>Seleccione Moneda</option>
+                                                    <option>Bolivianos</option>
+                                                    <option>Dolares</option>
+                                                </select>
+                                            </div>
+                                            <label class="col-form-label col-md-1 col-sm-1 ">Monto</label>
+                                            <div class="col-md-2 col-sm-2 ">
+                                                <input type="text" class="form-control" disabled="disabled" placeholder="Monto" style="font-size:small">
+                                            </div>
+                                         </div>
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-1 col-sm-1 ">Entregue a: </label>
+                                            <div class="col-md-8 col-sm-8 ">
+                                                <input type="text" class="form-control" placeholder="Nombre receptor" style="font-size:small">
+                                            </div>
+                                            <!--INICIO MODAL-->
+                                            <button type="button" class="btn btn-round btn-success col-md-1 col-sm-1" data-toggle="modal" data-target=".modal-edit-rubro"style="font-size:small"><i style="color:white; " class="glyphicon glyphicon-plus" title="Editar"></i>&nbsp;&nbsp;&nbsp;ITEM</button>
+                                            @* <a class="glyphicon" href="inscripcion/factura-recibo/${data}" role="button" data-toggle="modal" data-target=".modal-edit-rubro"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a> *@
+                                                <div class="modal fade modal-edit-rubro" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="myModalLabel">AGREGAR ITEM</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">
+                                                                    <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                            </div>
+                                                        <div class="modal-body" style="font-size:small">
+                                                            <form class="form-label-left input_mask">
+                                                                <div class="form-group row" >
+                                                                  @*   <label class="col-form-label col-md-1 col-sm-1 ">Por</label>
+                                                                    <div class="col-md-2 col-sm-2 ">
+                                                                    <select class="form-control" style="font-size:small">
+                                                                        <option>Seleccionar</option>
+                                                                        <option>Compra</option>
+                                                                        <option>Servicio</option>
+                                                                        <option>Activo</option>
+                                                                        <option>Otros</option>
+                                                                    </select>
+                                                                    </div> *@
+                                                                <label class="col-form-label col-md-1 col-sm-1 " style="font-size:small">  Concepto:</label>
+                                                                <div class="col-md-5 col-sm-5 " >
+                                                                    <input type="text" class="form-control" placeholder="Descripcion" style="font-size:small">
+                                                                </div>
+                                                                <label class="col-form-label col-md-1 col-sm-1 " style="font-size:small">Monto </label>
+                                                                <div class="col-md-2 col-sm-2 ">
+                                                                    <input type="text" class="form-control" placeholder="Monto" style="font-size:small">
+                                                                </div>
+                                                                <label class="col-form-label col-md-1 col-sm-1 " style="font-size:small">Facturado</label>
+                                                                        <div class="col-md-2 col-sm-2 ">
+                                                                            <select class="form-control" style="font-size:small">
+                                                                                <option>Seleccionar</option>
+                                                                                <option>Facturado</option>
+                                                                                <option>Sin Factura</option>
+                                                                                <option>Retencion</option>
+                                                                                <option>Asume IVA</option>
+                                                                            </select>
+                                                                        </div>
+                                                                </div>
+                                                            <div class="form-group row" >
+                                                                        
+                                                                <label class="col-form-label col-md-1 col-sm-1 " style="font-size:small; text-align:right">Cuenta</label>
+                                                                <div class="col-md-2 col-sm-2 ">
+                                                                    <input type="text" class="form-control" placeholder="Còdigo" style="font-size:small">
+                                                                </div>
+                                                                <div class="col-md-2 col-sm-2 ">
+                                                                    <input type="text" class="form-control" placeholder="Nombre" style="font-size:small">
+                                                                </div>
+                                                                <div class="col-md-2 col-sm-2 ">
+                                                                    <input type="text" class="form-control" placeholder="DEBE" style="font-size:small">
+                                                                </div>
+                                                                <div class="col-md-2 col-sm-2 ">
+                                                                    <input type="text" class="form-control" placeholder="HABER" style="font-size:small">
+                                                                </div>
+                                                                                                                                
+                                            
+                                                            </div>
+                                                                <div class="form-group row">
+                                                                    <label class="col-form-label col-md-1 col-sm-1 " style="font-size:small; text-align:right">Cuenta</label>
+                                                                    <div class="col-md-2 col-sm-2 ">
+                                                                        <input type="text" class="form-control" placeholder="Còdigo" style="font-size:small">
+                                                                    </div>
+                                                                    <div class="col-md-2 col-sm-2 ">
+                                                                        <input type="text" class="form-control" placeholder="Nombre" style="font-size:small">
+                                                                    </div>
+                                                                    <div class="col-md-2 col-sm-2 ">
+                                                                        <input type="text" class="form-control" placeholder="DEBE" style="font-size:small">
+                                                                    </div>
+                                                                    <div class="col-md-2 col-sm-2 ">
+                                                                        <input type="text" class="form-control" placeholder="HABER"style="font-size:small">
+                                                                    </div>
+                                                                     <button type="button" class="btn btn-round btn-success col-md-2 col-sm-2" style="font-size:smaller"><i style="color:white; " class="glyphicon glyphicon-plus" title="Editar"></i>&nbsp;&nbsp;CUENTA</button>
+                                                                </div>    
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:small">CERRAR</button>
+                                                            <button type="button" class="btn btn-success" style="font-size:small">GUARDAR</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- FIN MODAL-->
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-1 col-sm-1 ">La suma: </label>
+                                            <div class="col-md-8 col-sm-8 ">
+                                                <input type="text" class="form-control" placeholder="Monto en literal" style="font-size:small">
+                                            </div>
+                                        </div>
+                                        
+                                     </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- form date pickers -->
+                            <div class="x_panel" style="">
+                                <div class="x_content">
+                                    
+                                <!--AQUI IR AGREGANDO LOS ITEMS y SUS ASIENTOS-->
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- form date pickers -->
+                            <div class="x_panel" style="">
+                                <div class="x_content">
+                                    
+                                    <form class="form-label-left input_mask">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-md-6 col-sm-6 "></label>
+                                            <button type="button" class="btn btn-round btn-success col-md-2 col-sm-2" style="font-size:small">GUARDAR</button>
+                                            <label class="col-form-label col-md-1 col-sm-1 "></label>
+                                            <button type="button" class="btn btn-round btn-primary col-md-2 col-sm-2" style="font-size:small">IMPRIMIR</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
