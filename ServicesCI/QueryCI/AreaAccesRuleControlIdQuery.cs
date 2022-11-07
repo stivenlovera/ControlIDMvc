@@ -59,7 +59,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 data.Add(new area_access_rulesCreateDto
                 {
-                    access_rulesid=areaReglaAcceso.ReglaAcceso.ControlId,
+                    access_rule_id=areaReglaAcceso.ReglaAcceso.ControlId,
                     area_id=areaReglaAcceso.Area.ControlId
                 });
             }
@@ -89,7 +89,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 values = new area_access_rulesCreateDto
                 {
                   area_id=areaReglaAcceso.ControlIdAreaId,
-                  access_rulesid=areaReglaAcceso.ControlidReglaAccesoId
+                  access_rule_id=areaReglaAcceso.ControlidReglaAccesoId
                 },
                 where = new
                 {
