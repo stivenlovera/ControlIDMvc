@@ -207,13 +207,13 @@ namespace ControlIDMvc.Controllers
         public async Task<ActionResult> Update(int id, ReglaAccesoCreateDto reglaAccesoCreateDto)
         {
             //await this._reglaAccesoQuery.ValidarNombre(reglaAccesoCreateDto.Nombre);
-            var update = new ReglaAcceso
+            var dataUpdate = new ReglaAcceso
             {
                 Id = id,
                 Nombre = reglaAccesoCreateDto.Nombre,
                 Descripcion = reglaAccesoCreateDto.Descripcion
             };
-            await this._reglaAccesoQuery.Update(update);
+            var update=await this._reglaAccesoQuery.Update(dataUpdate);
             //limpiando a persona reglas acceso
             var deletePerosna = await this._personaReglaAccesoQuery.DeleteAllReglaAccesoId(id);
             //limpiando a horario reglas acceso
