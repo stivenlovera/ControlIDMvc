@@ -68,13 +68,13 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 objeto = "access_rules",
                 values = new accessRulesCreateDto
                 {
-                    name = reglaAcceso.ControlIdName,
+                    name = reglaAcceso.Nombre,
                     priority = reglaAcceso.ControlIdType,
                     type = reglaAcceso.ControlIdType
                 },
                 where = new
                 {
-                    users = new
+                    access_rules = new
                     {
                         id = reglaAcceso.ControlId
                     }
