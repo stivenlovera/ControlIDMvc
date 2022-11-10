@@ -100,7 +100,7 @@ namespace ControlIDMvc.Controllers
                     ControlIdName = horarioCreateDto.Nombre,
                     Dias = dias
                 };
-                var horario=await this._horarioQuery.store(insert);
+                var horario = await this._horarioQuery.store(insert);
                 await this.RegistrarHora(horario, horario.Dias);
                 return RedirectToAction(nameof(Index));
             }
@@ -183,7 +183,8 @@ namespace ControlIDMvc.Controllers
                             message = "Horario eliminado correctamente"
                         }
                     );
-                }else
+                }
+                else
                 {
                     return Json(
                         new
@@ -485,7 +486,7 @@ namespace ControlIDMvc.Controllers
             if (apiResponse.status)
             {
                 horario.ControlId = apiResponse.ids[0];
-                var update=await this._horarioQuery.UpdateControlId(horario);
+                var update = await this._horarioQuery.UpdateControlId(horario);
                 //dependecia
                 await this.StoreDia(update, update.Dias);
                 return apiResponse.status;
@@ -528,7 +529,9 @@ namespace ControlIDMvc.Controllers
                 {
                     //crear horario
                     await this.UpdateHorario(horario);
-                    await this.DeleteHorario(horario,horario.Dias);
+                    await this.DeleteHorario(horario, horario.Dias);
+                    await this.StoreDia(horario, horario.Dias);
+
                 }
             }
             return true;
@@ -539,7 +542,7 @@ namespace ControlIDMvc.Controllers
             if (apiResponse.status)
             {
                 horario.ControlIdName = horario.Nombre;
-                var update=await this._horarioQuery.UpdateControlId(horario);
+                var update = await this._horarioQuery.UpdateControlId(horario);
                 //dependecia
                 await this.StoreDia(update, update.Dias);
                 return apiResponse.status;
@@ -567,13 +570,25 @@ namespace ControlIDMvc.Controllers
         }
         private async Task<bool> DeleteHorario(Horario horario, List<Dia> dias)
         {
-            var delete = await this._horarioQuery.Delete(horario.ControlId);
             var apiResponse = await this._horarioControlIdQuery.Delete(horario);
             if (apiResponse.status)
             {
                 return apiResponse.status;
             }
             return apiResponse.status;
+        }
+        private async Task<bool> DeleteHorarioDias(List<Dia> dias)
+        {
+            foreach (var dia in dias)
+            {
+                var apiResponse = await this._diasControlIdQuery.Delete(dia);
+                if (apiResponse.status)
+                {
+                    return apiResponse.status;
+                }
+                return apiResponse.status;
+            }
+            return true;
         }
     }
     public class ExtraerDia

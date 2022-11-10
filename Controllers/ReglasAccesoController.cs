@@ -229,7 +229,7 @@ namespace ControlIDMvc.Controllers
             {
                 insertPersonaReglaAcceso.Add(new PersonaReglasAcceso
                 {
-                    ReglaAccesoId = id,
+                    ReglaAccesoId = update.Id,
                     PersonaId = persona
                 });
             }
@@ -241,7 +241,7 @@ namespace ControlIDMvc.Controllers
                 insertHorarioReglaAcceso.Add(new HorarioReglaAcceso
                 {
                     HorarioId = horario,
-                    ReglasAccesoId = id
+                    ReglasAccesoId = update.Id,
                 });
 
             }
@@ -253,7 +253,7 @@ namespace ControlIDMvc.Controllers
             {
                 insertAreaReglaAcceso.Add(new AreaReglaAcceso
                 {
-                    ReglaAccesoId = id,
+                    ReglaAccesoId = update.Id,
                     AreaId = area
                 });
                 listaAreas.Add(area);
@@ -267,7 +267,7 @@ namespace ControlIDMvc.Controllers
             {
                 insertPortalReglaAcceso.Add(new PortalReglaAcceso
                 {
-                    ReglaAccesoId = id,
+                    ReglaAccesoId = update.Id,
                     PortalId = portal.Id
                 });
             }
@@ -347,7 +347,7 @@ namespace ControlIDMvc.Controllers
             }
             return true;
         }
-         /*------Delete data dispositivo------*/
+        /*------Delete data dispositivo------*/
         private async Task<bool> DeleteReglaAcceso(ReglaAcceso reglaAcceso)
         {
             /*buscar por dispositivos*/
