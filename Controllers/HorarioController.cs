@@ -146,7 +146,7 @@ namespace ControlIDMvc.Controllers
             }
             return View("~/Views/Horario/Editar.cshtml", edit);
         }
-        [HttpGet("update/{id:int}")]
+        [HttpPost("update/{id:int}")]
         public async Task<ActionResult> Update(int id, HorarioDto horarioDto)
         {
             if (ModelState.IsValid)
@@ -165,7 +165,7 @@ namespace ControlIDMvc.Controllers
             }
             return View("~/Views/Horario/Editar.cshtml", horarioDto);
         }
-        [HttpGet("delete/{id:int}")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<ActionResult> Delete(int id, HorarioDto horarioDto)
         {
             if (ModelState.IsValid)
@@ -329,8 +329,8 @@ namespace ControlIDMvc.Controllers
                     insert.Add(
                     new Dia
                     {
-                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * (Convert.ToInt32(dia.hora_fin.Minute * 60))==0 ? 60 :(Convert.ToInt32(dia.hora_fin.Minute * 60) )*60,
-                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * (Convert.ToInt32(dia.hora_inicio.Minute * 60))==0 ? 60 :(Convert.ToInt32(dia.hora_inicio.Minute * 60) )*60,
+                        ControlEnd = 0,
+                        ControlStart = 0,
                         ControlHol1 = 0,
                         ControlHol2 = 0,
                         ControlHol3 = 0,
