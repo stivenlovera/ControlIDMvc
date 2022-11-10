@@ -1,4 +1,4 @@
-var personas_disponibles = $("#datatable").DataTable({
+var datatable = $("#datatable").DataTable({
     // ServerSide Setups
     processing: true,
     serverSide: true,

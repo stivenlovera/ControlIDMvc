@@ -170,17 +170,29 @@ namespace ControlIDMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var deleteDias = await this._horarioQuery.DeleteDias(id);
-                var dias = this.UpdateDiaSistema(horarioDto);
-                var insert = new Horario
+                //verificar dias de uso
+                var horario = await this._horarioQuery.GetOne(id);
+                if (await this._horarioQuery.Delete(id))
                 {
-                    Nombre = horarioDto.Nombre,
-                    Descripcion = horarioDto.Descripcion,
-                    ControlIdName = horarioDto.Nombre,
-                    Dias = dias
-                };
-                var horario = await this._horarioQuery.update(insert);
-                return RedirectToAction(nameof(Index));
+                    var deleteDias = await this._horarioQuery.DeleteDias(id);
+                    await this.DeleteReglaAcceso(horario);
+                    return Json(
+                        new
+                        {
+                            status = "success",
+                            message = "Horario eliminado correctamente"
+                        }
+                    );
+                }else
+                {
+                    return Json(
+                        new
+                        {
+                            status = "error",
+                            message = "Ocurrio un error"
+                        }
+                    );
+                }
             }
             return View("~/Views/Horario/Editar.cshtml", horarioDto);
         }
@@ -514,7 +526,7 @@ namespace ControlIDMvc.Controllers
                 if (loginStatus)
                 {
                     //crear regla acceso
-                    await this.DeleteHorario(horario,horario.Dias);
+                    await this.DeleteHorario(horario, horario.Dias);
                 }
             }
             return true;

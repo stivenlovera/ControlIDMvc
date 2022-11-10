@@ -1,4 +1,4 @@
-console.log("ejecucion") 
+
 $(document).on("click", ".delete", function () {
     const id = $(this).data('id');
     Swal.fire({
@@ -27,7 +27,7 @@ function eliminar_evento(id) {
                     'Resgistro eliminado',
                     'success'
                 );
-                table.draw();
+                datatable.draw();
             } else {
                 Swal.fire({
                     icon: 'error',

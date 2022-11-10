@@ -260,7 +260,7 @@ namespace ControlIDMvc.Controllers
                 var area=await this._areaQuery.GetOne(id);
                 if (await this._areaQuery.Delete(id))
                 {
-                    await this._areaControlIdQuery.Delete(area);
+                    await this.DeleteArea(area);
                     return Json(new
                     {
                         status = "success",
@@ -387,6 +387,37 @@ namespace ControlIDMvc.Controllers
                 if (apiResponse.changes > 0)
                 {
                     await this._areaQuery.UpdateControlId(area);
+                }
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> DeleteArea(Area area)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear area
+                    await this.AreaDelete(area);
+                }
+            }
+            return true;
+        }
+        private async Task<bool> AreaDelete(Area area)
+        {
+            var apiResponse = await this._areaControlIdQuery.Delete(area);
+            if (apiResponse.status)
+            {
+                if (apiResponse.changes > 0)
+                {
+                    //await this._areaQuery.UpdateControlId(area);
                 }
                 return apiResponse.status;
             }
