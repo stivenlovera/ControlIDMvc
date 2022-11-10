@@ -107,9 +107,9 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Horario> store(Horario horario)
         {
-            this._dbContext.Horario.Update(horario);
+            this._dbContext.Horario.Add(horario);
             await _dbContext.SaveChangesAsync();
-            return horario;
+            return await this._dbContext.Horario.Include(x=>x.Dias).FirstOrDefaultAsync();
         }
         public async Task<Horario> update(Horario horario)
         {

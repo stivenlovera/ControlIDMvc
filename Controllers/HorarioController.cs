@@ -100,8 +100,8 @@ namespace ControlIDMvc.Controllers
                     ControlIdName = horarioCreateDto.Nombre,
                     Dias = dias
                 };
-                await this._horarioQuery.store(insert);
-                await this.RegistrarHora(insert, insert.Dias);
+                var horario=await this._horarioQuery.store(insert);
+                await this.RegistrarHora(horario, horario.Dias);
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Horario/Create.cshtml");
