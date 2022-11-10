@@ -39,7 +39,7 @@ namespace ControlIDMvc.Querys
             _dBContext.Entry(await _dBContext.Dia.FirstOrDefaultAsync(x => x.Id == dia.Id)).CurrentValues.SetValues(
                new 
                {
-                   Id = dia.Id
+                   Id = dia.Id,
                    ControlId = dia.ControlId,
                    ControlMon = dia.Mon,
                    ControlThu = dia.Thu,
