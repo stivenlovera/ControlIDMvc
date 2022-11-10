@@ -463,7 +463,7 @@ namespace ControlIDMvc.Controllers
                 {
                     //crear usuario
                     await this.StoreHorario(horario);
-                    await this.StoreDia(horario,dias);
+                    await this.StoreDia(horario, dias);
                 }
             }
             return true;
@@ -483,7 +483,7 @@ namespace ControlIDMvc.Controllers
                 return apiResponse.status;
             }
         }
-        private async Task<bool> StoreDia(Horario horario,List<Dia> dias)
+        private async Task<bool> StoreDia(Horario horario, List<Dia> dias)
         {
             var apiResponse = await this._diasControlIdQuery.CreateAll(dias);
             if (apiResponse.status)
@@ -502,6 +502,32 @@ namespace ControlIDMvc.Controllers
             {
                 return apiResponse.status;
             }
+        }
+        /*------Delete data dispositivo------*/
+        private async Task<bool> DeleteReglaAcceso(Horario horario)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear regla acceso
+                    await this.DeleteHorario(horario,horario.Dias);
+                }
+            }
+            return true;
+        }
+        private async Task<bool> DeleteHorario(Horario horario, List<Dia> dias)
+        {
+            var delete = await this._horarioQuery.Delete(horario.ControlId);
+            var apiResponse = await this._horarioControlIdQuery.Delete(horario);
+            if (apiResponse.status)
+            {
+                return apiResponse.status;
+            }
+            return apiResponse.status;
         }
     }
     public class ExtraerDia

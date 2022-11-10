@@ -213,7 +213,7 @@ namespace ControlIDMvc.Controllers
                 Nombre = reglaAccesoCreateDto.Nombre,
                 Descripcion = reglaAccesoCreateDto.Descripcion
             };
-            var update=await this._reglaAccesoQuery.Update(dataUpdate);
+            var update = await this._reglaAccesoQuery.Update(dataUpdate);
             //limpiando a persona reglas acceso
             var deletePerosna = await this._personaReglaAccesoQuery.DeleteAllReglaAccesoId(id);
             //limpiando a horario reglas acceso
@@ -286,9 +286,11 @@ namespace ControlIDMvc.Controllers
         [HttpDelete("delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
+            var reglaAcceso = await this._reglaAccesoQuery.GetOne(id);
             /*validate */
-            if (await this._reglaAccesoQuery.Delete(id))
+            if (await this._reglaAccesoQuery.Delete(reglaAcceso.Id))
             {
+                var delete = await this.DeleteReglaAcceso(reglaAcceso);
                 return Json(
                     new
                     {
@@ -345,6 +347,22 @@ namespace ControlIDMvc.Controllers
             }
             return true;
         }
+         /*------Delete data dispositivo------*/
+        private async Task<bool> DeleteReglaAcceso(ReglaAcceso reglaAcceso)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear regla acceso
+                    await this.DeletePortalsAccesoRules(reglaAcceso.ControlId);
+                }
+            }
+            return true;
+        }
         /*------Obtener data dispositivo------*/
         private async Task<bool> StoreAccesoRules(ReglaAcceso reglaAcceso)
         {
@@ -363,6 +381,7 @@ namespace ControlIDMvc.Controllers
                 return apiResponse.status;
             }
         }
+
         private async Task<bool> StorePersonaAccesoRules(List<PersonaReglasAcceso> personaReglasAccesos)
         {
             var apiResponse = await this._usuarioRulesAccessControlIdQuery.CreateAll(personaReglasAccesos);
