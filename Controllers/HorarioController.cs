@@ -497,7 +497,7 @@ namespace ControlIDMvc.Controllers
         }
         private async Task<bool> StoreDia(Horario horario, List<Dia> dias)
         {
-            var apiResponse = await this._diasControlIdQuery.CreateAll(dias);
+            var apiResponse = await this._diasControlIdQuery.CreateAll(horario);
             if (apiResponse.status)
             {
                 int index = 0;

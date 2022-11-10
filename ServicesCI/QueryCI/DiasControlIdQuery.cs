@@ -57,14 +57,14 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunCreate(body);
             return response;
         }
-        public async Task<ResponseDiasCreate> CreateAll(List<Dia> dias)
+        public async Task<ResponseDiasCreate> CreateAll(Horario horario)
         {
             var data = new List<time_spansCreateDto>();
-            foreach (var dia in dias)
+            foreach (var dia in horario.Dias)
             {
                 data.Add(new time_spansCreateDto
                 {
-                    time_zone_id = dia.ControlTimeZoneId,
+                    time_zone_id = horario.ControlId,
                     start = dia.ControlStart,
                     end = dia.ControlEnd,
                     sun = dia.Sun,
