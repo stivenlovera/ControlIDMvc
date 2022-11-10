@@ -255,7 +255,7 @@ namespace ControlIDMvc.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var verificar = await this._areaQuery.VerificarDelete(id);
-            if (verificar)
+            if (!verificar)
             {
                 var area=await this._areaQuery.GetOne(id);
                 if (await this._areaQuery.Delete(id))

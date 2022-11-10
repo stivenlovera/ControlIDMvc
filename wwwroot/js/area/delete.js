@@ -2,7 +2,7 @@ console.log("ejecucion")
 $(document).on("click", ".delete", function () {
     const id = $(this).data('id');
     Swal.fire({
-        title: 'Esta seguro de eliminar este horario?',
+        title: 'Esta seguro de eliminar esta area?',
         text: "Este procesos es irreversible!",
         icon: 'warning',
         showCancelButton: true,
@@ -18,7 +18,7 @@ $(document).on("click", ".delete", function () {
 function eliminar_evento(id) {
     $.ajax({
         type: "DELETE",
-        url: `/horario/delete/${id}`,
+        url: `/area/delete/${id}`,
         dataType: "json",
         success: function (response) {
             if (response.status == 'success') {
