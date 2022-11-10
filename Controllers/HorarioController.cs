@@ -515,6 +515,40 @@ namespace ControlIDMvc.Controllers
                 return apiResponse.status;
             }
         }
+
+        /*------Obtener data dispositivo------*/
+        private async Task<bool> ModificarHora(Horario horario, List<Dia> dias)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear horario
+                    await this.UpdateHorario(horario);
+                    await this.DeleteHorario(horario,horario.Dias);
+                }
+            }
+            return true;
+        }
+        private async Task<bool> UpdateHorario(Horario horario)
+        {
+            var apiResponse = await this._horarioControlIdQuery.Update(horario);
+            if (apiResponse.status)
+            {
+                horario.ControlIdName = horario.Nombre;
+                var update=await this._horarioQuery.UpdateControlId(horario);
+                //dependecia
+                await this.StoreDia(update, update.Dias);
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
         /*------Delete data dispositivo------*/
         private async Task<bool> DeleteReglaAcceso(Horario horario)
         {

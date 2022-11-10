@@ -135,7 +135,9 @@ namespace ControlIDMvc.Querys
                 Dirrecion = persona.Dirrecion,
                 Observaciones = persona.Observaciones,
                 ControlIdName = persona.Nombre,
-                ControlIdPassword = persona.ControlIdPassword
+                ControlIdPassword = persona.ControlIdPassword,
+                ControlIdBegin_time = persona.ControlIdBegin_time,
+                ControlIdEnd_time = persona.ControlIdEnd_time
             });
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Persona.Where(p => p.Id == persona.Id).Include(x => x.card).FirstAsync();

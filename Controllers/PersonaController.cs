@@ -126,7 +126,7 @@ public class PersonaController : Controller
                         TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
                         {
                             Area = Convert.ToInt32(area),
-                            Codigo = Convert.ToInt32(personaCreateDto.Area[index]),
+                            Codigo = Convert.ToInt32(personaCreateDto.Codigo[index]),
                             ControlId = 0,
                             PersonaId = persona.Id,
                             ControlIdsecret = "",
@@ -210,6 +210,9 @@ public class PersonaController : Controller
                     Dirrecion = personaDto.Dirrecion,
                     Fecha_nac = personaDto.Fecha_nac,
                     ControlIdPassword = personaDto.ControlIdPassword,
+                    
+                    ControlIdBegin_time = this.DateTimeToUnix(personaDto.ControlIdBegin_time),
+                    ControlIdEnd_time = this.DateTimeToUnix(personaDto.ControlIdEnd_time),
                 };
                 var persona = await this._personaQuery.UpdateOne(personaUpdate);
 
@@ -418,7 +421,7 @@ public class PersonaController : Controller
                     card.ControlId = createCard.ids[0];
                     card.ControlIdsecret = "";
                     card.ControlIdUserId = persona.ControlId;
-                    card.ControlIdValue = this.ConvertCard(card.area.ToString(),card.codigo.ToString());
+                    card.ControlIdValue = this.ConvertCard(card.area.ToString(), card.codigo.ToString());
                     var updateCard = await this._tarjetaQuery.UpdateOneControlId(card);
                 }
             }
@@ -475,7 +478,7 @@ public class PersonaController : Controller
                     card.ControlId = update.ids[0];
                     card.ControlIdsecret = "";
                     card.ControlIdUserId = persona.ControlId;
-                    card.ControlIdValue = this.ConvertCard(card.area.ToString(),card.codigo.ToString());
+                    card.ControlIdValue = this.ConvertCard(card.area.ToString(), card.codigo.ToString());
                     var updateCard = await this._tarjetaQuery.UpdateOneControlId(card);
                 }
             }
