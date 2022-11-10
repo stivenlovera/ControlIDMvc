@@ -473,9 +473,8 @@ namespace ControlIDMvc.Controllers
                 var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
                 if (loginStatus)
                 {
-                    //crear usuario
+                    //crear horario
                     await this.StoreHorario(horario);
-                    await this.StoreDia(horario, dias);
                 }
             }
             return true;
@@ -486,8 +485,9 @@ namespace ControlIDMvc.Controllers
             if (apiResponse.status)
             {
                 horario.ControlId = apiResponse.ids[0];
-                await this._horarioQuery.UpdateControlId(horario);
-
+                var update=await this._horarioQuery.UpdateControlId(horario);
+                //dependecia
+                await this.StoreDia(update, update.Dias);
                 return apiResponse.status;
             }
             else

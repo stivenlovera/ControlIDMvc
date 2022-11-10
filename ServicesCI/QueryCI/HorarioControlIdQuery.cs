@@ -39,7 +39,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             List<time_zonesCreateDto> horarios = new List<time_zonesCreateDto>();
             horarios.Add(new time_zonesCreateDto
             {
-                name = horario.ControlIdName
+                name = horario.Nombre
             });
             BodyCreateObject body = new BodyCreateObject()
             {
