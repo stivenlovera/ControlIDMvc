@@ -125,9 +125,10 @@ namespace ControlIDMvc.Querys
         public async Task<Horario> UpdateControlId(Horario horario)
         {
             _dbContext.Entry(await _dbContext.Horario.FirstOrDefaultAsync(x => x.Id == horario.Id)).CurrentValues.SetValues(new
-            {
+            { 
                 Id = horario.Id,
-                ControlIdName = horario.Nombre
+                ControlIdName = horario.Nombre,
+                ControlId = horario.ControlId
             });
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Horario.Where(p => p.Id == horario.Id).Include(x => x.Dias).FirstAsync();
