@@ -35,8 +35,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         {
             var usuario = new List<usersCreateDto>(){
                 new usersCreateDto{
-                    begin_time=2,
-                    end_time=2,
+                    begin_time=personaCreateDto.ControlIdBegin_time,
+                    end_time=personaCreateDto.ControlIdEnd_time,
                     password=personaCreateDto.ControlIdPassword,
                     name=personaCreateDto.Nombre,
                     registration=personaCreateDto.ControlIdRegistration,
