@@ -17,6 +17,6 @@ namespace ControlIDMvc.Entities
         public List<PortalReglaAcceso> PortalReglaAccesos { get; set; }
         public List<AreaReglaAcceso> AreaSReglaAccesos { get; set; }
         public List<PersonaReglasAcceso> PersonaReglasAcceso { get; set; }
-         public List<HorarioReglaAcceso> HorarioReglasAcceso { get; set; }
+        public List<HorarioReglaAcceso> HorarioReglasAcceso { get; set; }
     }
 }

@@ -485,8 +485,7 @@ namespace ControlIDMvc.Controllers
             var apiResponse = await this._accessRulesControlIdQuery.Update(reglaAcceso);
             if (apiResponse.status)
             {
-                reglaAcceso.ControlId = apiResponse.changes;
-                reglaAcceso.ControlIdName = reglaAcceso.ControlIdName;
+                reglaAcceso.ControlIdName = reglaAcceso.Nombre;
                 await this._reglaAccesoQuery.UpdateControlId(reglaAcceso);
 
                 return apiResponse.status;
