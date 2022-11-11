@@ -160,10 +160,13 @@ public class PersonaController : Controller
     {
         bool bandera = false;
         int index = 0;
-        foreach (var area in personaCreateDto.Area)
+        if (personaCreateDto.Area!=null)
+        {
+             foreach (var area in personaCreateDto.Area)
         {
             bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreateDto.Codigo[index]));
             index++;
+        }
         }
         return bandera;
     }
