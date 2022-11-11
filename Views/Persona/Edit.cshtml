@@ -324,18 +324,21 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                   @foreach (var tarjeta in tarjetas)
+                                                   @if (tarjetas!=null)
                                                    {
-                                                    <tr>
-                                                        <td>@tarjeta.area,@tarjeta.codigo</td>
-                                                        <td>
-                                                            <input name="area" type="text" value="@tarjeta.area" hidden>
-                                                            <input name="codigo" type="text" value="@tarjeta.area" hidden>
-                                                            <button class="btn btn-danger btn-xs remove_tarjeta"
-                                                                role="button"><i class="fa fa fa-trash"></i></button>
-                                                        </td>
-                                                    </tr>
-                                                     
+                                                        @foreach (var tarjeta in tarjetas)
+                                                        {
+                                                            <tr>
+                                                                <td>@tarjeta.area,@tarjeta.codigo</td>
+                                                                <td>
+                                                                    <input name="area" type="text" value="@tarjeta.area" hidden>
+                                                                    <input name="codigo" type="text" value="@tarjeta.area" hidden>
+                                                                    <button class="btn btn-danger btn-xs remove_tarjeta"
+                                                                        role="button"><i class="fa fa fa-trash"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                        }
                                                    }
                                                 </tbody>
                                             </table>
