@@ -147,7 +147,7 @@ public class PersonaController : Controller
             }
             else
             {
-                ViewData["Error"] = "CI ya fue registrado";
+                ViewData["Error"] = "TAR";
                 return View("~/Views/Persona/Create.cshtml", personaCreateDto);
             }
         }
@@ -160,24 +160,27 @@ public class PersonaController : Controller
     {
         bool bandera = false;
         int index = 0;
-        if (personaCreateDto.Area!=null)
+        if (personaCreateDto.Area != null)
         {
-             foreach (var area in personaCreateDto.Area)
-        {
-            bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreateDto.Codigo[index]));
-            index++;
-        }
+            foreach (var area in personaCreateDto.Area)
+            {
+                bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreateDto.Codigo[index]));
+                index++;
+            }
         }
         return bandera;
     }
-     private async Task<bool> validarCardsRepetidoEdit(PersonaDto personaCreate)
+    private async Task<bool> validarCardsRepetidoEdit(PersonaDto personaCreate)
     {
         bool bandera = false;
         int index = 0;
-        foreach (var area in personaCreate.Area)
+        if (personaCreate.Area != null)
         {
-            bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreate.Codigo[index]));
-            index++;
+            foreach (var area in personaCreate.Area)
+            {
+                bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreate.Codigo[index]));
+                index++;
+            }
         }
         return bandera;
     }
