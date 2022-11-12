@@ -229,9 +229,9 @@ public class PersonaController : Controller
     {
         if (ModelState.IsValid)
         {
-            if (!await this._personaQuery.ValidateExistExceptoId(personaDto.Ci, id))
+            if (await this._personaQuery.ValidateExistExceptoId(personaDto.Ci, id))
             {
-                if (await this.validarCardsRepetidoEdit(personaDto))
+                if (!await this.validarCardsRepetidoEdit(personaDto))
                 {
                     var personaUpdate = new Persona
                     {
