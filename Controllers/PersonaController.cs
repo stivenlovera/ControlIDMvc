@@ -160,24 +160,29 @@ public class PersonaController : Controller
     {
         bool bandera = false;
         int index = 0;
+        if (personaCreateDto.Area != null)
+        {
             foreach (var area in personaCreateDto.Area)
             {
                 bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreateDto.Codigo[index]));
                 index++;
             }
+        }
         return bandera;
     }
     private async Task<bool> validarCardsRepetidoEdit(PersonaDto personaCreate)
     {
         bool bandera = false;
         int index = 0;
-
+        if (personaCreate.Area != null)
+        {
             foreach (var area in personaCreate.Area)
             {
                 bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreate.Codigo[index]));
                 index++;
             }
-       
+        }
+
         return bandera;
     }
     [HttpPost("data-table")]
