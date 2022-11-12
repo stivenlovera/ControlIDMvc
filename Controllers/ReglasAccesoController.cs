@@ -342,7 +342,7 @@ namespace ControlIDMvc.Controllers
                     await this.StorePersonaAccesoRules(personaReglasAcceso);
                     await this.StoreAreaAccesoRules(areaReglaAccesos);
                     await this.StoreHorarioAccesoRules(horarioReglaAccesos);
-                    await this.StorePortalsAccesoRules(portalReglaAccesos);
+                    //await this.StorePortalsAccesoRules(portalReglaAccesos);
                 }
             }
             return true;
@@ -470,7 +470,7 @@ namespace ControlIDMvc.Controllers
                     await this.DeletePersonaAccesoRules(reglaAcceso.ControlId);
                     await this.DeleteAreaAccesoRules(reglaAcceso.ControlId);
                     await this.DeleteHorarioAccesoRules(reglaAcceso.ControlId);
-                    await this.DeletePortalsAccesoRules(reglaAcceso.ControlId);
+                    //await this.DeletePortalsAccesoRules(reglaAcceso.ControlId);
                     //recrear
                     await this.StorePersonaAccesoRules(personaReglasAcceso);
                     await this.StoreAreaAccesoRules(areaReglaAccesos);
