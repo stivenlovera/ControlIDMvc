@@ -89,7 +89,7 @@ public class PersonaController : Controller
             if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
             {
                 //save img
-                if (await this.validarCardsRepetido(personaCreateDto))
+                if (!await this.validarCardsRepetido(personaCreateDto))
                 {
                     if (personaCreateDto.perfil != null)
                     {
@@ -228,7 +228,7 @@ public class PersonaController : Controller
     {
         if (ModelState.IsValid)
         {
-            if (await this._personaQuery.ValidateExistExceptoId(personaDto.Ci, id))
+            if (!await this._personaQuery.ValidateExistExceptoId(personaDto.Ci, id))
             {
                 if (await this.validarCardsRepetidoEdit(personaDto))
                 {
