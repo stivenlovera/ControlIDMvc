@@ -86,8 +86,8 @@ namespace ControlIDMvc.Querys
                     Nombre = portal.Nombre,
                     AreaFromId = portal.AreaFromId,
                     AreaToId = portal.AreaToId,
-                    AreaTo = await this._dBContext.Area.Where(a => a.Id == portal.Id).FirstOrDefaultAsync(),
-                    AreaFrom = await this._dBContext.Area.Where(a => a.Id == portal.Id).FirstOrDefaultAsync()
+                    AreaTo = await this._dBContext.Area.Where(a => a.Id == portal.AreaToId).FirstOrDefaultAsync(),
+                    AreaFrom = await this._dBContext.Area.Where(a => a.Id == portal.AreaFromId).FirstOrDefaultAsync()
                 });
             }
             return resultado;
