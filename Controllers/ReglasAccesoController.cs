@@ -475,7 +475,7 @@ namespace ControlIDMvc.Controllers
                     await this.StorePersonaAccesoRules(personaReglasAcceso);
                     await this.StoreAreaAccesoRules(areaReglaAccesos);
                     await this.StoreHorarioAccesoRules(horarioReglaAccesos);
-                    await this.StorePortalsAccesoRules(portalReglaAccesos);
+                    //await this.StorePortalsAccesoRules(portalReglaAccesos);
                 }
             }
             return true;
