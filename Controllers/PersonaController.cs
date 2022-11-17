@@ -169,7 +169,7 @@ public class PersonaController : Controller
     {
         string folder = "images/perfiles/";
         string name = Guid.NewGuid().ToString() + imagen.FileName;
-        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder + name);
+        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath+folder, name);
         await imagen.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
 
         return name;
