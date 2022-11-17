@@ -167,9 +167,9 @@ public class PersonaController : Controller
     //subir image 
     private async Task<string> UploadFoto(IFormFile imagen)
     {
-        string folder = "images/perfiles/";
+        string folder = "/images/perfiles/";
         string name = Guid.NewGuid().ToString() + imagen.FileName;
-        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath+folder, name);
+        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, name);
         await imagen.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
 
         return name;
@@ -436,6 +436,7 @@ public class PersonaController : Controller
         /*valido si es el login fue ok*/
         this._usuarioControlIdQuery.Params(port, ip, user, password, login.data);
         this._cardControlIdQuery.Params(port, ip, user, password, login.data);
+        this._registroRostroControlIdQuery.Params(port, ip, user, password, login.data);
         return login.estado;
     }
     /*------USUARIO------*/

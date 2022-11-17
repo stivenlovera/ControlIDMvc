@@ -41,7 +41,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 accesosRules.Add(new accessRulesCreateDto{
                     name=reglaAcceso.Nombre,
                     priority=0,
-                    type=0
+                    type=1
                 });
             }
             BodyCreateObject body = new BodyCreateObject()
