@@ -142,6 +142,17 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Persona.Where(p => p.Id == persona.Id).Include(x => x.card).FirstAsync();
         }
+        public async Task<Persona> UpdatefechaValidez(Persona persona)
+        {
+            _dbContext.Entry(await _dbContext.Persona.FirstOrDefaultAsync(x => x.Id == persona.Id)).CurrentValues.SetValues(new
+            {
+                Id = persona.Id,
+                ControlIdBegin_time = persona.ControlIdBegin_time,
+                ControlIdEnd_time = persona.ControlIdEnd_time
+            });
+            await _dbContext.SaveChangesAsync();
+            return await _dbContext.Persona.Where(p => p.Id == persona.Id).Include(x => x.card).FirstAsync();
+        }
         public async Task<List<Persona>> GetAllLikeCi(int value)
         {
             return await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).ToListAsync();

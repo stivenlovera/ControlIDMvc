@@ -15,5 +15,10 @@ namespace ControlIDMvc.ServicesCI
         public string ApiUrlDelete = "destroy_objects.fcgi";
         /*sistema*/
         public string ApiUrlGetInfoSistema = "system_information.fcgi";
+
+        /*detector de rostro*/
+        public string apiUrlShowUserImagen ="user_get_image_list.fcgi";
+        public string apiUrlCreateUserImagen ="user_set_image_list.fcgi";
+        public string apiUrlDeleteUserImagen ="user_destroy_image.fcgi";
     }
 }

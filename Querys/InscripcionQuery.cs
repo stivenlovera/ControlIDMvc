@@ -37,7 +37,7 @@ namespace ControlIDMvc.Querys
                         {
                             Id = i.Id,
                             PaqueteNombre = i.Paquete.Nombre,
-                            numeroRecibo=i.NumeroRecibo,
+                            numeroRecibo = i.NumeroRecibo,
                             PersonaNombre = i.Persona.Nombre,
                             PersonaCi = i.Persona.Ci,
                             PaqueteId = i.PaqueteId,
@@ -57,9 +57,9 @@ namespace ControlIDMvc.Querys
             }
             // get total count of records after search
             filterRecord = data.Count();
-            System.Console.WriteLine(" filtro "+sortColumn+" "+sortColumnDirection);
+            System.Console.WriteLine(" filtro " + sortColumn + " " + sortColumnDirection);
             //filtro columna
-            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection)) data = data.OrderBy(x=>sortColumn).ThenBy(x=>sortColumnDirection);
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection)) data = data.OrderBy(x => sortColumn).ThenBy(x => sortColumnDirection);
             //pagination
             var empList = data.Skip(skip).Take(pageSize).ToList();
             return new
@@ -86,13 +86,19 @@ namespace ControlIDMvc.Querys
             return inscripcion;
         }
 
-        public async Task<InscripcionDto> Update(InscripcionCreateDto inscripcionCreateDto, int id)
+        public async Task<Inscripcion> Update(Inscripcion inscripcion, int id)
         {
-            var inscripcion = _mapper.Map<Inscripcion>(inscripcionCreateDto);
-            inscripcion.Id = id;
-            _dbContext.Update(inscripcion);
+            _dbContext.Entry(await _dbContext.Inscripcion.FirstOrDefaultAsync(x => x.Id == id)).CurrentValues.SetValues(new
+            {
+                Id = inscripcion.Id,
+                FechaInicio = inscripcion.FechaInicio,
+                FechaFin = inscripcion.FechaFin,
+                Costo = inscripcion.Costo,
+                PersonaId = inscripcion.PersonaId,
+                PaqueteId = inscripcion.PaqueteId
+            });
             await _dbContext.SaveChangesAsync();
-            return _mapper.Map<InscripcionDto>(inscripcion);
+            return await _dbContext.Inscripcion.Where(p => p.Id == id).FirstAsync();
         }
         public async Task<bool> Delete(int id)
         {

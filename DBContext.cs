@@ -33,6 +33,7 @@ namespace ControlIDMvc
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Caja> Caja { get; set; }
         public DbSet<Egreso> Egreso { get; set; }
+        public DbSet<ImagenPerfil> ImagenPerfil { get; set; }
         
     }
 }

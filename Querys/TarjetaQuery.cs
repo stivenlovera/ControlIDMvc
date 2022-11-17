@@ -34,6 +34,11 @@ namespace ControlIDMvc.Querys
             var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo).AnyAsync();
             return existCard;
         }
+        public async Task<bool> VerityCardEditar(int area, int codigo, int personaId)
+        {
+            var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo && tarjeta.PersonaId != personaId).AnyAsync();
+            return existCard;
+        }
         public async Task<Tarjeta> UpdateOne(Tarjeta tarjeta)
         {
             _dbContext.Update(tarjeta);
@@ -45,9 +50,9 @@ namespace ControlIDMvc.Querys
             _dbContext.Entry(await _dbContext.Tarjeta.FirstOrDefaultAsync(x => x.Id == tarjeta.Id)).CurrentValues.SetValues(new
             {
                 ControlId = tarjeta.ControlId,
-                ControlIdsecret=tarjeta.ControlIdsecret,
-                ControlIdValue=tarjeta.ControlIdValue,
-                ControlIdUserId=tarjeta.ControlIdUserId
+                ControlIdsecret = tarjeta.ControlIdsecret,
+                ControlIdValue = tarjeta.ControlIdValue,
+                ControlIdUserId = tarjeta.ControlIdUserId
             });
             await _dbContext.SaveChangesAsync();
             return tarjeta;

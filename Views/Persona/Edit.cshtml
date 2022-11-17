@@ -25,6 +25,7 @@
                     <div class="x_title">
                         <h2>Datos de la Persona<small></small></h2>
                         <div class="clearfix"></div>
+                        <h5><span class="text-danger">@ViewData["ErrorCard"]</span></h5>
                     </div>
                     <div class="x_content">
 
@@ -332,12 +333,11 @@
                                                                 <td>@tarjeta.area,@tarjeta.codigo</td>
                                                                 <td>
                                                                     <input name="area" type="text" value="@tarjeta.area" hidden>
-                                                                    <input name="codigo" type="text" value="@tarjeta.area" hidden>
+                                                                    <input name="codigo" type="text" value="@tarjeta.codigo" hidden>
                                                                     <button class="btn btn-danger btn-xs remove_tarjeta"
                                                                         role="button"><i class="fa fa fa-trash"></i></button>
                                                                 </td>
                                                             </tr>
-                                                            
                                                         }
                                                    }
                                                 </tbody>

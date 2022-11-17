@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221106031804_init")]
+    [Migration("20221117005509_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -471,6 +471,18 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Caption")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("ControlIdImage")
+                        .HasColumnType("longtext");
+
+                    b.Property<long>("ControlIdTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ControlUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -480,8 +492,11 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("base64")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1026,7 +1041,7 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.PersonaReglasAcceso", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
-                        .WithMany()
+                        .WithMany("PersonaReglasAccesoId")
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1151,6 +1166,8 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.Persona", b =>
                 {
                     b.Navigation("Inscripciones");
+
+                    b.Navigation("PersonaReglasAccesoId");
 
                     b.Navigation("Usuario");
 

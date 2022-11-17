@@ -33,6 +33,6 @@ namespace ControlIDMvc.Dtos.Persona
         [JsonProperty(PropertyName = "cards")]
         public List<string> Area { get; set; }
         public List<string> Codigo { get; set; }
-        public  IFormFile perfil { get; set; }
+        public IFormFile perfil { get; set; }
     }
 }
