@@ -116,6 +116,7 @@ namespace ControlIDMvc.Controllers
                 return NotFound();
             }
             var edit = new HorarioDto();
+            edit.Id = horario.Id;
             edit.Nombre = horario.Nombre;
             edit.Descripcion = horario.Descripcion;
             foreach (var dia in horario.Dias)
@@ -155,6 +156,7 @@ namespace ControlIDMvc.Controllers
                 var dias = this.UpdateDiaSistema(horarioDto);
                 var insert = new Horario
                 {
+                    Id = id,
                     Nombre = horarioDto.Nombre,
                     Descripcion = horarioDto.Descripcion,
                     ControlIdName = horarioDto.Nombre,
@@ -176,6 +178,7 @@ namespace ControlIDMvc.Controllers
                 {
                     var deleteDias = await this._horarioQuery.DeleteDias(id);
                     await this.DeleteReglaAcceso(horario);
+                    await this._horarioQuery.Delete(id);
                     return Json(
                         new
                         {
@@ -373,6 +376,7 @@ namespace ControlIDMvc.Controllers
                     insert.Add(
                     new Dia
                     {
+                        HorarioId=horarioDto.Id,
                         ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * Convert.ToInt32(dia.hora_fin.Minute * 60),
                         ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * Convert.ToInt32(dia.hora_inicio.Minute * 60),
                         ControlHol1 = 0,

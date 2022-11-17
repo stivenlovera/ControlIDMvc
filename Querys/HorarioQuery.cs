@@ -119,8 +119,10 @@ namespace ControlIDMvc.Querys
                 Nombre = horario.Nombre,
                 Descripcion = horario.Nombre
             });
+            //adicionar dia forzar
+            await this._dbContext.Dia.AddRangeAsync(horario.Dias);
             await _dbContext.SaveChangesAsync();
-            return await _dbContext.Horario.Where(p => p.Id == horario.Id).Include(x => x.Dias).FirstAsync();
+            return await _dbContext.Horario.Where(h => h.Id == horario.Id).Include(x => x.Dias).FirstAsync();
         }
         public async Task<Horario> UpdateControlId(Horario horario)
         {
@@ -172,10 +174,10 @@ namespace ControlIDMvc.Querys
         }
         public async Task<bool> Delete(int horario_id)
         {
-            var dia = await _dbContext.Horario.Where(x => x.Id == horario_id).FirstOrDefaultAsync();
-            if (dia != null)
+            var horario = await _dbContext.Horario.Where(x => x.Id == horario_id).FirstOrDefaultAsync();
+            if (horario != null)
             {
-                _dbContext.Dia.RemoveRange(dia.Dias);
+                _dbContext.Horario.RemoveRange(horario);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
