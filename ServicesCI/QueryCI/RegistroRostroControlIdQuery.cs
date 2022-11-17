@@ -57,7 +57,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 responseCreateRegsitroRostroDto responseUser = JsonConvert.DeserializeObject<responseCreateRegsitroRostroDto>(apiResponse.data);
                 responseCreate.status = apiResponse.estado;
-                responseCreate.resultado = responseUser.results;
+                responseCreate.responseCreateRegsitroRostroDto.results = responseUser.results;
             }
             else
             {
@@ -103,7 +103,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
     public class ResponseRegistroFotoCreate
     {
         public bool status { get; set; }
-        public resultado resultado { get; set; }
+        public responseCreateRegsitroRostroDto responseCreateRegsitroRostroDto { get; set; }
     }
     public class ResponseRegistroFotoShow
     {
