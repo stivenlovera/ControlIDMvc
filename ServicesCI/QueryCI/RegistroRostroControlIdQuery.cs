@@ -57,7 +57,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 responseCreateRegsitroRostroDto responseUser = JsonConvert.DeserializeObject<responseCreateRegsitroRostroDto>(apiResponse.data);
                 responseCreate.status = apiResponse.estado;
-                responseCreate.responseCreateRegsitroRostroDto.results = responseUser.results;
+                responseCreate.responseCreateRegsitroRostroDto = responseUser;
             }
             else
             {
