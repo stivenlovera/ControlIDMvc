@@ -18,7 +18,7 @@ namespace ControlIDMvc.ServicesCI.Dtos.registroRostroDto
     }
     public class responseCreateRegsitroRostroDto
     {
-        public resultado results { get; set; }
+        public List<resultado> results { get; set; }
     }
     public class resultado
     {
