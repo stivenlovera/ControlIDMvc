@@ -560,7 +560,9 @@ public class PersonaController : Controller
     private async Task<bool> CardUpdateControlId(Persona persona)
     {
         List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
-
+        //elimina base de tarjetas anteriores para recrear
+        await this._cardControlIdQuery.DeleteAllUserId(persona.card);
+        
         foreach (var card in persona.card)
         {
             if (card.ControlId != 0)
