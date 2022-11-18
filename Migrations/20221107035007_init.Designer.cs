@@ -3,6 +3,7 @@ using System;
 using ControlIDMvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20221107035007_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -469,18 +471,6 @@ namespace ControlIDMvc.Migrations
                     b.Property<string>("Caption")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ControlIdImage")
-                        .HasColumnType("longtext");
-
-                    b.Property<long>("ControlIdTimestamp")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ControlUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -490,11 +480,8 @@ namespace ControlIDMvc.Migrations
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
 
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("base64")
-                        .HasColumnType("longtext");
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1165,7 +1152,7 @@ namespace ControlIDMvc.Migrations
                         .IsRequired();
 
                     b.HasOne("ControlIDMvc.Entities.ReglaAcceso", "ReglasAcceso")
-                        .WithMany("HorarioReglasAcceso")
+                        .WithMany()
                         .HasForeignKey("ReglasAccesoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1219,7 +1206,7 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.PersonaReglasAcceso", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
-                        .WithMany("PersonaReglasAccesoId")
+                        .WithMany()
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1389,8 +1376,6 @@ namespace ControlIDMvc.Migrations
                 {
                     b.Navigation("Inscripciones");
 
-                    b.Navigation("PersonaReglasAccesoId");
-
                     b.Navigation("Usuario");
 
                     b.Navigation("card");
@@ -1430,9 +1415,6 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.ReglaAcceso", b =>
                 {
                     b.Navigation("AreaSReglaAccesos");
-
-                    b.Navigation("HorarioReglasAcceso");
-
 
                     b.Navigation("PersonaReglasAcceso");
 
