@@ -94,7 +94,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 objeto = "time_zones",
                 values = new time_zonesCreateDto
                 {
-                    name = horario.ControlIdName
+                    name = horario.Nombre
                 },
                 where = new
                 {
