@@ -379,8 +379,8 @@ namespace ControlIDMvc.Controllers
                     new Dia
                     {
                         HorarioId=horarioDto.Id,
-                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * Convert.ToInt32(dia.hora_fin.Minute * 60),
-                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * Convert.ToInt32(dia.hora_inicio.Minute * 60),
+                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * ((Convert.ToInt32(dia.hora_fin.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.hora_fin.Minute * 60))) * 60,
+                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * ((Convert.ToInt32(dia.hora_inicio.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.hora_inicio.Minute * 60))) * 60,
                         ControlHol1 = 0,
                         ControlHol2 = 0,
                         ControlHol3 = 0,
