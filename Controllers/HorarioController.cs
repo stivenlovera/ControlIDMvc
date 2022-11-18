@@ -587,6 +587,7 @@ namespace ControlIDMvc.Controllers
         {
             foreach (var dia in dias)
             {
+                //delete all  horario controlId 
                 var apiResponse = await this._diasControlIdQuery.Delete(dia);
                 if (apiResponse.status)
                 {
