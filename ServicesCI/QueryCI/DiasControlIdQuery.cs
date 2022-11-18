@@ -128,7 +128,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunUpdate(body);
             return response;
         }
-        public async Task<ResponseDiasDelete> Delete(Dia dia)
+        public async Task<ResponseDiasDelete> Delete(Horario horario,Dia dia)
         {
             BodyDeleteObject body = new BodyDeleteObject()
             {
@@ -137,7 +137,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     time_spans = new
                     {
-                        time_zone_id = dia.ControlTimeZoneId
+                        time_zone_id = horario.ControlId
                     }
                 }
             };

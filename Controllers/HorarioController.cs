@@ -535,7 +535,7 @@ namespace ControlIDMvc.Controllers
                 {
                     //crear horario
                     await this.UpdateHorario(horario);
-                    await this.DeleteHorarioDias(horario.Dias);
+                    await this.DeleteHorarioDias(horario,horario.Dias);
                     await this.StoreDia(horario, horario.Dias);
 
                 }
@@ -583,12 +583,12 @@ namespace ControlIDMvc.Controllers
             }
             return apiResponse.status;
         }
-        private async Task<bool> DeleteHorarioDias(List<Dia> dias)
+        private async Task<bool> DeleteHorarioDias(Horario horario, List<Dia> dias)
         {
             foreach (var dia in dias)
             {
                 //delete all  horario controlId 
-                var apiResponse = await this._diasControlIdQuery.Delete(dia);
+                var apiResponse = await this._diasControlIdQuery.Delete(horario,dia);
                 if (apiResponse.status)
                 {
                     return apiResponse.status;
