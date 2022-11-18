@@ -137,7 +137,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     time_spans = new
                     {
-                        value = dia.ControlId
+                        id = dia.ControlId
                     }
                 }
             };
