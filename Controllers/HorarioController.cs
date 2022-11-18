@@ -154,7 +154,7 @@ namespace ControlIDMvc.Controllers
             {
                 var deleteDias = await this._horarioQuery.DeleteDias(id);
                 var dias = this.UpdateDiaSistema(horarioDto);
-                var insert = new Horario
+                var update = new Horario
                 {
                     Id = id,
                     Nombre = horarioDto.Nombre,
@@ -162,7 +162,9 @@ namespace ControlIDMvc.Controllers
                     ControlIdName = horarioDto.Nombre,
                     Dias = dias
                 };
-                var horario = await this._horarioQuery.update(insert);
+                var horario = await this._horarioQuery.update(update);
+                //editar dias
+                var updateControlId= await ModificarHora(horario,horario.Dias);
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Horario/Editar.cshtml", horarioDto);
@@ -533,7 +535,7 @@ namespace ControlIDMvc.Controllers
                 {
                     //crear horario
                     await this.UpdateHorario(horario);
-                    await this.DeleteHorario(horario, horario.Dias);
+                    await this.DeleteHorarioDias(horario.Dias);
                     await this.StoreDia(horario, horario.Dias);
 
                 }
