@@ -550,7 +550,7 @@ namespace ControlIDMvc.Controllers
                 horario.ControlIdName = horario.Nombre;
                 var update = await this._horarioQuery.UpdateControlId(horario);
                 //dependecia
-                await this.StoreDia(update, update.Dias);
+                //await this.StoreDia(update, update.Dias);
                 return apiResponse.status;
             }
             else
