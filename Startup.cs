@@ -61,11 +61,15 @@ namespace ControlIDMvc
             Services.Services.AddTransient<EgresoQuery>();
             Services.Services.AddTransient<CajaQuery>();
             Services.Services.AddTransient<DiaQuery>();
+
             Services.Services.AddTransient<PlanCuentasGrupoQuery>();
             Services.Services.AddTransient<PlanCuentaRubroQuery>();
             Services.Services.AddTransient<PlanCuentaTituloQuery>();
             Services.Services.AddTransient<PlanCuentaCompuestaQuery>();
             Services.Services.AddTransient<PlanCuentaSubCuentaQuery>();
+
+            Services.Services.AddTransient<ImagenPerfilQuery>();
+
             /*modelo Control ID*/
             Services.Services.AddTransient<LoginControlIdQuery>();
             Services.Services.AddTransient<UsuarioControlIdQuery>();
@@ -81,7 +85,8 @@ namespace ControlIDMvc
             Services.Services.AddTransient<AreaControlIdQuery>();
             Services.Services.AddTransient<DiasControlIdQuery>();
             Services.Services.AddTransient<AreaAccesRuleControlIdQuery>();
-            Services.Services.AddTransient<DispositivoControlIdQuery>();
+            Services.Services.AddTransient<DispositivoControlIdQuery>(); 
+            Services.Services.AddTransient<RegistroRostroControlIdQuery>();
 
             Services.Services.AddAutoMapper(typeof(Startup));
         }

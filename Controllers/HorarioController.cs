@@ -27,23 +27,34 @@ namespace ControlIDMvc.Controllers
 
         private readonly DBContext _dbContext;
         private readonly HorarioQuery _horarioQuery;
+        private readonly DispositivoQuery _dispositivoQuery;
         private readonly LoginControlIdQuery _loginControlIdQuery;
         private readonly HttpClientService _httpClientService;
         private readonly HorarioControlIdQuery _horarioControlIdQuery;
+        private readonly DiasControlIdQuery _diasControlIdQuery;
+        private readonly DiaQuery _diaQuery;
         ApiRutas _apiRutas;
         public HorarioController(
             DBContext dbContext,
             HorarioQuery HorarioQuery,
+            DispositivoQuery dispositivoQuery,
             LoginControlIdQuery loginControlIdQuery,
             HttpClientService httpClientService,
-            HorarioControlIdQuery horarioControlIdQuery
+            HorarioControlIdQuery horarioControlIdQuery,
+            DiasControlIdQuery diasControlIdQuery,
+            DiaQuery diaQuery
             )
         {
             this._dbContext = dbContext;
             this._horarioQuery = HorarioQuery;
+            this._dispositivoQuery = dispositivoQuery;
             this._loginControlIdQuery = loginControlIdQuery;
             this._httpClientService = httpClientService;
+
+            /*api*/
             this._horarioControlIdQuery = horarioControlIdQuery;
+            this._diasControlIdQuery = diasControlIdQuery;
+            this._diaQuery = diaQuery;
             this._apiRutas = new ApiRutas();
         }
 
@@ -89,7 +100,8 @@ namespace ControlIDMvc.Controllers
                     ControlIdName = horarioCreateDto.Nombre,
                     Dias = dias
                 };
-                await this._horarioQuery.store(insert);
+                var horario = await this._horarioQuery.store(insert);
+                await this.RegistrarHora(horario, horario.Dias);
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Horario/Create.cshtml");
@@ -104,6 +116,7 @@ namespace ControlIDMvc.Controllers
                 return NotFound();
             }
             var edit = new HorarioDto();
+            edit.Id = horario.Id;
             edit.Nombre = horario.Nombre;
             edit.Descripcion = horario.Descripcion;
             foreach (var dia in horario.Dias)
@@ -134,41 +147,58 @@ namespace ControlIDMvc.Controllers
             }
             return View("~/Views/Horario/Editar.cshtml", edit);
         }
-        [HttpGet("update/{id:int}")]
+        [HttpPost("update/{id:int}")]
         public async Task<ActionResult> Update(int id, HorarioDto horarioDto)
         {
             if (ModelState.IsValid)
             {
-                var deleteDias =await this._horarioQuery.DeleteDias(id);
+                var deleteDias = await this._horarioQuery.DeleteDias(id);
                 var dias = this.UpdateDiaSistema(horarioDto);
-                var insert = new Horario
+                var update = new Horario
                 {
+                    Id = id,
                     Nombre = horarioDto.Nombre,
                     Descripcion = horarioDto.Descripcion,
                     ControlIdName = horarioDto.Nombre,
                     Dias = dias
                 };
-                var horario=await this._horarioQuery.update(insert);
+                var horario = await this._horarioQuery.update(update);
+                //editar dias
+                var updateControlId= await ModificarHora(horario,horario.Dias);
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Horario/Editar.cshtml", horarioDto);
         }
-         [HttpGet("delete/{id:int}")]
+        [HttpDelete("delete/{id:int}")]
         public async Task<ActionResult> Delete(int id, HorarioDto horarioDto)
         {
             if (ModelState.IsValid)
             {
-                var deleteDias =await this._horarioQuery.DeleteDias(id);
-                var dias = this.UpdateDiaSistema(horarioDto);
-                var insert = new Horario
+                //verificar dias de uso
+                var horario = await this._horarioQuery.GetOne(id);
+                if (await this._horarioQuery.Delete(id))
                 {
-                    Nombre = horarioDto.Nombre,
-                    Descripcion = horarioDto.Descripcion,
-                    ControlIdName = horarioDto.Nombre,
-                    Dias = dias
-                };
-                var horario=await this._horarioQuery.update(insert);
-                return RedirectToAction(nameof(Index));
+                    var deleteDias = await this._horarioQuery.DeleteDias(id);
+                    await this.DeleteReglaAcceso(horario);
+                    await this._horarioQuery.Delete(id);
+                    return Json(
+                        new
+                        {
+                            status = "success",
+                            message = "Horario eliminado correctamente"
+                        }
+                    );
+                }
+                else
+                {
+                    return Json(
+                        new
+                        {
+                            status = "error",
+                            message = "Ocurrio un error"
+                        }
+                    );
+                }
             }
             return View("~/Views/Horario/Editar.cshtml", horarioDto);
         }
@@ -305,8 +335,8 @@ namespace ControlIDMvc.Controllers
                     insert.Add(
                     new Dia
                     {
-                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * Convert.ToInt32(dia.hora_fin.Minute * 60),
-                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * Convert.ToInt32(dia.hora_inicio.Minute * 60),
+                        ControlEnd = 0,
+                        ControlStart = 0,
                         ControlHol1 = 0,
                         ControlHol2 = 0,
                         ControlHol3 = 0,
@@ -348,8 +378,9 @@ namespace ControlIDMvc.Controllers
                     insert.Add(
                     new Dia
                     {
-                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * Convert.ToInt32(dia.hora_fin.Minute * 60),
-                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * Convert.ToInt32(dia.hora_inicio.Minute * 60),
+                        HorarioId=horarioDto.Id,
+                        ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * ((Convert.ToInt32(dia.hora_fin.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.hora_fin.Minute * 60))) * 60,
+                        ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * ((Convert.ToInt32(dia.hora_inicio.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.hora_inicio.Minute * 60))) * 60,
                         ControlHol1 = 0,
                         ControlHol2 = 0,
                         ControlHol3 = 0,
@@ -425,6 +456,146 @@ namespace ControlIDMvc.Controllers
                     break;
             }
             return resultado;
+        }
+        /*control Id*/
+        /*login dispositivo*/
+        private async Task<bool> LoginControlId(string ip, int port, string user, string api, string password)
+        {
+            BodyLogin cuerpo = _loginControlIdQuery.Login(user, password);
+            Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
+            /*valido si es el login fue ok*/
+
+            this._horarioControlIdQuery.Params(port, ip, user, password, login.data);
+            this._diasControlIdQuery.Params(port, ip, user, password, login.data);
+            //this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
+            return login.estado;
+        }
+        /*------Obtener data dispositivo------*/
+        private async Task<bool> RegistrarHora(Horario horario, List<Dia> dias)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear horario
+                    await this.StoreHorario(horario);
+                }
+            }
+            return true;
+        }
+        private async Task<bool> StoreHorario(Horario horario)
+        {
+            var apiResponse = await this._horarioControlIdQuery.Create(horario);
+            if (apiResponse.status)
+            {
+                horario.ControlId = apiResponse.ids[0];
+                var update = await this._horarioQuery.UpdateControlId(horario);
+                //dependecia
+                await this.StoreDia(update, update.Dias);
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> StoreDia(Horario horario, List<Dia> dias)
+        {
+            var apiResponse = await this._diasControlIdQuery.CreateAll(horario);
+            if (apiResponse.status)
+            {
+                int index = 0;
+                foreach (var id in apiResponse.ids)
+                {
+                    dias[index].ControlId = id;
+                    dias[index].ControlTimeZoneId = horario.ControlId;
+                    await this._diaQuery.UpdateControlId(dias[index]);
+                    index++;
+                }
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+
+        /*------Obtener data dispositivo------*/
+        private async Task<bool> ModificarHora(Horario horario, List<Dia> dias)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear horario
+                    await this.UpdateHorario(horario);
+                    await this.DeleteHorarioDias(horario,horario.Dias);
+                    await this.StoreDia(horario, horario.Dias);
+
+                }
+            }
+            return true;
+        }
+        private async Task<bool> UpdateHorario(Horario horario)
+        {
+            var apiResponse = await this._horarioControlIdQuery.Update(horario);
+            if (apiResponse.status)
+            {
+                horario.ControlIdName = horario.Nombre;
+                var update = await this._horarioQuery.UpdateControlId(horario);
+                //dependecia
+                //await this.StoreDia(update, update.Dias);
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        /*------Delete data dispositivo------*/
+        private async Task<bool> DeleteReglaAcceso(Horario horario)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear regla acceso
+                    await this.DeleteHorario(horario, horario.Dias);
+                }
+            }
+            return true;
+        }
+        private async Task<bool> DeleteHorario(Horario horario, List<Dia> dias)
+        {
+            var apiResponse = await this._horarioControlIdQuery.Delete(horario);
+            if (apiResponse.status)
+            {
+                return apiResponse.status;
+            }
+            return apiResponse.status;
+        }
+        private async Task<bool> DeleteHorarioDias(Horario horario, List<Dia> dias)
+        {
+            foreach (var dia in dias)
+            {
+                //delete all  horario controlId 
+                var apiResponse = await this._diasControlIdQuery.Delete(horario,dia);
+                if (apiResponse.status)
+                {
+                    return apiResponse.status;
+                }
+                return apiResponse.status;
+            }
+            return true;
         }
     }
     public class ExtraerDia

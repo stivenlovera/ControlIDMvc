@@ -5,6 +5,9 @@ using ControlIDMvc.Dtos.Paquete;
 using ControlIDMvc.Dtos.Utils;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Querys;
+using ControlIDMvc.ServicesCI;
+using ControlIDMvc.ServicesCI.QueryCI;
+using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlIDMvc.Controllers
@@ -16,18 +19,32 @@ namespace ControlIDMvc.Controllers
         private readonly PersonaQuery _personaQuery;
         private readonly InscripcionQuery _inscripcionQuery;
         private readonly CajaQuery _cajaQuery;
-
+        private readonly LoginControlIdQuery _loginControlIdQuery;
+        private readonly HttpClientService _httpClientService;
+        private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
+        private readonly DispositivoQuery _dispositivoQuery;
+        ApiRutas _ApiRutas;
         public InscripcionController(
             PaqueteQuery PaqueteQuery,
             PersonaQuery personaQuery,
             InscripcionQuery inscripcionQuery,
-            CajaQuery cajaQuery
+            CajaQuery cajaQuery,
+            /*controlId*/
+            LoginControlIdQuery loginControlIdQuery,
+            HttpClientService httpClientService,
+            UsuarioControlIdQuery usuarioControlIdQuery,
+            DispositivoQuery dispositivoQuery
         )
         {
             this._paqueteQuery = PaqueteQuery;
             this._personaQuery = personaQuery;
             this._inscripcionQuery = inscripcionQuery;
             this._cajaQuery = cajaQuery;
+            this._loginControlIdQuery = loginControlIdQuery;
+            this._httpClientService = httpClientService;
+            this._usuarioControlIdQuery = usuarioControlIdQuery;
+            this._dispositivoQuery = dispositivoQuery;
+            this._ApiRutas = new ApiRutas();
         }
         [HttpGet]
         public ActionResult Index(string message)
@@ -66,18 +83,28 @@ namespace ControlIDMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Store(InscripcionCreateDto InscripcionCreateDto)
         {
-            if (!ModelState.IsValid)
+            //regeneracion de parametros requeridos
+            var paquetes = await this._paqueteQuery.GetAll();
+            ViewData["paquetes"] = paquetes;
+            var personas = await this._personaQuery.GetAll();
+            ViewData["personas"] = personas;
+            DateTime fechaRecibo = DateTime.Now;
+            fechaRecibo.ToString("yyyyMMdd");
+            ViewData["numeroRecibo"] = fechaRecibo.ToString("MMddHHmmss");
+
+            if (ModelState.IsValid)
             {
-                System.Console.WriteLine(ModelState.ErrorCount);
-                var paquetes = await this._paqueteQuery.GetAll();
-                ViewData["paquetes"] = paquetes;
-                var personas = await this._personaQuery.GetAll();
-                ViewData["personas"] = personas;
-                return View("~/Views/Inscripcion/Create.cshtml");
+                var inscripcion = await this._inscripcionQuery.Store(InscripcionCreateDto);
+                var caja = await this.addCash(inscripcion);
+                //update dispositivo 
+                var persona = await this._personaQuery.GetOne(InscripcionCreateDto.PersonaId);
+                persona.ControlIdBegin_time = this.DateTimeToUnix(InscripcionCreateDto.FechaInicio);
+                persona.ControlIdEnd_time = this.DateTimeToUnix(InscripcionCreateDto.FechaFin);
+                var updateFecha = await this._personaQuery.UpdateOne(persona);
+                await this.UpdateDispositivo(updateFecha);
+                return RedirectToAction("PreviewRecibo", new { id = 1 });
             }
-            var inscripcion = await this._inscripcionQuery.Store(InscripcionCreateDto);
-            var caja=await this.addCash(inscripcion);
-            return RedirectToAction("PreviewRecibo", new { id = 1 });
+            return View("~/Views/Inscripcion/Create.cshtml");
         }
 
         [HttpPost("store-recibo")]
@@ -102,6 +129,8 @@ namespace ControlIDMvc.Controllers
             var personas = await this._personaQuery.GetAll();
             ViewData["personas"] = personas;
             var inscripcion = await this._inscripcionQuery.Edit(id);
+            ViewData["numeroRecibo"] = inscripcion.NumeroRecibo;
+
             InscripcionUpdateDto inscripcionUpdateDto = new InscripcionUpdateDto
             {
                 Id = inscripcion.Id,
@@ -121,10 +150,39 @@ namespace ControlIDMvc.Controllers
         }
 
         [HttpPost("update/{id:int}")]
-        public async Task<ActionResult> Update(int id, InscripcionCreateDto inscripcionCreateDto)
+        public async Task<ActionResult> Update(int id, InscripcionUpdateDto inscripcionUpdateDto)
         {
-            var inscripcion = await this._inscripcionQuery.Update(inscripcionCreateDto, id);
-            return RedirectToAction("PreviewRecibo", new { id = 1 });
+            //regeneracion requerida
+            var paquetes = await this._paqueteQuery.GetAll();
+            ViewData["paquetes"] = paquetes;
+            var personas = await this._personaQuery.GetAll();
+            ViewData["personas"] = personas;
+            var inscripcion = await this._inscripcionQuery.Edit(id);
+            ViewData["numeroRecibo"] = inscripcion.NumeroRecibo;
+            if (ModelState.IsValid)
+            {
+                var data = new Inscripcion
+                {
+                    Id=inscripcionUpdateDto.Id,
+                    PersonaId = inscripcionUpdateDto.Id,
+                    Costo = inscripcionUpdateDto.Costo,
+                    FechaFin = inscripcionUpdateDto.FechaFin,
+                    FechaInicio = inscripcionUpdateDto.FechaInicio,
+                    NumeroRecibo = inscripcionUpdateDto.NumeroRecibo,
+                    PaqueteId = inscripcionUpdateDto.PaqueteId,
+
+                };
+                var updateInscripcion = await this._inscripcionQuery.Update(data, id);
+                //update dispositivo
+                var persona = await this._personaQuery.GetOne(inscripcionUpdateDto.PersonaId);
+                persona.ControlIdBegin_time = this.DateTimeToUnix(inscripcionUpdateDto.FechaInicio);
+                persona.ControlIdEnd_time = this.DateTimeToUnix(inscripcionUpdateDto.FechaFin);
+                var updateFecha = await this._personaQuery.UpdateOne(persona);
+                await this.UpdateDispositivo(updateFecha);
+                return RedirectToAction("PreviewRecibo", new { id = 1 });
+            }
+            var aux=ModelState.Values;
+            return View("~/Views/Inscripcion/Edit.cshtml", inscripcionUpdateDto);
         }
 
         [HttpDelete("delete/{id:int}")]
@@ -169,10 +227,18 @@ namespace ControlIDMvc.Controllers
             }
             return paquetes;
         }
+        /*Utils*/
+        private long DateTimeToUnix(DateTime MyDateTime)
+        {
+            TimeSpan timeSpan = MyDateTime - new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            var data = (long)timeSpan.TotalSeconds;
+            System.Console.WriteLine(data);
+            return data;
+        }
         /*
         * Modelo de negocio
         */
-          private async Task<bool> addCash(InscripcionDto inscripcionDto)
+        private async Task<bool> addCash(InscripcionDto inscripcionDto)
         {
             var egresoCaja = new CajaCreateDto
             {
@@ -192,6 +258,45 @@ namespace ControlIDMvc.Controllers
             {
                 return false;
             }
+        }
+        /*Controlador de fechas*/
+        private async Task<bool> LoginControlId(string ip, int port, string user, string api, string password)
+        {
+            BodyLogin cuerpo = _loginControlIdQuery.Login(user, password);
+            Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
+            /*valido si es el login fue ok*/
+            this._usuarioControlIdQuery.Params(port, ip, user, password, login.data);
+            return login.estado;
+        }
+        /*------USUARIO------*/
+        private async Task<bool> UpdateDispositivo(Persona persona)
+        {
+            /*consutar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._ApiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //modificar usuario
+                    await this.UserUpdateControlId(persona);
+
+                }
+            }
+            return true;
+        }
+        private async Task<bool> UserUpdateControlId(Persona persona)
+        {
+            var addUsuario = await this._usuarioControlIdQuery.Update(persona);
+            if (addUsuario.status)
+            {
+                //si el cambio due exitoso
+                if (addUsuario.changes == 1)
+                {
+                    var updateUsuario = await this._personaQuery.UpdateOne(persona);
+                }
+            }
+            return addUsuario.status;
         }
     }
 }

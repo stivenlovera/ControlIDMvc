@@ -59,8 +59,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 data.Add(new portalsAccessRulesCreateDto
                 {
-                    access_rule_id = portalReglaAcceso.ControlIdRulesId,
-                    portal_id = portalReglaAcceso.ControlIdPortalId
+                    access_rule_id = portalReglaAcceso.ReglaAcceso.ControlId,
+                    portal_id = portalReglaAcceso.Portal.ControlId,
                 });
             }
             BodyCreateObject body = new BodyCreateObject()
@@ -81,13 +81,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunShowAll(body);
             return response;
         }
-        public async Task<ResponsePortalAccessRulesDelete> DeleteAccessRulesId(List<PortalReglaAcceso> portalReglaAccesos)
+        public async Task<ResponsePortalAccessRulesDelete> DeleteAccessRulesId(int accessRulesId)
         {
-            var PortalReglaAccesoIds = new List<int>();
-            foreach (var portalReglaAcceso in portalReglaAccesos)
-            {
-                PortalReglaAccesoIds.Add(portalReglaAcceso.ControlIdRulesId);
-            }
             BodyDeleteObject body = new BodyDeleteObject()
             {
                 objeto = "portal_access_rules",
@@ -95,7 +90,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     portal_access_rules = new
                     {
-                        access_rule_id = PortalReglaAccesoIds
+                        access_rule_id = accessRulesId
                     }
                 }
             };

@@ -25,6 +25,7 @@
                     <div class="x_title">
                         <h2>Datos de la Persona<small></small></h2>
                         <div class="clearfix"></div>
+                        <h5><span class="text-danger">@ViewData["ErrorCard"]</span></h5>
                     </div>
                     <div class="x_content">
 
@@ -174,7 +175,7 @@
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
                                                             <input type="text" id="contraseña_repetido" name="contraseña_repetido" value="@Model.ControlIdPassword"
-                                                                required="contraseña_repetido" class="form-control ">
+                                                              class="form-control ">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -185,8 +186,7 @@
                                                                 class="required">*</span>
                                                         </label>
                                                         <div class="col-md-10 col-sm-10">
-                                                            <input type="text" id="observaciones" name="observaciones" value="@Model.Observaciones"
-                                                                required="observaciones" class="form-control ">
+                                                            <input type="text" id="observaciones" name="observaciones" value="@Model.Observaciones" class="form-control ">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -325,18 +325,20 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                   @foreach (var tarjeta in tarjetas)
+                                                   @if (tarjetas!=null)
                                                    {
-                                                    <tr>
-                                                        <td>@tarjeta.area,@tarjeta.codigo</td>
-                                                        <td>
-                                                            <input name="area" type="text" value="@tarjeta.area" hidden>
-                                                            <input name="codigo" type="text" value="@tarjeta.area" hidden>
-                                                            <button class="btn btn-danger btn-xs remove_tarjeta"
-                                                                role="button"><i class="fa fa fa-trash"></i></button>
-                                                        </td>
-                                                    </tr>
-                                                     
+                                                        @foreach (var tarjeta in tarjetas)
+                                                        {
+                                                            <tr>
+                                                                <td>@tarjeta.area,@tarjeta.codigo</td>
+                                                                <td>
+                                                                    <input name="area" type="text" value="@tarjeta.area" hidden>
+                                                                    <input name="codigo" type="text" value="@tarjeta.codigo" hidden>
+                                                                    <button class="btn btn-danger btn-xs remove_tarjeta"
+                                                                        role="button"><i class="fa fa fa-trash"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        }
                                                    }
                                                 </tbody>
                                             </table>
@@ -412,8 +414,8 @@
                                                         </label>
                                                         <div class="col-md-8 col-sm-8">
                                                             <input id="fin_permiso" class="form-control"
-                                                                type="date" name="ControlIdBegin_time"
-                                                                value="@Model.ControlIdBegin_time.ToString(format)">
+                                                                type="date" name="ControlIdEnd_time"
+                                                                value="@Model.ControlIdEnd_time.ToString(format)">
                                                         </div>
                                                     </div>
                                                 </div>

@@ -37,13 +37,15 @@ namespace ControlIDMvc.Controllers
         private readonly AreaReglasAccesoQuery _areaReglaAccesoQuery;
         private readonly PortalQuery _portalQuery;
         private readonly PortalReglasAccesoQuery _portalReglasAccesoQuery;
+        private readonly DispositivoQuery _dispositivoQuery;
         private readonly PortalsAccessRulesControlIdQuery _portalsAccessRulesControlIdQuery;
+        private readonly AreaAccesRuleControlIdQuery _areaAccesRuleControlIdQuery;
         private readonly AreaQuery _areaQuery;
         ApiRutas _apiRutas;
 
         public ReglasAccesoController(
             DBContext dbContext,
-             HttpClientService httpClientService,
+            HttpClientService httpClientService,
             /*SISTEMA*/
             PersonaQuery personaQuery,
             HorarioReglaAccesoQuery horarioReglaAccesoQuery,
@@ -53,13 +55,15 @@ namespace ControlIDMvc.Controllers
             AreaReglasAccesoQuery areaReglaAccesoQuery,
             PortalQuery portalQuery,
             PortalReglasAccesoQuery portalReglasAccesoQuery,
+            AreaQuery areaQuery,
             /*API*/
+            DispositivoQuery dispositivoQuery,
             LoginControlIdQuery loginControlIdQuery,
             UsuarioRulesAccessControlIdQuery UsuarioReglasAccesoControlIdQuery,
             AccessRulesControlIdQuery accessRulesControlIdQuery,
             HorarioAccessRulesControlIdQuery HorarioAccessRulesControlIdQuery,
             PortalsAccessRulesControlIdQuery PortalsAccessRulesControlIdQuery,
-            AreaQuery areaQuery
+            AreaAccesRuleControlIdQuery areaAccesRuleControlIdQuery
 
         )
         {
@@ -77,7 +81,9 @@ namespace ControlIDMvc.Controllers
             this._areaReglaAccesoQuery = areaReglaAccesoQuery;
             this._portalQuery = portalQuery;
             this._portalReglasAccesoQuery = portalReglasAccesoQuery;
+            this._dispositivoQuery = dispositivoQuery;
             this._portalsAccessRulesControlIdQuery = PortalsAccessRulesControlIdQuery;
+            this._areaAccesRuleControlIdQuery = areaAccesRuleControlIdQuery;
             this._areaQuery = areaQuery;
 
             this._apiRutas = new ApiRutas();
@@ -144,6 +150,7 @@ namespace ControlIDMvc.Controllers
                     }
                     var reglasHorario = await this._horarioReglaAccesoQuery.StoreAll(horarioReglaAccesos);
                     //regla acceso y area
+                    var listaAreas = new List<int>();
                     var AreaReglaAccesos = new List<AreaReglaAcceso>();
                     foreach (var area in reglaAccesoCreateDto.AreaSelecionadas)
                     {
@@ -154,8 +161,24 @@ namespace ControlIDMvc.Controllers
                                 ReglaAccesoId = insert.Id
                             }
                         );
+                        listaAreas.Add(area);
                     }
                     var reglasArea = await this._areaReglaAccesoQuery.storeAll(AreaReglaAccesos);
+                    /*analizando portal deacuerdo a areas*/
+                    var portales = await this._portalQuery.GetAllAreaID(listaAreas);
+                    /*adicionando portal*/
+                    var insertPortalReglaAcceso = new List<PortalReglaAcceso>();
+                    foreach (var portal in portales)
+                    {
+                        insertPortalReglaAcceso.Add(new PortalReglaAcceso
+                        {
+                            ReglaAccesoId = insert.Id,
+                            PortalId = portal.Id
+                        });
+                    }
+                    var reglasPortals = await this._portalReglasAccesoQuery.StoreAll(insertPortalReglaAcceso);
+                    /*add regla acceso*/
+                    await this.StoreReglaAcceso(insert, reglasPersona, reglasArea, reglasHorario, reglasPortals);
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -180,17 +203,345 @@ namespace ControlIDMvc.Controllers
             };
             return View("~/Views/ReglasAcceso/Edit.cshtml", edit);
         }
-        [HttpPost("update/{id:int}")]
+        [HttpPut("update/{id:int}")]
         public async Task<ActionResult> Update(int id, ReglaAccesoCreateDto reglaAccesoCreateDto)
         {
-            await this._reglaAccesoQuery.ValidarNombre(reglaAccesoCreateDto.Nombre);
-            return View("~/Views/ReglasAcceso/Edit.cshtml");
+            //await this._reglaAccesoQuery.ValidarNombre(reglaAccesoCreateDto.Nombre);
+            var dataUpdate = new ReglaAcceso
+            {
+                Id = id,
+                Nombre = reglaAccesoCreateDto.Nombre,
+                Descripcion = reglaAccesoCreateDto.Descripcion
+            };
+            var update = await this._reglaAccesoQuery.Update(dataUpdate);
+            //limpiando a persona reglas acceso
+            var deletePerosna = await this._personaReglaAccesoQuery.DeleteAllReglaAccesoId(id);
+            //limpiando a horario reglas acceso
+            var deleteHorario = await this._horarioReglaAccesoQuery.DeleteAllReglaAccesoId(id);
+            //limpiando a area reglas acceso
+            var deleteArea = await this._areaReglaAccesoQuery.DeleteAllReglaAccesoId(id);
+            //limpiando a portals reglas acceso
+            var deletePortal = await this._portalReglasAccesoQuery.DeleteAllReglaAccesoId(id);
+
+            /*adicionando persona*/
+            var insertPersonaReglaAcceso = new List<PersonaReglasAcceso>();
+            foreach (var persona in reglaAccesoCreateDto.PersonasSelecionadas)
+            {
+                insertPersonaReglaAcceso.Add(new PersonaReglasAcceso
+                {
+                    ReglaAccesoId = update.Id,
+                    PersonaId = persona
+                });
+            }
+            var reglasPersonas = await this._personaReglaAccesoQuery.StoreAll(insertPersonaReglaAcceso);
+            /*adicionando horario*/
+            var insertHorarioReglaAcceso = new List<HorarioReglaAcceso>();
+            foreach (var horario in reglaAccesoCreateDto.HorarioSelecionados)
+            {
+                insertHorarioReglaAcceso.Add(new HorarioReglaAcceso
+                {
+                    HorarioId = horario,
+                    ReglasAccesoId = update.Id,
+                });
+
+            }
+            var reglasHorarios = await this._horarioReglaAccesoQuery.StoreAll(insertHorarioReglaAcceso);
+            /*adicionando area*/
+            var insertAreaReglaAcceso = new List<AreaReglaAcceso>();
+            var listaAreas = new List<int>();
+            foreach (var area in reglaAccesoCreateDto.AreaSelecionadas)
+            {
+                insertAreaReglaAcceso.Add(new AreaReglaAcceso
+                {
+                    ReglaAccesoId = update.Id,
+                    AreaId = area
+                });
+                listaAreas.Add(area);
+            }
+            var reglasAreas = await this._areaReglaAccesoQuery.storeAll(insertAreaReglaAcceso);
+            /*analizando portal deacuerdo a areas*/
+            var portales = await this._portalQuery.GetAllAreaID(listaAreas);
+            /*adicionando portal*/
+            var insertPortalReglaAcceso = new List<PortalReglaAcceso>();
+            foreach (var portal in portales)
+            {
+                insertPortalReglaAcceso.Add(new PortalReglaAcceso
+                {
+                    ReglaAccesoId = update.Id,
+                    PortalId = portal.Id
+                });
+            }
+            var reglasPortals = await this._portalReglasAccesoQuery.StoreAll(insertPortalReglaAcceso);
+            // add a dispsitivo
+            await this.UpdateReglaAcceso(update, reglasPersonas, reglasAreas, reglasHorarios, reglasPortals);
+            return Json(
+                new
+                {
+                    status = "success",
+                    message = "recibido"
+                }
+            );
         }
+
         [HttpDelete("delete/{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await this._reglaAccesoQuery.ValidarNombre("demo");
-            return View("~/Views/ReglasAcceso/Edit.cshtml");
+            var reglaAcceso = await this._reglaAccesoQuery.GetOne(id);
+            /*validate */
+            if (await this._reglaAccesoQuery.Delete(reglaAcceso.Id))
+            {
+                var delete = await this.DeleteReglaAcceso(reglaAcceso);
+                return Json(
+                    new
+                    {
+                        status = "success",
+                        message = "Regla de acceso"
+                    }
+                );
+            }
+            else
+            {
+                return Json(
+                     new
+                     {
+                         status = "error",
+                         message = "Ocurrio un error"
+                     }
+                 );
+            }
+        }
+        /*
+           *CARGAR A CONTROL ID Y ACTUALIZAR SISTEMA
+       */
+        /*login dispositivo*/
+        private async Task<bool> LoginControlId(string ip, int port, string user, string api, string password)
+        {
+            BodyLogin cuerpo = _loginControlIdQuery.Login(user, password);
+            Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
+            /*valido si es el login fue ok*/
+            this._accessRulesControlIdQuery.Params(port, ip, user, password, login.data);
+            this._usuarioRulesAccessControlIdQuery.Params(port, ip, user, password, login.data);
+            this._areaAccesRuleControlIdQuery.Params(port, ip, user, password, login.data);
+            this._horarioAccessRulesControlIdQuery.Params(port, ip, user, password, login.data);
+            this._portalsAccessRulesControlIdQuery.Params(port, ip, user, password, login.data);
+            //this._portalsControlIdQuery.Params(port, ip, user, password, login.data);
+            return login.estado;
+        }
+        /*------Obtener data dispositivo------*/
+        private async Task<bool> StoreReglaAcceso(ReglaAcceso reglaAcceso, List<PersonaReglasAcceso> personaReglasAcceso, List<AreaReglaAcceso> areaReglaAccesos, List<HorarioReglaAcceso> horarioReglaAccesos, List<PortalReglaAcceso> portalReglaAccesos)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear usuario
+                    await this.StoreAccesoRules(reglaAcceso);
+                    await this.StorePersonaAccesoRules(personaReglasAcceso);
+                    await this.StoreAreaAccesoRules(areaReglaAccesos);
+                    await this.StoreHorarioAccesoRules(horarioReglaAccesos);
+                    //await this.StorePortalsAccesoRules(portalReglaAccesos);
+                }
+            }
+            return true;
+        }
+        /*------Delete data dispositivo------*/
+        private async Task<bool> DeleteReglaAcceso(ReglaAcceso reglaAcceso)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    //crear regla acceso
+                    await this.DeletePortalsAccesoRules(reglaAcceso.ControlId);
+                }
+            }
+            return true;
+        }
+        /*------Obtener data dispositivo------*/
+        private async Task<bool> StoreAccesoRules(ReglaAcceso reglaAcceso)
+        {
+            var reglasAccesos = new List<ReglaAcceso>();
+            reglasAccesos.Add(reglaAcceso);
+            var apiResponse = await this._accessRulesControlIdQuery.CreateAccessRules(reglasAccesos);
+            if (apiResponse.status)
+            {
+                reglaAcceso.ControlId = apiResponse.ids[0];
+                await this._reglaAccesoQuery.UpdateControlId(reglaAcceso);
+
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+
+        private async Task<bool> StorePersonaAccesoRules(List<PersonaReglasAcceso> personaReglasAccesos)
+        {
+            var apiResponse = await this._usuarioRulesAccessControlIdQuery.CreateAll(personaReglasAccesos);
+            if (apiResponse.status)
+            {
+                foreach (var personaReglasAcceso in personaReglasAccesos)
+                {
+                    personaReglasAcceso.ControlIdAccessRulesId = personaReglasAcceso.ReglaAcceso.ControlId;
+                    personaReglasAcceso.ControlIdUserId = personaReglasAcceso.Persona.ControlId;
+                    await this._personaReglaAccesoQuery.UpdateControlId(personaReglasAcceso);
+                }
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> StoreAreaAccesoRules(List<AreaReglaAcceso> areaReglaAccesos)
+        {
+            var apiResponse = await this._areaAccesRuleControlIdQuery.CreateAll(areaReglaAccesos);
+            if (apiResponse.status)
+            {
+                foreach (var areaReglaAcceso in areaReglaAccesos)
+                {
+                    areaReglaAcceso.ControlIdAreaId = areaReglaAcceso.Area.ControlId;
+                    areaReglaAcceso.ControlidReglaAccesoId = areaReglaAcceso.ReglaAcceso.ControlId;
+                    await this._areaReglaAccesoQuery.UpdateControlId(areaReglaAcceso);
+                }
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> StoreHorarioAccesoRules(List<HorarioReglaAcceso> horarioReglaAccesos)
+        {
+            var apiResponse = await this._horarioAccessRulesControlIdQuery.CreateAll(horarioReglaAccesos);
+            if (apiResponse.status)
+            {
+                foreach (var horarioReglaAcceso in horarioReglaAccesos)
+                {
+                    horarioReglaAcceso.ControlIdTimeZoneId = horarioReglaAcceso.Horario.ControlId;
+                    horarioReglaAcceso.ControlIdAccessRulesId = horarioReglaAcceso.ReglasAcceso.ControlId;
+                    await this._horarioReglaAccesoQuery.UpdateControlId(horarioReglaAcceso);
+                }
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> StorePortalsAccesoRules(List<PortalReglaAcceso> portalReglaAccesos)
+        {
+            var apiResponse = await this._portalsAccessRulesControlIdQuery.CreateAll(portalReglaAccesos);
+            if (apiResponse.status)
+            {
+                foreach (var portalReglaAcceso in portalReglaAccesos)
+                {
+                    portalReglaAcceso.ControlIdPortalId = portalReglaAcceso.Portal.ControlId;
+                    portalReglaAcceso.ControlIdRulesId = portalReglaAcceso.ReglaAcceso.ControlId;
+                    await this._portalReglasAccesoQuery.UpdateControlId(portalReglaAcceso);
+                }
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+
+
+        /*------Delete data dispositivo------*/
+        private async Task<bool> UpdateReglaAcceso(ReglaAcceso reglaAcceso, List<PersonaReglasAcceso> personaReglasAcceso, List<AreaReglaAcceso> areaReglaAccesos, List<HorarioReglaAcceso> horarioReglaAccesos, List<PortalReglaAcceso> portalReglaAccesos)
+        {
+            /*buscar por dispositivos*/
+            var dispositivos = await this._dispositivoQuery.GetAll();
+            foreach (var dispositivo in dispositivos)
+            {
+                var loginStatus = await this.LoginControlId(dispositivo.Ip, dispositivo.Puerto, dispositivo.Usuario, this._apiRutas.ApiUrlLogin, dispositivo.Password);
+                if (loginStatus)
+                {
+                    await this.UpdateAccesoRules(reglaAcceso);
+                    await this.DeletePersonaAccesoRules(reglaAcceso.ControlId);
+                    await this.DeleteAreaAccesoRules(reglaAcceso.ControlId);
+                    await this.DeleteHorarioAccesoRules(reglaAcceso.ControlId);
+                    //await this.DeletePortalsAccesoRules(reglaAcceso.ControlId);
+                    //recrear
+                    await this.StorePersonaAccesoRules(personaReglasAcceso);
+                    await this.StoreAreaAccesoRules(areaReglaAccesos);
+                    await this.StoreHorarioAccesoRules(horarioReglaAccesos);
+                    //await this.StorePortalsAccesoRules(portalReglaAccesos);
+                }
+            }
+            return true;
+        }
+        private async Task<bool> UpdateAccesoRules(ReglaAcceso reglaAcceso)
+        {
+            var apiResponse = await this._accessRulesControlIdQuery.Update(reglaAcceso);
+            if (apiResponse.status)
+            {
+                reglaAcceso.ControlIdName = reglaAcceso.Nombre;
+                await this._reglaAccesoQuery.UpdateControlId(reglaAcceso);
+
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> DeletePersonaAccesoRules(int ReglasAccesoId)
+        {
+            var apiResponse = await this._usuarioRulesAccessControlIdQuery.DeleteReglaAccesoId(ReglasAccesoId);
+            if (apiResponse.status)
+            {
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> DeleteAreaAccesoRules(int ReglasAccesoId)
+        {
+            var apiResponse = await this._areaAccesRuleControlIdQuery.DeleteAccessRulesId(ReglasAccesoId);
+            if (apiResponse.status)
+            {
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> DeleteHorarioAccesoRules(int ReglasAccesoId)
+        {
+            var apiResponse = await this._horarioAccessRulesControlIdQuery.DeleteReglasAccesoId(ReglasAccesoId);
+            if (apiResponse.status)
+            {
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
+        }
+        private async Task<bool> DeletePortalsAccesoRules(int ReglasAccesoId)
+        {
+            var apiResponse = await this._portalsAccessRulesControlIdQuery.DeleteAccessRulesId(ReglasAccesoId);
+            if (apiResponse.status)
+            {
+                return apiResponse.status;
+            }
+            else
+            {
+                return apiResponse.status;
+            }
         }
     }
 }

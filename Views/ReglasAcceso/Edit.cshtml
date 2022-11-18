@@ -31,6 +31,7 @@
                                         <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 ">
+                                        <input type="text" id="id" name="id" value="@Model.Id" hidden>
                                         <input type="text" id="nombre" name="nombre" value="@Model.Nombre"
                                             required="required" class="form-control">
                                         <span asp-validation-for="Nombre" class="text-danger"></span>
@@ -74,14 +75,11 @@
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            <input type="checkbox" id="check-all">
-                                                        </th>
-                                                        <th>ID</th>
-                                                        <th>DNI</th>
+                                                        <th>CI</th>
                                                         <th>Nombre</th>
                                                         <th>Apellido</th>
                                                         <th>Telefono</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -90,12 +88,16 @@
                                                         @foreach (var persona in Model.personasOcupadas)
                                                         {
                                                             <tr>
-                                                                <td></td>
-                                                                <td>@persona.Id</td>
+                                                                <td>@persona.Ci</td>
                                                                 <td>@persona.Nombre</td>
                                                                 <td>@persona.Apellido</td>
                                                                 <td>@persona.Celular</td>
-                                                                <td></td>
+                                                                <td>
+                                                                    <button class="btn btn-danger btn-xs delete_persona"
+                                                                data-id="@persona.Id" role="button">
+                                                                        <i class="fa fa-trash" title="Eliminar Persona"></i>
+                                                                    </button>
+                                                                </td>
                                                             </tr>
                                                         }
                                                     }
@@ -118,23 +120,20 @@
                                             <div class="buttons">
                                                 <!-- Standard button -->
                                                 <div class="row">
-                                                    <button class="btn btn-secondary btn-xs" id="añadir_horario"
+                                                    <button class="btn btn-secondary btn-xs" id="open_modal_horario"
                                                         role="button">Añadir horario <i class="fa fa-plus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <table id="datatable_personas"
+                                            <table id="datatable_horario"
                                                 class="table table-striped table-bordered bulk_action"
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            <input type="checkbox" id="check-all">
-                                                        </th>
-                                                        <th>Id</th>
                                                         <th>Nombre</th>
                                                         <th>Descripcion</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -143,10 +142,14 @@
                                                         @foreach (var horario in Model.horariosOcupadas)
                                                         {
                                                             <tr>
-                                                                <td></td>
-                                                                <td>@horario.Id</td>
                                                                 <td>@horario.Nombre</td>
                                                                 <td>@horario.Descripcion</td>
+                                                                <td>
+                                                                    <button class="btn btn-danger btn-xs delete_horario"
+                                                                data-id="@horario.Id" role="button">
+                                                                        <i class="fa fa-trash" title="Eliminar Horario"></i>
+                                                                    </button>
+                                                                </td>
                                                             </tr>
                                                         }
                                                     }
@@ -168,25 +171,19 @@
                                             <div class="buttons">
                                                 <!-- Standard button -->
                                                 <div class="row">
-                                                    <button class="btn btn-secondary btn-xs" id="añadir_area"
+                                                    <button class="btn btn-secondary btn-xs" id="open_modal_area"
                                                         role="button">Añadir Area <i class="fa fa-plus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <table id="datatable_personas"
+                                            <table id="datatable_area"
                                                 class="table table-striped table-bordered bulk_action"
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>
-                                                        <th>
-                                                            <input type="checkbox" id="check-all">
-                                                        </th>
-                                                        <th>ID</th>
-                                                        <th>DNI</th>
                                                         <th>Nombre</th>
-                                                        <th>Apellido</th>
-                                                        <th>Telefono</th>
+                                                        <th>Descripcion</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -196,10 +193,14 @@
                                                         @foreach (var area in Model.areasOcupadas)
                                                         {
                                                             <tr>
-                                                                <td></td>
-                                                                <td>@area.Id</td>
                                                                 <td>@area.Nombre</td>
                                                                 <td>@area.Descripcion</td>
+                                                                <td>
+                                                                    <button class="btn btn-danger btn-xs delete_area"
+                                                                data-id="@area.Id" role="button">
+                                                                        <i class="fa fa-trash" title="Eliminar Area"></i>
+                                                                    </button>
+                                                                </td>
                                                             </tr>
                                                         }
                                                     }
@@ -213,6 +214,14 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="item form-group">
+                            <div class="col-md-6 col-sm-6 offset-md-3">
+                                <button class="btn btn-primary" type="button">Cancelar</button>
+                                <button type="submit" class="btn btn-success" id="save_regla_acceso">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -241,8 +250,7 @@
                                     <th>
                                         <input type="checkbox" id="check-all">
                                     </th>
-                                    <th>ID</th>
-                                    <th>DNI</th>
+                                    <th>CI</th>
                                     <th>Nombre</th>
                                     <th>Apellido</th>
                                     <th>Telefono</th>
@@ -254,12 +262,13 @@
                                     @foreach (var persona in Model.personasDisponibles)
                                     {
                                         <tr>
-                                            <td></td>
-                                            <td>@persona.Id</td>
+                                            <td><input class="check_persona" type="checkbox" id="check-all" name="personas[]" value="@persona.Id"
+                                            data-ci="@persona.Ci" data-nombre="@persona.Nombre" data-apellido="@persona.Apellido" data-celular="@persona.Celular">
+                                            </td>
+                                            <td>@persona.Ci</td>
                                             <td>@persona.Nombre</td>
                                             <td>@persona.Apellido</td>
                                             <td>@persona.Celular</td>
-                                            <td></td>
                                         </tr>
                                     }
                                 }
@@ -273,6 +282,122 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="añadir_persona" data-dismiss="modal">Añadir
+                    persona</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Large horario -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_añadir_horario">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Añadir Horario</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="datatable_horario_disponibles" class="table table-striped table-bordered"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="check-all">
+                                    </th>
+                                    <th>Horario</th>
+                                    <th>Descripcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.horariosDisponibles != null)
+                                {
+                                    @foreach (var horario in Model.horariosDisponibles)
+                                    {
+                                        <tr>
+                                            <td><input class="check_horario" type="checkbox" id="check-all" name="horario[]"
+                                            value="@horario.Id" data-nombre="@horario.Nombre" data-descripcion="@horario.Descripcion">
+                                            </td>
+                                            <td>@horario.Nombre</td>
+                                            <td>@horario.Descripcion</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="añadir_horario" data-dismiss="modal">Añadir
+                    horario</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Large area -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_añadir_area">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Añadir Area</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="area_disponibles" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="check-all">
+                                    </th>
+                                    <th>Horario</th>
+                                    <th>Descripcion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.areasDisponibles != null)
+                                {
+                                    @foreach (var area in Model.areasDisponibles)
+                                    {
+                                        <tr>
+                                            <td><input class="check_area" type="checkbox" name="area[]"
+                                            data-nombre="@area.Nombre" data-descripcion="@area.Descripcion"
+                                            value="@area.Id">
+                                            </td>
+                                            <td>@area.Nombre</td>
+                                            <td>@area.Descripcion</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="añadir_area" data-dismiss="modal">Añadir
+                    horario</button>
             </div>
         </div>
     </div>
@@ -296,4 +421,5 @@
 <script src="~/js/reglaAcceso/Editar/dataTablePersona.js"></script>
 <script src="~/js/reglaAcceso/Editar/dataTableHorario.js"></script>
 <script src="~/js/reglaAcceso/Editar/dataTableArea.js"></script>
+<script src="~/js/reglaAcceso/Editar/editar.js"></script>
 }

@@ -8,7 +8,6 @@ namespace ControlIDMvc.Entities
     public class HorarioReglaAcceso
     {
         public int Id { get; set; }
-
         public int ReglasAccesoId { get; set; }
         public ReglaAcceso ReglasAcceso { get; set; }
         public int HorarioId { get; set; }

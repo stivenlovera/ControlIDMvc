@@ -16,14 +16,13 @@ namespace ControlIDMvc.Dtos.Inscripcion
         [Required(ErrorMessage = "Fecha Final es requerido")]
         public DateTime FechaFin { get; set; }
         [Required(ErrorMessage = "Costo es requerido")]
-        public decimal? Costo { get; set; }
+        public decimal Costo { get; set; }
         [Range(1, 200, ErrorMessage = "Please select a country")]
         [Required(ErrorMessage = "Seleccione un paquete")]
         public int PaqueteId { get; set; }
-        [Required(ErrorMessage = "Seleccione una persona")]
         public string PaqueteNombre { get; set; }
         [Required(ErrorMessage = "Seleccione una persona")]
-        public int? PersonaId { get; set; }
+        public int PersonaId { get; set; }
         [Required(ErrorMessage = "Nombre es requerido")]
         public string Nombres { get; set; }
         [Required(ErrorMessage = "Apellido es requerido")]

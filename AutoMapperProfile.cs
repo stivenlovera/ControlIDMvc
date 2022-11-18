@@ -67,6 +67,7 @@ namespace ControlIDMvc
 
             CreateMap<InscripcionCreateDto, Inscripcion>();
             CreateMap<Inscripcion, InscripcionDto>();
+            CreateMap<InscripcionUpdateDto, Inscripcion>();
 
             CreateMap<RolCreateDto, Rol>();
             CreateMap<Rol, RolDto>();

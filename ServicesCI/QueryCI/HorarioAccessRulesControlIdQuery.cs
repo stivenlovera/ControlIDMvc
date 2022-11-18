@@ -53,13 +53,13 @@ namespace ControlIDMvc.ServicesCI.QueryCI
         }
         public async Task<ResponseHorarioAccesoRulesCreate> CreateAll(List<HorarioReglaAcceso> horarioReglaAccesos)
         {
-            List<HorarioReglaAcceso> data = new List<HorarioReglaAcceso>();
+            List<time_zones_access_rulesCreateDto> data = new List<time_zones_access_rulesCreateDto>();
             foreach (var horarioReglaAcceso in horarioReglaAccesos)
             {
-                data.Add(new HorarioReglaAcceso
+                data.Add(new time_zones_access_rulesCreateDto
                 {
-                    ControlIdAccessRulesId = horarioReglaAcceso.ControlIdAccessRulesId,
-                    ControlIdTimeZoneId=horarioReglaAcceso.ControlIdTimeZoneId
+                    access_rule_id = horarioReglaAcceso.ReglasAcceso.ControlId,
+                    time_zone_id=horarioReglaAcceso.Horario.ControlId
                 });
             }
             BodyCreateObject body = new BodyCreateObject()
@@ -111,7 +111,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunUpdate(body);
             return response;
         }
-        public async Task<ResponseHorarioAccesoRulesDelete> Delete(HorarioReglaAcceso horarioReglaAcceso)
+        public async Task<ResponseHorarioAccesoRulesDelete> DeleteReglasAccesoId(int access_rule_id)
         {
             BodyDeleteObject body = new BodyDeleteObject()
             {
@@ -120,7 +120,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     access_rule_time_zones = new
                     {
-                        access_rule_id = horarioReglaAcceso.ControlIdAccessRulesId
+                        access_rule_id = access_rule_id
                     }
                 }
             };

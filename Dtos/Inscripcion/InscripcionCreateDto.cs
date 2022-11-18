@@ -10,17 +10,17 @@ namespace ControlIDMvc.Dtos.Inscripcion
     {
         public DateTime FechaCreacion { get; set; }
         [Required(ErrorMessage = "Fecha Inicio es requerido")]
-        public DateTime? FechaInicio { get; set; }
+        public DateTime FechaInicio { get; set; }
         [Required(ErrorMessage = "Numero de recibo es requerido")]
         public string NumeroRecibo { get; set; }
         [Required(ErrorMessage = "Fecha Final es requerido")]
-        public DateTime? FechaFin { get; set; }
+        public DateTime FechaFin { get; set; }
         [Required(ErrorMessage = "Costo es requerido")]
-        public decimal? Costo { get; set; }
+        public decimal Costo { get; set; }
         [Required(ErrorMessage = "Seleccione un paquete")]
         public int PaqueteId { get; set; }
         [Required(ErrorMessage = "Seleccione una persona")]
-        public int? PersonaId { get; set; }
+        public int PersonaId { get; set; }
         [Required(ErrorMessage = "Nombre es requerido")]
         public string Nombres { get; set; }
         [Required(ErrorMessage = "Apellido es requerido")]

@@ -59,8 +59,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             {
                 data.Add(new area_access_rulesCreateDto
                 {
-                    access_rulesid=areaReglaAcceso.ControlidReglaAccesoId,
-                    area_id=areaReglaAcceso.ControlidReglaAccesoId
+                    access_rule_id=areaReglaAcceso.ReglaAcceso.ControlId,
+                    area_id=areaReglaAcceso.Area.ControlId
                 });
             }
             BodyCreateObject body = new BodyCreateObject()
@@ -89,7 +89,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 values = new area_access_rulesCreateDto
                 {
                   area_id=areaReglaAcceso.ControlIdAreaId,
-                  access_rulesid=areaReglaAcceso.ControlidReglaAccesoId
+                  access_rule_id=areaReglaAcceso.ControlidReglaAccesoId
                 },
                 where = new
                 {
@@ -102,7 +102,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunUpdate(body);
             return response;
         }
-        public async Task<ResponseAreaReglasAccessDelete> Delete(AreaReglaAcceso areaReglaAcceso)
+        
+        public async Task<ResponseAreaReglasAccessDelete> DeleteAccessRulesId(int access_rule_id)
         {
             BodyDeleteObject body = new BodyDeleteObject()
             {
@@ -111,7 +112,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     area_access_rules = new
                     {
-                        value = areaReglaAcceso.ControlidReglaAccesoId
+                        access_rule_id = access_rule_id
                     }
                 }
             };

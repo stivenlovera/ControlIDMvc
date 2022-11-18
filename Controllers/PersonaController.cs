@@ -26,6 +26,7 @@ public class PersonaController : Controller
     public string password = "admin";
     public int port { get; set; }
     private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<HomeController> logger;
     private readonly HttpClientService _httpClientService;
     private readonly IWebHostEnvironment _webHostEnvironment;
     private PersonaQuery _personaQuery;
@@ -34,6 +35,8 @@ public class PersonaController : Controller
     private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
     private readonly CardControlIdQuery _cardControlIdQuery;
     private readonly DispositivoQuery _dispositivoQuery;
+    private readonly RegistroRostroControlIdQuery _registroRostroControlIdQuery;
+    private readonly ImagenPerfilQuery _imagenPerfilQuery;
     ApiRutas _ApiRutas;
     public PersonaController(
         ILogger<HomeController> logger,
@@ -44,9 +47,12 @@ public class PersonaController : Controller
         LoginControlIdQuery loginControlIdQuery,
         UsuarioControlIdQuery usuarioControlIdQuery,
         CardControlIdQuery cardControlIdQuery,
-        DispositivoQuery dispositivoQuery
+        DispositivoQuery dispositivoQuery,
+        RegistroRostroControlIdQuery registroRostroControlIdQuery,
+        ImagenPerfilQuery imagenPerfilQuery
         )
     {
+        this.logger = logger;
         this._httpClientService = httpClientService;
         this._webHostEnvironment = webHostEnvironment;
         this._personaQuery = personaQuery;
@@ -55,6 +61,8 @@ public class PersonaController : Controller
         this._usuarioControlIdQuery = usuarioControlIdQuery;
         this._cardControlIdQuery = cardControlIdQuery;
         this._dispositivoQuery = dispositivoQuery;
+        this._registroRostroControlIdQuery = registroRostroControlIdQuery;
+        this._imagenPerfilQuery = imagenPerfilQuery;
         this._logger = logger;
 
         this._loginControlIdQuery = loginControlIdQuery;
@@ -88,57 +96,62 @@ public class PersonaController : Controller
         {
             if (await this._personaQuery.ValidarUsuario(personaCreateDto.Ci))
             {
-                //save img
-                if (personaCreateDto.perfil != null)
+                if (!await this.validarCardsRepetido(personaCreateDto))
                 {
-                    string folder = "images/perfiles";
-                    folder += Guid.NewGuid().ToString() + personaCreateDto.perfil.FileName;
-                    string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
-                    await personaCreateDto.perfil.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                    /*insertar*/
+                    personaCreateDto.ControlIdSalt = "";
+                    personaCreateDto.ControlIdRegistration = "";
+                    personaCreateDto.ControlIdName = personaCreateDto.Nombre;
 
-                }
-                /*insertar*/
-                personaCreateDto.ControlIdSalt = "";
-                personaCreateDto.ControlIdRegistration = "";
-                personaCreateDto.ControlIdName = personaCreateDto.Nombre;
-                var persona = await this._personaQuery.Store(new Persona
-                {
-                    Ci = personaCreateDto.Ci,
-                    Nombre = personaCreateDto.Nombre,
-                    Apellido = personaCreateDto.Apellido,
-                    Celular = personaCreateDto.Celular,
-                    Dirrecion = personaCreateDto.Dirrecion,
-                    Fecha_nac = personaCreateDto.Fecha_nac,
-                    Email = personaCreateDto.Email,
-                    Observaciones = personaCreateDto.Observaciones,
-                    ControlIdBegin_time = this.DateTimeToUnix(personaCreateDto.ControlIdBegin_time),
-                    ControlIdEnd_time = this.DateTimeToUnix(personaCreateDto.ControlIdEnd_time),
-                    ControlIdName = personaCreateDto.Nombre,
-                    ControlIdPassword = personaCreateDto.ControlIdPassword,
-                    ControlIdRegistration = "",
-                    ControlIdSalt = "",
-                });
-                if (personaCreateDto.Area != null)
-                {
-                    int index = 0;
-                    foreach (var area in personaCreateDto.Area)
+                    var persona = await this._personaQuery.Store(new Persona
                     {
-                        TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
-                        {
-                            Area = Convert.ToInt32(area),
-                            Codigo = Convert.ToInt32(personaCreateDto.Area[index]),
-                            ControlId = 0,
-                            PersonaId = persona.Id,
-                            ControlIdsecret = "",
-                            ControlIdValue = 0,
-                            ControlIdUserId = 0
-                        };
-                        await this._tarjetaQuery.Store(tarjetaCreateDto);
-                        index++;
+                        Ci = personaCreateDto.Ci,
+                        Nombre = personaCreateDto.Nombre,
+                        Apellido = personaCreateDto.Apellido,
+                        Celular = personaCreateDto.Celular,
+                        Dirrecion = personaCreateDto.Dirrecion,
+                        Fecha_nac = personaCreateDto.Fecha_nac,
+                        Email = personaCreateDto.Email,
+                        Observaciones = personaCreateDto.Observaciones,
+                        ControlIdBegin_time = this.DateTimeToUnix(personaCreateDto.ControlIdBegin_time),
+                        ControlIdEnd_time = this.DateTimeToUnix(personaCreateDto.ControlIdEnd_time),
+                        ControlIdName = personaCreateDto.Nombre,
+                        ControlIdPassword = personaCreateDto.ControlIdPassword,
+                        ControlIdRegistration = "",
+                        ControlIdSalt = "",
+                    });
+                    //guardar imagen
+                    if (personaCreateDto.perfil != null)
+                    {
+                        var fileFoto = await this.UploadFoto(personaCreateDto.perfil);
+                        var base64 = this.ConvertToBase64(personaCreateDto.perfil);
+                        var imagenSave = await this.GuardarImagen(persona, personaCreateDto.perfil, fileFoto,base64);
                     }
+
+                    if (personaCreateDto.Area != null)
+                    {
+                        int index = 0;
+                        foreach (var area in personaCreateDto.Area)
+                        {
+                            TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
+                            {
+                                Area = Convert.ToInt32(area),
+                                Codigo = Convert.ToInt32(personaCreateDto.Codigo[index]),
+                                ControlId = 0,
+                                PersonaId = persona.Id,
+                                ControlIdsecret = "",
+                                ControlIdValue = 0,
+                                ControlIdUserId = 0
+                            };
+                            await this._tarjetaQuery.Store(tarjetaCreateDto);
+                            index++;
+                        }
+                    }
+                    await this.SaveDispositivo(persona,persona.perfiles[0]);
+                    return RedirectToAction(nameof(Index));
                 }
-                await this.SaveDispositivo(persona);
-                return RedirectToAction(nameof(Index));
+                ViewData["ErrorCard"] = "Tarjeta ya registrada";
+                return View("~/Views/Persona/Create.cshtml", personaCreateDto);
             }
             else
             {
@@ -151,7 +164,70 @@ public class PersonaController : Controller
             return View("~/Views/Persona/Create.cshtml", personaCreateDto);
         }
     }
+    //subir image 
+    private async Task<string> UploadFoto(IFormFile imagen)
+    {
+        string folder = "/images/perfiles/";
+        string name = Guid.NewGuid().ToString() + imagen.FileName;
+        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, name);
+        await imagen.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
 
+        return name;
+    }
+    private string ConvertToBase64(IFormFile imagen)
+    {
+        var memoria = new MemoryStream();
+        imagen.CopyTo(memoria);
+        var bit = memoria.ToArray();
+        var base64 = Convert.ToBase64String(bit);
+        return base64;
+    }
+    private async Task<ImagenPerfil> GuardarImagen(Persona persona, IFormFile imagen, string ubicacion, string base64)
+    {
+        var nuevaImagen = new ImagenPerfil
+        {
+            base64=base64,
+            ControlIdImage = "",
+            ControlUserId = 0,
+            ControlIdTimestamp = 0,
+            Name = imagen.FileName,
+            Caption = imagen.ContentType,
+            FechaCreacion = DateTime.Now,
+            Path = ubicacion,
+            Size = imagen.Length,
+            PersonaId = persona.Id
+        };
+        var imagenStore = await this._imagenPerfilQuery.store(nuevaImagen);
+        return imagenStore;
+    }
+    private async Task<bool> validarCardsRepetido(PersonaCreateDto personaCreateDto)
+    {
+        bool bandera = false;
+        int index = 0;
+        if (personaCreateDto.Area != null)
+        {
+            foreach (var area in personaCreateDto.Area)
+            {
+                bandera = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaCreateDto.Codigo[index]));
+                index++;
+            }
+        }
+        return bandera;
+    }
+    private async Task<bool> validarCardsRepetidoEdit(PersonaDto personaCreate, int personaId)
+    {
+        bool bandera = false;
+        int index = 0;
+        if (personaCreate.Area != null)
+        {
+            foreach (var area in personaCreate.Area)
+            {
+                bandera = await this._tarjetaQuery.VerityCardEditar(Convert.ToInt32(area), Convert.ToInt32(personaCreate.Codigo[index]), personaId);
+                index++;
+            }
+        }
+        return bandera;
+    }
     [HttpPost("data-table")]
     public ActionResult DataTable()
     {
@@ -196,45 +272,55 @@ public class PersonaController : Controller
     {
         if (ModelState.IsValid)
         {
+            //recuperacion de tarjetas anteriores
+            ViewData["tarjetas"] = await this._tarjetaQuery.GetAllByPersona(id);
             if (await this._personaQuery.ValidateExistExceptoId(personaDto.Ci, id))
             {
-                var personaUpdate = new Persona
+                if (!await this.validarCardsRepetidoEdit(personaDto, id))
                 {
-                    Id = id,
-                    Celular = personaDto.Celular,
-                    Apellido = personaDto.Apellido,
-                    Ci = personaDto.Ci,
-                    Nombre = personaDto.Nombre,
-                    Email = personaDto.Email,
-                    Observaciones = personaDto.Observaciones,
-                    Dirrecion = personaDto.Dirrecion,
-                    Fecha_nac = personaDto.Fecha_nac,
-                    ControlIdPassword = personaDto.ControlIdPassword,
-                };
-                var persona = await this._personaQuery.UpdateOne(personaUpdate);
-
-                if (personaDto.Area != null)
-                {
-                    int index = 0;
-                    foreach (var area in personaDto.Area)
+                    var personaUpdate = new Persona
                     {
-                        TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
+                        Id = id,
+                        Celular = personaDto.Celular,
+                        Apellido = personaDto.Apellido,
+                        Ci = personaDto.Ci,
+                        Nombre = personaDto.Nombre,
+                        Email = personaDto.Email,
+                        Observaciones = personaDto.Observaciones,
+                        Dirrecion = personaDto.Dirrecion,
+                        Fecha_nac = personaDto.Fecha_nac,
+                        ControlIdPassword = personaDto.ControlIdPassword,
+
+                        ControlIdBegin_time = this.DateTimeToUnix(personaDto.ControlIdBegin_time),
+                        ControlIdEnd_time = this.DateTimeToUnix(personaDto.ControlIdEnd_time),
+                    };
+                    var persona = await this._personaQuery.UpdateOne(personaUpdate);
+
+                    if (personaDto.Area != null)
+                    {
+                        int index = 0;
+                        foreach (var area in personaDto.Area)
                         {
-                            Area = Convert.ToInt32(area),
-                            Codigo = Convert.ToInt32(personaDto.Area[index]),
-                            ControlId = 0,
-                            PersonaId = persona.Id,
-                        };
-                        var verificar = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaDto.Area[index]));
-                        if (!verificar)
-                        {
-                            await this._tarjetaQuery.Store(tarjetaCreateDto);
+                            TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
+                            {
+                                Area = Convert.ToInt32(area),
+                                Codigo = Convert.ToInt32(personaDto.Area[index]),
+                                ControlId = 0,
+                                PersonaId = persona.Id,
+                            };
+                            var verificar = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaDto.Area[index]));
+                            if (!verificar)
+                            {
+                                await this._tarjetaQuery.Store(tarjetaCreateDto);
+                            }
+                            index++;
                         }
-                        index++;
                     }
+                    await this.UpdateDispositivo(persona);
+                    return RedirectToAction(nameof(Index));
                 }
-                await this.UpdateDispositivo(persona);
-                return RedirectToAction(nameof(Index));
+                ViewData["ErrorCard"] = "Card ya fue registrado";
+                return View("~/Views/Persona/Edit.cshtml", personaDto);
             }
             else
             {
@@ -289,7 +375,6 @@ public class PersonaController : Controller
     [HttpPost("store-ajax")]
     public async Task<ActionResult> StoreAjax(PersonaCreateDto personaCreateDto)
     {
-
         var storePersona = await this._personaQuery.Store(new Persona
         {
             Ci = personaCreateDto.Ci,
@@ -332,13 +417,6 @@ public class PersonaController : Controller
         System.Console.WriteLine(data);
         return data;
     }
-    public DateTime UnixTimeStampToDateTime2(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-        dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-        return dtDateTime;
-    }
     private long ConvertCard(string area, string codigo)
     {
         int area_convert = Int32.Parse(area);
@@ -358,10 +436,11 @@ public class PersonaController : Controller
         /*valido si es el login fue ok*/
         this._usuarioControlIdQuery.Params(port, ip, user, password, login.data);
         this._cardControlIdQuery.Params(port, ip, user, password, login.data);
+        this._registroRostroControlIdQuery.Params(port, ip, user, password, login.data);
         return login.estado;
     }
     /*------USUARIO------*/
-    private async Task<bool> SaveDispositivo(Persona persona)
+    private async Task<bool> SaveDispositivo(Persona persona, ImagenPerfil imagenPerfil)
     {
         /*consutar por dispositivos*/
         var dispositivos = await this._dispositivoQuery.GetAll();
@@ -377,6 +456,10 @@ public class PersonaController : Controller
                 {
                     await this.CardStoreControlId(persona);
                 }
+                if (persona.perfiles != null)
+                {
+                    await this.ImageStoreControlId(persona, imagenPerfil);
+                }
             }
         }
         return true;
@@ -391,6 +474,19 @@ public class PersonaController : Controller
             var updateUsuario = await this._personaQuery.UpdateOne(persona);
         }
         return addUsuario.status;
+    }
+
+    private async Task<bool> ImageStoreControlId(Persona persona, ImagenPerfil imagenPerfil)
+    {
+        var addImagen = await this._registroRostroControlIdQuery.Create(persona.ControlId, imagenPerfil.base64,this.DateTimeToUnix(imagenPerfil.FechaCreacion));
+        if (addImagen.status)
+        {
+            imagenPerfil.ControlUserId = persona.ControlId;
+            imagenPerfil.ControlIdImage = imagenPerfil.ControlIdImage;
+            imagenPerfil.ControlIdTimestamp = this.DateTimeToUnix(imagenPerfil.FechaCreacion);
+            var updatePefil = await this._imagenPerfilQuery.UpdateControlId(imagenPerfil);
+        }
+        return addImagen.status;
     }
     /*------CARD------*/
     private cardsCreateDto ConvertCard(int usuarioId, string area, string codigo)
@@ -418,7 +514,7 @@ public class PersonaController : Controller
                     card.ControlId = createCard.ids[0];
                     card.ControlIdsecret = "";
                     card.ControlIdUserId = persona.ControlId;
-                    card.ControlIdValue = this.ConvertCard(card.area.ToString(),card.codigo.ToString());
+                    card.ControlIdValue = this.ConvertCard(card.area.ToString(), card.codigo.ToString());
                     var updateCard = await this._tarjetaQuery.UpdateOneControlId(card);
                 }
             }
@@ -464,7 +560,9 @@ public class PersonaController : Controller
     private async Task<bool> CardUpdateControlId(Persona persona)
     {
         List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
-
+        //elimina base de tarjetas anteriores para recrear
+        await this._cardControlIdQuery.DeleteAllUserId(persona.card);
+        
         foreach (var card in persona.card)
         {
             if (card.ControlId != 0)
@@ -475,7 +573,7 @@ public class PersonaController : Controller
                     card.ControlId = update.ids[0];
                     card.ControlIdsecret = "";
                     card.ControlIdUserId = persona.ControlId;
-                    card.ControlIdValue = this.ConvertCard(card.area.ToString(),card.codigo.ToString());
+                    card.ControlIdValue = this.ConvertCard(card.area.ToString(), card.codigo.ToString());
                     var updateCard = await this._tarjetaQuery.UpdateOneControlId(card);
                 }
             }

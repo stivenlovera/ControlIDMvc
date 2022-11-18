@@ -76,19 +76,36 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach (var disponible in Model.PuertasDisponibleId.Select((value, i) => new { i, value }))
+                                                    @if (Model.PuertasDisponibleId != null)
                                                     {
-                                                        <tr>
-                                                            <td>@Model.PuertasDisponibleNombre[disponible.i] <input value="@Model.PuertasDisponibleNombre[disponible.i]" name="PuertasDisponibleNombre" hidden> <input value="@disponible.value" name="PuertasDisponibleId" hidden></td>
-                                                            
-                                                            <td>@Model.PuertasDisponibleAreaEntradaNombre[disponible.i]<input value="@Model.PuertasDisponibleAreaEntradaNombre[disponible.i]" name="PuertasDisponibleAreaEntradaNombre" hidden> <input value="@Model.PuertasDisponibleAreaEntrada[disponible.i]" name="PuertasDisponibleAreaEntrada" hidden></td>
-                                                            <td>@Model.PuertasDisponibleAreaSalidaNombre[disponible.i] <input value="@Model.PuertasDisponibleAreaSalidaNombre[disponible.i]" name="PuertasDisponibleAreaSalidaNombre" hidden> <input value="@Model.PuertasDisponibleAreaSalida[disponible.i]" name="PuertasDisponibleAreaSalida" hidden></td>
-                                                            <td>
-                                                                <button
-                                                                class="btn btn-success btn-xs añadir_area_seleccionada"                 
+                                                        @foreach (var disponible in Model.PuertasDisponibleId.Select((value,
+                                                       i) => new { i, value }))
+                                                        {
+                                                            <tr>
+                                                                <td>@Model.PuertasDisponibleNombre[disponible.i] <input
+                                                                value="@Model.PuertasDisponibleNombre[disponible.i]"
+                                                                name="PuertasDisponibleNombre" hidden> <input
+                                                                value="@disponible.value" name="PuertasDisponibleId"
+                                                                hidden></td>
+
+                                                                <td>@Model.PuertasDisponibleAreaEntradaNombre[disponible.i]<input
+                                                                value="@Model.PuertasDisponibleAreaEntradaNombre[disponible.i]"
+                                                                name="PuertasDisponibleAreaEntradaNombre" hidden> <input
+                                                                value="@Model.PuertasDisponibleAreaEntrada[disponible.i]"
+                                                                name="PuertasDisponibleAreaEntrada" hidden></td>
+                                                                <td>@Model.PuertasDisponibleAreaSalidaNombre[disponible.i]
+                                                                    <input
+                                                                value="@Model.PuertasDisponibleAreaSalidaNombre[disponible.i]"
+                                                                name="PuertasDisponibleAreaSalidaNombre" hidden> <input
+                                                                value="@Model.PuertasDisponibleAreaSalida[disponible.i]"
+                                                                name="PuertasDisponibleAreaSalida" hidden></td>
+                                                                <td>
+                                                                    <button
+                                                                class="btn btn-success btn-xs añadir_area_seleccionada"
                                                                 type="button"><i class="fa fa-arrow-right"></i></button>
-                                                            </td>
-                                                        </tr>
+                                                                </td>
+                                                            </tr>
+                                                        }
                                                     }
                                                 </tbody>
                                             </table>
@@ -99,6 +116,7 @@
                                                     seleccionada
                                                 </label>
                                             </div>
+                                            <span asp-validation-for="PuertasSelecionadasAreaEntradaNombre" class="text-danger"></span>
                                             <table id="area_selecionadas"
                                                 class="table table-striped table-bordered bulk_action"
                                                 style="width:100%">

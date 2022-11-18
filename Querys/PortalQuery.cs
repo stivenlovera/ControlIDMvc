@@ -86,8 +86,8 @@ namespace ControlIDMvc.Querys
                     Nombre = portal.Nombre,
                     AreaFromId = portal.AreaFromId,
                     AreaToId = portal.AreaToId,
-                    AreaTo = await this._dBContext.Area.Where(a => a.Id == portal.Id).FirstOrDefaultAsync(),
-                    AreaFrom = await this._dBContext.Area.Where(a => a.Id == portal.Id).FirstOrDefaultAsync()
+                    AreaTo = await this._dBContext.Area.Where(a => a.Id == portal.AreaToId).FirstOrDefaultAsync(),
+                    AreaFrom = await this._dBContext.Area.Where(a => a.Id == portal.AreaFromId).FirstOrDefaultAsync()
                 });
             }
             return resultado;
@@ -108,6 +108,11 @@ namespace ControlIDMvc.Querys
         public async Task<List<Portal>> GetAllByID(List<int> portals_id)
         {
             var portals = await this._dBContext.Portal.Where(area => portals_id.Contains(area.Id)).ToListAsync();
+            return portals;
+        }
+        public async Task<List<Portal>> GetAllAreaID(List<int> areas_id)
+        {
+            var portals = await this._dBContext.Portal.Where(area => areas_id.Contains(area.AreaFromId) || areas_id.Contains(area.AreaToId)).ToListAsync();
             return portals;
         }
         public async Task<List<Portal>> GetAreaId(int ControlId)
