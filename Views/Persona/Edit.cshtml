@@ -3,6 +3,9 @@
     ViewData["Title"] = "Editar Persona";
     string format = "yyyy-MM-dd";
     var tarjetas = ViewData["tarjetas"] as List<ControlIDMvc.Entities.Tarjeta>;
+
+    /*image*/
+    Model.pathImagen=Model.pathImagen == "" ? "profile_user.jpg" : @Model.pathImagen;
 }
 
 <div class="right_col" role="main">
@@ -36,7 +39,7 @@
                                 <div class="profile_img">
                                     <div id="crop-avatar">
                                         <!-- Current avatar -->
-                                        <img class="img-responsive avatar-view" src="~/images/perfiles/@Model.pathImagen"
+                                        <img class="img-responsive avatar-view" src='~/images/perfiles/@Model.pathImagen'
                                             width="100%" height="100%" alt="Avatar" title="Change the avatar" id="imgPreview">
                                     </div>
                                 </div>
