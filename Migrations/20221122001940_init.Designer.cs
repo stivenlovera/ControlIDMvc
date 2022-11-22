@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlIDMvc.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20221117005509_init")]
+    [Migration("20221122001940_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -500,7 +500,8 @@ namespace ControlIDMvc.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonaId");
+                    b.HasIndex("PersonaId")
+                        .IsUnique();
 
                     b.ToTable("ImagenPerfil");
                 });
@@ -659,6 +660,186 @@ namespace ControlIDMvc.Migrations
                     b.HasIndex("ReglaAccesoId");
 
                     b.ToTable("PersonaReglasAcceso");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaCompuesta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Debe")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Haber")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Moneda")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<string>("Nivel")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NombreCuenta")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PlanCuentaTituloId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanCuentaTituloId");
+
+                    b.ToTable("PlanCuentaCompuesta");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaGrupo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Debe")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Haber")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Moneda")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<string>("Nivel")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NombreCuenta")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PlanCuentaGrupo");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaRubro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Debe")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Haber")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Moneda")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<string>("Nivel")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NombreCuenta")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PlanCuentaGrupoId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanCuentaGrupoId");
+
+                    b.ToTable("PlanCuentaRubro");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaSubCuenta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Debe")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Haber")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<int>("Moneda")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nivel")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NombreCuenta")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PlanCuentaCompuestaId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanCuentaCompuestaId");
+
+                    b.ToTable("PlanCuentaSubCuenta");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaTitulo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Debe")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Haber")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<decimal>("Moneda")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.Property<string>("Nivel")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NombreCuenta")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("PlanCuentaRubroId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(20,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanCuentaRubroId");
+
+                    b.ToTable("PlanCuentaTitulo");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Portal", b =>
@@ -1011,8 +1192,8 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.ImagenPerfil", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
-                        .WithMany("perfiles")
-                        .HasForeignKey("PersonaId")
+                        .WithOne("perfil")
+                        .HasForeignKey("ControlIDMvc.Entities.ImagenPerfil", "PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1055,6 +1236,50 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Persona");
 
                     b.Navigation("ReglaAcceso");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaCompuesta", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.PlanCuentaTitulo", "PlanCuentaTitulo")
+                        .WithMany("PlanCuentaCompuesta")
+                        .HasForeignKey("PlanCuentaTituloId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlanCuentaTitulo");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaRubro", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.PlanCuentaGrupo", "PlanCuentaGrupo")
+                        .WithMany("PlanCuentaRubros")
+                        .HasForeignKey("PlanCuentaGrupoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlanCuentaGrupo");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaSubCuenta", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.PlanCuentaCompuesta", "PlanCuentaCompuesta")
+                        .WithMany("PlanCuentaSubCuenta")
+                        .HasForeignKey("PlanCuentaCompuestaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlanCuentaCompuesta");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaTitulo", b =>
+                {
+                    b.HasOne("ControlIDMvc.Entities.PlanCuentaRubro", "PlanCuentaRubro")
+                        .WithMany("PlanCuentaTitulo")
+                        .HasForeignKey("PlanCuentaRubroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PlanCuentaRubro");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.PortalReglaAcceso", b =>
@@ -1175,7 +1400,27 @@ namespace ControlIDMvc.Migrations
 
                     b.Navigation("documentos");
 
-                    b.Navigation("perfiles");
+                    b.Navigation("perfil");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaCompuesta", b =>
+                {
+                    b.Navigation("PlanCuentaSubCuenta");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaGrupo", b =>
+                {
+                    b.Navigation("PlanCuentaRubros");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaRubro", b =>
+                {
+                    b.Navigation("PlanCuentaTitulo");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaTitulo", b =>
+                {
+                    b.Navigation("PlanCuentaCompuesta");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Portal", b =>

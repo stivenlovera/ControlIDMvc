@@ -42,5 +42,4 @@ function eliminar_evento(id) {
             fail()
         }
     });
-    
 }

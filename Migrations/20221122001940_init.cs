@@ -419,14 +419,21 @@ namespace ControlIDMvc.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Size = table.Column<int>(type: "int", nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Path = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Caption = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersonaId = table.Column<int>(type: "int", nullable: false)
+                    PersonaId = table.Column<int>(type: "int", nullable: false),
+                    ControlUserId = table.Column<int>(type: "int", nullable: false),
+                    ControlIdTimestamp = table.Column<long>(type: "bigint", nullable: false),
+                    ControlIdImage = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    base64 = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -882,12 +889,12 @@ namespace ControlIDMvc.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NombreCuenta = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Moneda = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Moneda = table.Column<int>(type: "int", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     Nivel = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Debe = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Haber = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Debe = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     PlanCuentaCompuestaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -960,7 +967,8 @@ namespace ControlIDMvc.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ImagenPerfil_PersonaId",
                 table: "ImagenPerfil",
-                column: "PersonaId");
+                column: "PersonaId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inscripcion_PaqueteId",

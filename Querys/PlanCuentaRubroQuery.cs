@@ -25,18 +25,40 @@ namespace ControlIDMvc.Querys
         {
             return await _dBContext.PlanCuentaRubro.Include(p => p.PlanCuentaTitulo).ToListAsync();
         }
-        public async Task<List<PlanCuentaRubro>> GetOne(int id)
+        public async Task<PlanCuentaRubro> GetOne(int id)
         {
-            return await _dBContext.PlanCuentaRubro.Where(p => p.Id == id).Include(p => p.PlanCuentaTitulo).ToListAsync();
+            return await _dBContext.PlanCuentaRubro.Where(p => p.Id == id).Include(p => p.PlanCuentaGrupo).FirstAsync();
         }
-        public bool Update()
+        /*validaiones*/
+        public async Task<bool> ValidarCodigo(string codigo, int codigoGrupoId)
         {
-            return true;
+            return await _dBContext.PlanCuentaRubro.Where(pg => pg.Codigo == codigo && pg.PlanCuentaGrupoId==codigoGrupoId).AnyAsync();
         }
-        public bool delete()
+        public async Task<bool> ValidarCodigoUpdate(int id, string codigo,int codigoGrupoId)
         {
-            return true;
+            return await _dBContext.PlanCuentaRubro.Where(pg => pg.Codigo == codigo && pg.Id != id && pg.PlanCuentaGrupoId == codigoGrupoId).AnyAsync();
         }
-
+        public async Task<PlanCuentaRubro> Update(PlanCuentaRubro planCuentaRubro)
+        {
+            _dBContext.Entry(await _dBContext.PlanCuentaRubro.FirstOrDefaultAsync(x => x.Id == planCuentaRubro.Id)).CurrentValues.SetValues(new
+            {
+                Id = planCuentaRubro.Id,
+                Codigo = planCuentaRubro.Codigo,
+                NombreCuenta = planCuentaRubro.NombreCuenta
+            });
+            await _dBContext.SaveChangesAsync();
+            return await _dBContext.PlanCuentaRubro.Where(pg => pg.Id == planCuentaRubro.Id).FirstAsync();
+        }
+        public async Task<bool> Delete(int id)
+        {
+            var planRubro = await _dBContext.PlanCuentaRubro.Where(x => x.Id == id).FirstAsync();
+            if (planRubro != null)
+            {
+                _dBContext.PlanCuentaRubro.Remove(planRubro);
+                await _dBContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

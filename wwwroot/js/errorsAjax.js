@@ -30,3 +30,15 @@ function fail() {
         html: '',
     });
 }
+function validateError(errors) {
+    let resultado = "";
+    let claves = Object.keys(errors); // claves = ["nombre", "color", "macho", "edad"]
+    for (let i = 0; i < claves.length; i++) {
+        console.log(claves[i])
+        let clave = claves[i];
+        if (errors[clave].errors.length > 0) {
+            resultado += `${errors[clave].errors[0].errorMessage}<br>`;
+        }
+    }
+    return resultado
+}

@@ -498,7 +498,8 @@ namespace ControlIDMvc.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonaId");
+                    b.HasIndex("PersonaId")
+                        .IsUnique();
 
                     b.ToTable("ImagenPerfil");
                 });
@@ -775,13 +776,13 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Debe")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("Haber")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
-                    b.Property<decimal>("Moneda")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<int>("Moneda")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nivel")
                         .HasColumnType("longtext");
@@ -793,7 +794,7 @@ namespace ControlIDMvc.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.HasKey("Id");
 
@@ -1189,8 +1190,8 @@ namespace ControlIDMvc.Migrations
             modelBuilder.Entity("ControlIDMvc.Entities.ImagenPerfil", b =>
                 {
                     b.HasOne("ControlIDMvc.Entities.Persona", "Persona")
-                        .WithMany("perfiles")
-                        .HasForeignKey("PersonaId")
+                        .WithOne("perfil")
+                        .HasForeignKey("ControlIDMvc.Entities.ImagenPerfil", "PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1397,7 +1398,7 @@ namespace ControlIDMvc.Migrations
 
                     b.Navigation("documentos");
 
-                    b.Navigation("perfiles");
+                    b.Navigation("perfil");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.PlanCuentaCompuesta", b =>
@@ -1432,7 +1433,6 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("AreaSReglaAccesos");
 
                     b.Navigation("HorarioReglasAcceso");
-
 
                     b.Navigation("PersonaReglasAcceso");
 

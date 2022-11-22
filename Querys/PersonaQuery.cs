@@ -91,7 +91,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Persona> GetOne(int id)
         {
-            var persona = await _dbContext.Persona.Where(persona => persona.Id == id).Include(p => p.card).FirstAsync();
+            var persona = await _dbContext.Persona.Where(persona => persona.Id == id).Include(p => p.card).Include(x=>x.perfil).FirstAsync();
             return persona;
         }
         public async Task<bool> ValidarUsuario(string ci)

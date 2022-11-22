@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControlIDMvc.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
 {
@@ -20,13 +21,39 @@ namespace ControlIDMvc.Querys
             await _dBContext.SaveChangesAsync();
             return planCuentaCompuesta;
         }
-        public bool Update()
+        public async Task<PlanCuentaCompuesta> GetOneCompuestaId(int CompuestaId)
         {
-            return true;
+            return await _dBContext.PlanCuentaCompuesta.Where(p => p.Id == CompuestaId).Include(p => p.PlanCuentaTitulo).ThenInclude(x => x.PlanCuentaRubro).ThenInclude(x => x.PlanCuentaGrupo).FirstAsync();
         }
-        public bool delete()
+        public async Task<bool> ValidarCodigo(string codigo, int codigoTituloId)
         {
-            return true;
+            return await _dBContext.PlanCuentaCompuesta.Where(pc => pc.Codigo == codigo && pc.PlanCuentaTituloId == codigoTituloId).AnyAsync();
+        }
+        public async Task<bool> ValidarCodigoUpdate(int id, string codigo, int cuentaTituloId)
+        {
+            return await _dBContext.PlanCuentaCompuesta.Where(pg => pg.Codigo == codigo && pg.Id != id && pg.PlanCuentaTituloId == cuentaTituloId).AnyAsync();
+        }
+        public async Task<PlanCuentaCompuesta> Update(PlanCuentaCompuesta planCuentaCompuesta)
+        {
+            _dBContext.Entry(await _dBContext.PlanCuentaCompuesta.FirstOrDefaultAsync(x => x.Id == planCuentaCompuesta.Id)).CurrentValues.SetValues(new
+            {
+                Id = planCuentaCompuesta.Id,
+                Codigo = planCuentaCompuesta.Codigo,
+                NombreCuenta = planCuentaCompuesta.NombreCuenta
+            });
+            await _dBContext.SaveChangesAsync();
+            return await _dBContext.PlanCuentaCompuesta.Where(pg => pg.Id == planCuentaCompuesta.Id).FirstAsync();
+        }
+        public async Task<bool> Delete(int id)
+        {
+            var planCuentaCompuesta = await _dBContext.PlanCuentaCompuesta.Where(x => x.Id == id).FirstAsync();
+            if (planCuentaCompuesta != null)
+            {
+                _dBContext.PlanCuentaCompuesta.Remove(planCuentaCompuesta);
+                await _dBContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
         public bool GetAll()
         {

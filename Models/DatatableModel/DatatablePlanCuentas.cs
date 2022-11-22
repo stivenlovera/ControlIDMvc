@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ControlIDMvc.Dtos.PlanCuentaGrupo
+namespace ControlIDMvc.Models.DatatableModel
 {
-    public class PlanCuentaListaDto
-    {
-        public List<ListaPlanes> ListaPlanes { get; set; }
-    }
-    public class ListaPlanes
+    public class DatatablePlanCuentas
     {
         public int Id { get; set; }
         public string Codigo { get; set; }

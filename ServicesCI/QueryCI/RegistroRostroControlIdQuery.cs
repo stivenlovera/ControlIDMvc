@@ -48,6 +48,15 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunCreate(body);
             return response;
         }
+        public async Task<ResponseRegistroFotoDelete> Delete(int user_id)
+        {
+            var body = new
+            {
+                user_id = user_id
+            };
+            var response = await this.RunDelete(body);
+            return response;
+        }
         private async Task<ResponseRegistroFotoCreate> RunCreate(Object body)
         {
             ResponseRegistroFotoCreate responseCreate = new ResponseRegistroFotoCreate();

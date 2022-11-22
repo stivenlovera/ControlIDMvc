@@ -23,7 +23,7 @@ namespace ControlIDMvc.Entities
         public long ControlIdEnd_time { get; set; }
         public List<Tarjeta> card { get; set; }
         public List<ImagenDocumento> documentos { get; set; }
-        public List<ImagenPerfil> perfiles { get; set; }
+        public ImagenPerfil perfil { get; set; }
         public List<Inscripcion> Inscripciones { get; set; }
         public List<PersonaReglasAcceso> PersonaReglasAccesoId { get; set; }
         public Usuario Usuario { get; set; }

@@ -1,280 +1,192 @@
-
 @model ControlIDMvc.Dtos.PlanCuentaGrupo.PlanCuentaListaDto
 @{
 
     ViewData["Title"] = "ListaPlanDeCuentas";
-    Layout="_Layout";
+    Layout = "_Layout";
 }
 <div class="right_col" role="main">
-                <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3>PLAN DE CUENTAS</h3>
-                        </div>
-                        <div class="title_right">
-                            <div class="col-md-5 col-sm-5   form-group pull-right top_search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search for...">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Go!</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>PLAN DE CUENTAS</h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5   form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
                     </div>
-                    <div class="clearfix"></div>
-                    <div class="col-md-12 col-sm-12 ">
-                        <div class="x_panel">
-                            <div class="x_content">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="row">
-                                            <form class="form-horizontal form-label-left">
-                                                <div class="form-group row ">
-                                                    <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Codigo</label>
-                                                    <div class="col-md-2 col-sm-2 ">
-                                                        <input type="text" class="form-control" placeholder="Codigo Input" style="font-size:small">
-                                                    </div>
-                                                    <label class="control-label col-md-2 col-sm-2 " style="text-align:right">Nombre de la Cuenta</label>
-                                                    <div class="col-md-2 col-sm-2 ">
-                                                        <input type="text" class="form-control" placeholder="Cuenta Nombre" style="font-size:small">
-                                                    </div>
-                                                    <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Nivel</label>
-                                                    <div class="col-md-2 col-sm-2 ">
-                                                        <select class="form-control" style="font-size:small">
-                                                            <option>Grupo</option>
-                                                            <option>Rubro</option>
-                                                            <option>Titulo</option>
-                                                            <option>Compuesta</option>
-                                                            <option>SubCuenta</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-2 col-sm-2">
-                                                        <button type="button" class="btn btn-primary" id="open_modal_grupo" style="font-size:small">Crear GRUPO</button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <form class="form-horizontal form-label-left">
+                                    <div class="form-group row ">
+                                        <label class="control-label col-md-1 col-sm-1 "
+                                            style="text-align:right">Codigo</label>
+                                        <div class="col-md-2 col-sm-2 ">
+                                            <input type="text" class="form-control" placeholder="Codigo Input"
+                                                style="font-size:small">
                                         </div>
-                                        <div class="card-box table-responsive">
-                                            <table id="datatable-checkbox" class="table table-striped table-bordered bulk_action" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>
-                                                        <th><input type="checkbox" id="check-all"></th>
-                                                        </th>
-                                                        <th>Codigo</th>
-                                                        <th>Nombre de la Cuenta</th>
-                                                        <th>Moneda</th>
-                                                        <th>Valor</th>
-                                                        <th>Nivel</th>
-                                                        <th>CRUD</th>
-                                                        <th>Usuarios</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                    
-                                                    @foreach (var planCuenta in Model.ListaPlanes)
-                                                        {
-                                                        <tr>
-                                                            <td>
-                                                            <th><input type="checkbox" id="check-all"></th>
-                                                            </td>
-                                                            <td>@planCuenta.Codigo</td>
-                                                            <td>@planCuenta.NombreCuenta</td>
-                                                            <td>@planCuenta.Moneda</td>
-                                                            <td>@planCuenta.Valor</td>
-                                                            <td>@planCuenta.Nivel</td> 
-                                                            <td>
-                                                                <a class="glyphicon open_modal_@planCuenta.Modal" role="button" data-id="@planCuenta.Id" ><i style="color:orange" class="glyphicon glyphicon-pencil"  title="Editar"></i></a>
-                                                                &nbsp;
-                                                                <a class="glyphicon open_modal_@planCuenta.Modal" role="button" data-id="@planCuenta.Id" ><i style="color:forestgreen" class="glyphicon glyphicon-plus" title="Crear"></i></a>
-                                                            </td>
-                                                            <td>U1 U2 U3</td>
-                                                        </tr>
-                                                        }
-                                                   @*  <tr>
-                                                        <td>
-                                                        <th><input type="checkbox" id="check-all"></th>
-                                                        </td>
-                                                        <td>1</td>
-                                                        <td>Activos</td>
-                                                        <td></td>
-                                                        <td>1</td>
-                                                        <td>Grupo</td>
-                                                        <td>
-                                                            <!-- Large modal -->
-                                                            <a class="glyphicon" role="button" id="open_modal_rubro1"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a>
-                                                            &nbsp;
-                                                            <a class="glyphicon"  role="button" id="open_modal_rubro1"><i style="color:forestgreen" class="glyphicon glyphicon-plus" title="Crear"></i></a>
-                                                        </td>
-                                                        <td>U1 U2 U3</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                        <th><input type="checkbox" id="check-all"></th>
-                                                        </td>
-                                                        <td>1 1</td>
-                                                        <td>Activo Corriente</td>
-                                                        <td></td>
-                                                        <td>1</td>
-                                                        <td>Rubro</td>
-                                                        <td>
-                                                            <a class="glyphicon" role="button" id="open_modal_titulo"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a>
-                                                            &nbsp;
-                                                            <a class="glyphicon" role="button" id="open_modal_titulo"><i style="color:forestgreen" class="glyphicon glyphicon-plus" title="Editar"></i></a>
-                                                        </td>
-                                                        <td>U1 U2 U3</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                        <th><input type="checkbox" id="check-all"></th>
-                                                        </td>
-                                                        <td>1 1 01</td>
-                                                        <td>Disponibilidades</td>
-                                                        <td></td>
-                                                        <td>1</td>
-                                                        <td>Titulo</td>
-                                                        <td>
-                                                            <a class="glyphicon" role="button" id="open_modal_compuesta"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a>
-                                                            &nbsp;
-                                                            <a class="glyphicon" role="button" id="open_modal_compuesta"><i style="color:forestgreen" class="glyphicon glyphicon-plus" title="Editar"></i></a>
-                                                        </td>
-                                                        <td>$86,000</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                        <th><input type="checkbox" id="check-all"></th>
-                                                        </td>
-                                                        <td>1 1 01 01</td>
-                                                        <td>Billetes y Monedas</td>
-                                                        <td></td>
-                                                        <td>1</td>
-                                                        <td>Compuesta</td>
-                                                        <td>
-                                                            <a class="glyphicon" role="button" id="open_modal_subcuenta"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a>
-                                                            &nbsp;
-                                                            <a class="glyphicon" role="button" id="open_modal_subcuenta"><i style="color:forestgreen" class="glyphicon glyphicon-plus" title="Editar"></i></a>
-                                                        </td>
-                                                        <td>$433,060</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                        <th><input type="checkbox" id="check-all"></th>
-                                                        </td>
-                                                        <td>1 1 01 01 0001</td>
-                                                        <td>Efectivo</td>
-                                                        <td>Bs.</td>
-                                                        <td>1</td>
-                                                        <td>SubCuenta</td>
-                                                        <td>
-                                                            <a class="glyphicon" role="button" id="open_modal_subcuenta"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a>
-                                                        </td>
-                                                        <td>$162,700</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                        <th><input type="checkbox" id="check-all"></th>
-                                                        </td>
-                                                        <td>1 1 01 01 0001</td>
-                                                        <td>Credito Fiscal</td>
-                                                        <td>Bs.</td>
-                                                        <td>0.13</td>
-                                                        <td>SubCuenta</td>
-                                                        <td>
-                                                            <a class="glyphicon" Srole="button" id="open_modal_subcuenta"><i style="color:orange" class="glyphicon glyphicon-pencil" title="Editar"></i></a>
-                                                        </td>
-                                                        <td>$162,700</td>
-                                                    </tr> *@
-                                                </tbody>
-                                            </table>
+                                        <label class="control-label col-md-2 col-sm-2 " style="text-align:right">Nombre
+                                            de la Cuenta</label>
+                                        <div class="col-md-2 col-sm-2 ">
+                                            <input type="text" class="form-control" placeholder="Cuenta Nombre"
+                                                style="font-size:small">
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-1 "
+                                            style="text-align:right">Nivel</label>
+                                        <div class="col-md-2 col-sm-2 ">
+                                            <select class="form-control" style="font-size:small">
+                                                <option>Grupo</option>
+                                                <option>Rubro</option>
+                                                <option>Titulo</option>
+                                                <option>Compuesta</option>
+                                                <option>SubCuenta</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 col-sm-2">
+                                            <button type="button" class="btn btn-primary" id="open_modal_grupo"
+                                                style="font-size:small">Crear GRUPO</button>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
+                            </div>
+                            <div class="card-box table-responsive">
+                                
+                                <table id="datatable_planes" class="table table-striped table-bordered bulk_action"
+                                    style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre de la Cuenta</th>
+                                            <th>Moneda</th>
+                                            <th>Valor</th>
+                                            <th>Nivel</th>
+                                            <th>CRUD</th>
+                                            <th>Usuarios</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 <!-- Modal Crear Grupo --->
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_grupo">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">GRUPO</h4>
+                <h4 class="modal-title">GRUPO</h4>
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal form-label-left" id="form_grupo">
-                    <div class="form-group row ">
+                    <div class="form-group row">
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Codigo</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Codigo Input" name="codigo" style="font-size:small">
+                            <input type="text" class="form-control codigo" placeholder="Codigo Input" name="codigo"
+                                style="font-size:small">
                         </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la Cuenta</label>
+                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la
+                            Cuenta</label>
                         <div class="col-md-3 col-sm-3 ">
-                            <input type="text" class="form-control" placeholder="Cuenta Nombre" name="nombre"  style="font-size:small">
+                            <input type="text" class="form-control nombre" placeholder="Cuenta Nombre" name="nombre"
+                                style="font-size:small">
                         </div>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Nivel</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" name="nivel" value="Grupo" placeholder="Grupo" readonly style="font-size:small">
+                            <input type="text" class="form-control" name="nivel" value="Grupo" placeholder="Grupo"
+                                readonly style="font-size:small">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:small">CERRAR</button>
-                <button type="button" class="btn btn-success" id="guardar_grupo" style="font-size:small">GUARDAR</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    style="font-size:small">CERRAR</button>
+                <button type="button" class="btn btn-success guardar_grupo" id="button_grupo_guardar"
+                    style="font-size:small">GUARDAR</button>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Modal crear Rubro -->
 <div class="modal fade modal-edit-rubro" tabindex="-1" role="dialog" aria-hidden="true" id="modal_rubro">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">RUBRO</h4>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal form-label-right" id="form_rubro">
-                        <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <label class="control-label col-md-3 col-sm-3 codigo-grupo" style="text-align:left"></label>
-                        </div>
-                            <label class="control-label col-md-3 col-sm-3 nombre-grupo" style="text-align:left"></label>
-                            <label class="control-label col-md-2 col-sm-2 nivel-grupo" style="text-align:Center"></label>
-                        </div>
-                        <br>
-                        <div class="form-group row ">
-                        <input type="text" class="id-grupo" name="PlanCuentaGrupoId" hidden>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">RUBRO</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form-label-right" id="form_rubro">
+                    <div class="form-group row ">
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Grupo</strong>
+                            <p class="codigo-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Grupo</strong>
+                            <p class="nombre-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Grupo</strong>
+                            <p class="nivel-grupo"></p>
+                        </label>
+                    </div>
+                    <div class="form-group row ">
+                        <input type="text" name="codigoPadreGrupo" id="codigoPadreGrupo" hidden>
+                        <input type="text" value="" name="PlanCuentaGrupoId" id="PlanCuentaGrupoId" hidden>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Codigo</label>
-                            <div class="col-md-2 col-sm-2 ">
-                                <input type="text" class="form-control" placeholder="Codigo Input" style="font-size:small" name="codigo">
-                            </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la Cuenta</label>
+                        <div class="col-md-2 col-sm-2 ">
+                            <input type="text" class="form-control codigo" placeholder="Codigo Input"
+                                style="font-size:small" name="codigo">
+                        </div>
+                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la
+                            Cuenta</label>
                         <div class="col-md-3 col-sm-3 ">
-                            <input type="text" class="form-control" placeholder="Cuenta Nombre" style="font-size:small" name="nombre">
+                            <input type="text" class="form-control nombre" placeholder="Cuenta Nombre"
+                                style="font-size:small" name="nombre">
                         </div>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Nivel</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Rubro" readonly name="nivel" value="Rubro" style="font-size:small">
+                            <input type="text" class="form-control" placeholder="Rubro" readonly name="nivel"
+                                value="Rubro" style="font-size:small">
                         </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:small">CERRAR</button>
-                    <button type="button" class="btn btn-success" style="font-size:small" id="guardar_rubro">GUARDAR</button>
-                </div>
+                    </div>
+                </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    style="font-size:small">CERRAR</button>
+                <button type="button" class="btn btn-success" style="font-size:small"
+                    id="button_rubro_guardar">GUARDAR</button>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+
 <!-- Modal Crear Titulo -->
 <div class="modal fade modal-edit-titulo" tabindex="-1" role="dialog" aria-hidden="true" id="modal_titulo">
     <div class="modal-dialog modal-lg">
@@ -288,44 +200,65 @@
             <div class="modal-body">
                 <form class="form-horizontal form-label-right" id="form_titulo">
                     <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaGrupoId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Activo</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Grupo</label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Grupo</strong>
+                            <p class="codigo-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Grupo</strong>
+                            <p class="nombre-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Grupo</strong>
+                            <p class="nivel-grupo"></p>
+                        </label>
                     </div>
-                    <br>
-                    <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="11" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaRubroId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Activo Corriente</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Rubro</label>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Rubro</strong>
+                            <p class="codigo-rubro"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Rubro</strong>
+                            <p class="nombre-rubro"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Rubro</strong>
+                            <p class="nivel-rubro"></p>
+                        </label>
                     </div>
-                    <br>
                     <div class="form-group row ">
+                        <input type="text" id="codigoPadreRubro" name="codigoPadreRubro" hidden>
+                        <input type="text" id="PlanCuentaRubroId" name="PlanCuentaRubroId" hidden>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Codigo</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Codigo Input" style="font-size:small" name="codigo">
+                            <input type="text" class="form-control codigo" placeholder="Codigo Input"
+                                style="font-size:small" name="codigo">
                         </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la Cuenta</label>
+                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la
+                            Cuenta</label>
                         <div class="col-md-3 col-sm-3 ">
-                            <input type="text" class="form-control" placeholder="Cuenta Nombre" style="font-size:small" name="nombre">
+                            <input type="text" class="form-control nombre" placeholder="Cuenta Nombre"
+                                style="font-size:small" name="nombre">
                         </div>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Nivel</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Titulo" readonly style="font-size:small" name="nivel" value="Titulo">
+                            <input type="text" class="form-control" placeholder="Titulo" readonly
+                                style="font-size:small" name="nivel" value="Titulo">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:small">CERRAR</button>
-                <button type="button" class="btn btn-success" style="font-size:small"id="guardar_titulo">GUARDAR</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    style="font-size:small">CERRAR</button>
+                <button type="button" class="btn btn-success" style="font-size:small"
+                    id="button_titulo_guardar">GUARDAR</button>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Modal Crear Compuesta -->
 <div class="modal fade modal-edit-Compuesta" tabindex="-1" role="dialog" aria-hidden="true" id="modal_compuesta">
     <div class="modal-dialog modal-lg">
@@ -339,52 +272,81 @@
             <div class="modal-body">
                 <form class="form-horizontal form-label-right" id="form_compuesta">
                     <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaGrupoId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Activo</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Grupo</label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Grupo</strong>
+                            <p class="codigo-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Grupo</strong>
+                            <p class="nombre-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Grupo</strong>
+                            <p class="nivel-grupo"></p>
+                        </label>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Rubro</strong>
+                            <p class="codigo-rubro"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Rubro</strong>
+                            <p class="nombre-rubro"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Rubro</strong>
+                            <p class="nivel-rubro"></p>
+                        </label>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Titulo</strong>
+                            <p class="codigo-titulo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Titulo</strong>
+                            <p class="nombre-titulo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Titulo</strong>
+                            <p class="nivel-titulo"></p>
+                        </label>
                     </div>
                     <br>
                     <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaRubroId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Activo Corriente</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Rubro</label>
-                    </div>
-                    <br>
-                    <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaTituloId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Disponibilidades</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Titulo</label>
-                    </div>
-                    <br>
-                    <div class="form-group row ">
+                        <input type="text" id="codigoPadreTitulo" name="codigoPadreTitulo" hidden>
+                        <input type="text" class="form-control" value="1" placeholder="Codigo Input"
+                            id="PlanCuentaTituloId" style="font-size:small" name="PlanCuentaTituloId" hidden>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Codigo</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Codigo Input" style="font-size:small" name="codigo">
+                            <input type="text" class="form-control codigo" placeholder="Codigo Input"
+                                style="font-size:small" name="codigo">
                         </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la Cuenta</label>
+                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la
+                            Cuenta</label>
                         <div class="col-md-3 col-sm-3 ">
-                            <input type="text" class="form-control" placeholder="Cuenta Nombre" style="font-size:small" name="nombre">
+                            <input type="text" class="form-control nombre" placeholder="Cuenta Nombre"
+                                style="font-size:small" name="nombre">
                         </div>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Nivel</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Compuesta" readonly style="font-size:small" name="nivel" value="Compuesta">
+                            <input type="text" class="form-control" placeholder="Compuesta" readonly
+                                style="font-size:small" name="nivel" value="Compuesta">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:small">CERRAR</button>
-                <button type="button" class="btn btn-success" style="font-size:small" id="guardar_compuesta">GUARDAR</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    style="font-size:small">CERRAR</button>
+                <button type="button" class="btn btn-success" style="font-size:small"
+                    id="button_compuesta_guardar">GUARDAR</button>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Modal Crear SubCuenta -->
 <div class="modal fade modal-edit-SubCuenta" tabindex="-1" role="dialog" aria-hidden="true" id="modal_subcuenta">
     <div class="modal-dialog modal-lg">
@@ -398,71 +360,105 @@
             <div class="modal-body">
                 <form class="form-horizontal form-label-right" id="form_subcuenta">
                     <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaGrupoId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Activo</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Grupo</label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Grupo</strong>
+                            <p class="codigo-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Grupo</strong>
+                            <p class="nombre-grupo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Grupo</strong>
+                            <p class="nivel-grupo"></p>
+                        </label>
                     </div>
-                    <br>
-                    <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaRubroId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Activo Corriente</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Rubro</label>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Rubro</strong>
+                            <p class="codigo-rubro"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Rubro</strong>
+                            <p class="nombre-rubro"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Rubro</strong>
+                            <p class="nivel-rubro"></p>
+                        </label>
                     </div>
-                    <br>
-                    <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaTituloId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Disponibilidades</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Titulo</label>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Titulo</strong>
+                            <p class="codigo-titulo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Titulo</strong>
+                            <p class="nombre-titulo"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Titulo</strong>
+                            <p class="nivel-titulo"></p>
+                        </label>
                     </div>
-                    <br>
-                    <div class="form-group row ">
-                        <div class="col-md-1 col-sm-1">
-                            <input type="text" class="form-control" value="1" placeholder="Codigo Input" style="font-size:small" name="PlanCuentaCompuestaId">
-                        </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:left">Billetes y Monedas</label>
-                        <label class="control-label col-md-2 col-sm-2 " style="text-align:Center">Compuesta</label>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Codigo
+                                Compuesta</strong>
+                            <p class="codigo-compuesta"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nombre
+                                Compuesta</strong>
+                            <p class="nombre-compuesta"></p>
+                        </label>
+                        <label class="control-label col-md-4 col-sm-4 " style="text-align:left"><strong>Nivel
+                                Compuesta</strong>
+                            <p class="nivel-compuesta"></p>
+                        </label>
                     </div>
-                    <br>
-                    <div class="form-group row ">
+                    <div class="form-group row">
+                        <input type="text" id="codigoPadreCompuesta" name="codigoPadreCompuesta" hidden>
+                        <input type="text" class="form-control" placeholder="Codigo Input" id="PlanCuentaCompuestaId"
+                            style="font-size:small" name="PlanCuentaCompuestaId" hidden>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Codigo</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Codigo Input" style="font-size:small" name="codigo">
+                            <input type="text" class="form-control codigo" placeholder="Codigo Input"
+                                style="font-size:small" name="codigo">
                         </div>
-                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la Cuenta</label>
+                        <label class="control-label col-md-3 col-sm-3 " style="text-align:right">Nombre de la
+                            Cuenta</label>
                         <div class="col-md-3 col-sm-3 ">
-                            <input type="text" class="form-control" placeholder="Cuenta Nombre" style="font-size:small" name="nombre">
+                            <input type="text" class="form-control nombre" placeholder="Cuenta Nombre"
+                                style="font-size:small" name="nombre">
                         </div>
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Nivel</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <input type="text" class="form-control" placeholder="Sub Cuenta" readonly style="font-size:small" name="nivel" value="SubCuenta">
+                            <input type="text" class="form-control sub_cuenta" placeholder="Sub Cuenta" readonly
+                                style="font-size:small" name="nivel" value="SubCuenta">
                         </div>
                     </div>
                     <div class="form-group row ">
                         <label class="control-label col-md-1 col-sm-1 " style="text-align:right">Moneda</label>
                         <div class="col-md-2 col-sm-2 ">
-                            <select class="form-control" style="font-size:small" name="moneda">
-                                <option>Bolivianos</option>
-                                <option>Dolares</option>
-                                <option>Euros</option>
+                            <select class="form-control moneda" style="font-size:small" name="moneda">
+                                <option value="1">Bolivianos</option>
+                                <option value="2">Dolares</option>
+                                <option value="3">Euros</option>
                             </select>
                         </div>
                         <label class="control-label col-md-3 col-sm-3 " style="text-align:right">%</label>
                         <div class="col-md-3 col-sm-3 ">
-                            <input type="text" class="form-control" placeholder="1" style="font-size:small" name="valor">
+                            <input type="text" class="form-control valor" placeholder="1" style="font-size:small"
+                                name="valor">
                         </div>
                     </div>
                 </form>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:small">CERRAR</button>
-                <button type="button" class="btn btn-success" style="font-size:small" id="guardar_subcuenta">GUARDAR</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    style="font-size:small">CERRAR</button>
+                <button type="button" class="btn btn-success" style="font-size:small"
+                    id="button_sub_cuenta_guardar">GUARDAR</button>
             </div>
         </div>
     </div>
@@ -487,4 +483,72 @@
 <script src="~/js/plancuentas/PlanCuentaCompuesta.js"></script>
 <script src="~/js/plancuentas/PlanCuentaSubCuenta.js"></script>
 
+<script>
+    table = $("#datatable_planes").DataTable({
+        // ServerSide Setups
+        processing: true,
+        serverSide: true,
+        // Paging Setups
+        pageLength: 50,
+        filter: false,
+        searching: false,
+        order: [],
+        ajax: {
+            url: "PlanDeCuentas/data-table",
+            type: "POST",
+        },
+        columns: [
+            {
+                name: "codigo",
+                data: "codigo"
+            },
+            {
+                name: "nombreCuenta",
+                data: "nombreCuenta"
+            },
+            {
+                name: "moneda",
+                data: "moneda"
+            },
+            {
+                name: "valor",
+                data: "valor"
+            },
+            {
+                name: "nivel",
+                data: "nivel"
+            },
+            {
+                name: "id",
+                data: "id",
+                render: function (data, type, row) {
+                    let validarNuevo = ``;
+                    if (row.modalCreate) {
+                        validarNuevo = `
+                         <a class="glyphicon open_create_modal_${row.modalCreate}"
+                        role="button" data-id="${row.id}"><i style="color:forestgreen"
+                            class="glyphicon glyphicon-plus" title="Crear"></i></a>
+                       `;
+                    }
+                    return `
+                        <a class="glyphicon open_editar_modal_${row.modalEdit}"
+                        role="button" data-id="${row.id}"><i style="color:orange"
+                            class="glyphicon glyphicon-pencil" title="Editar"></i></a>
+                            ${validarNuevo}
+                        <a class="glyphicon open_delete_modal_${row.modalEdit}"
+                        role="button" data-id="${row.id}"><i style="color:forestgreen"
+                            class="glyphicon glyphicon-trash" title="Crear"></i></a>
+                    `;
+                }
+            },
+            {
+                name: "nivel",
+                data: "nivel",
+                 render: function (data, type, row) {
+                    return `U1 U2 U3`;
+                }
+            },
+        ]
+    });
+</script>
 }

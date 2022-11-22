@@ -20,9 +20,9 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return await this._dbContext.ImagenPerfil.Where(h => h.Id == imagenPerfil.Id).FirstOrDefaultAsync();
         }
-        public async Task<ImagenPerfil> Update(ImagenPerfil imagenPerfil)
+        public async Task<ImagenPerfil> Update( int id, ImagenPerfil imagenPerfil)
         {
-            _dbContext.Entry(await _dbContext.ImagenPerfil.FirstOrDefaultAsync(x => x.Id == imagenPerfil.Id)).CurrentValues.SetValues(new
+            _dbContext.Entry(await _dbContext.ImagenPerfil.FirstOrDefaultAsync(x => x.PersonaId == id)).CurrentValues.SetValues(new
             {
                 base64 = imagenPerfil.base64,
                 ControlIdTimestamp = imagenPerfil.ControlIdTimestamp,
@@ -53,7 +53,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<bool> Delete(int id)
         {
-            var imagenPerfil = await _dbContext.ImagenPerfil.Where(x => x.Id == id).FirstAsync();
+            var imagenPerfil = await _dbContext.ImagenPerfil.Where(x => x.PersonaId == id).FirstAsync();
             if (imagenPerfil != null)
             {
                 _dbContext.ImagenPerfil.Remove(imagenPerfil);

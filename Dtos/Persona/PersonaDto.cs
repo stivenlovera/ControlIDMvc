@@ -21,5 +21,7 @@ namespace ControlIDMvc.Dtos.Persona
         public List<string> Codigo { get; set; }
         public DateTime ControlIdBegin_time { get; set; }
         public DateTime ControlIdEnd_time { get; set; }
+        public string pathImagen { get; set; }
+        public IFormFile perfil { get; set; }
     }
 }

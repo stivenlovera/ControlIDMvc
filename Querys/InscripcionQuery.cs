@@ -69,8 +69,6 @@ namespace ControlIDMvc.Querys
                 recordsFiltered = filterRecord,
                 data = empList
             };
-
-
         }
         public async Task<InscripcionDto> Store(InscripcionCreateDto inscripcionCreateDto)
         {

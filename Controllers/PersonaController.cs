@@ -125,7 +125,7 @@ public class PersonaController : Controller
                     {
                         var fileFoto = await this.UploadFoto(personaCreateDto.perfil);
                         var base64 = this.ConvertToBase64(personaCreateDto.perfil);
-                        var imagenSave = await this.GuardarImagen(persona, personaCreateDto.perfil, fileFoto,base64);
+                        var imagenSave = await this.GuardarImagen(persona, personaCreateDto.perfil, fileFoto, base64);
                     }
 
                     if (personaCreateDto.Area != null)
@@ -147,7 +147,7 @@ public class PersonaController : Controller
                             index++;
                         }
                     }
-                    await this.SaveDispositivo(persona,persona.perfiles[0]);
+                    await this.SaveDispositivo(persona, persona.perfil == null ? null : persona.perfil);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["ErrorCard"] = "Tarjeta ya registrada";
@@ -167,11 +167,12 @@ public class PersonaController : Controller
     //subir image 
     private async Task<string> UploadFoto(IFormFile imagen)
     {
-        string folder = "/images/perfiles/";
+        string folder = "images/perfiles/";
         string name = Guid.NewGuid().ToString() + imagen.FileName;
-        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, name);
-        await imagen.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-
+        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder, name);
+        var file = new FileStream(serverFolder, FileMode.Create);
+        await imagen.CopyToAsync(file);
+        await file.DisposeAsync();
         return name;
     }
     private string ConvertToBase64(IFormFile imagen)
@@ -186,7 +187,7 @@ public class PersonaController : Controller
     {
         var nuevaImagen = new ImagenPerfil
         {
-            base64=base64,
+            base64 = base64,
             ControlIdImage = "",
             ControlUserId = 0,
             ControlIdTimestamp = 0,
@@ -198,6 +199,24 @@ public class PersonaController : Controller
             PersonaId = persona.Id
         };
         var imagenStore = await this._imagenPerfilQuery.store(nuevaImagen);
+        return imagenStore;
+    }
+    private async Task<ImagenPerfil> UpdateImagen(int id, Persona persona, IFormFile imagen, string ubicacion, string base64)
+    {
+        var nuevaImagen = new ImagenPerfil
+        {
+            base64 = base64,
+            ControlIdImage = "",
+            ControlUserId = 0,
+            ControlIdTimestamp = 0,
+            Name = imagen.FileName,
+            Caption = imagen.ContentType,
+            FechaCreacion = DateTime.Now,
+            Path = ubicacion,
+            Size = imagen.Length,
+            PersonaId = persona.Id
+        };
+        var imagenStore = await this._imagenPerfilQuery.Update(id, nuevaImagen);
         return imagenStore;
     }
     private async Task<bool> validarCardsRepetido(PersonaCreateDto personaCreateDto)
@@ -246,8 +265,11 @@ public class PersonaController : Controller
         }
         else
         {
+            /*validar perfil*/
+            var validarPerfi = persona.perfil == null ? "" : persona.perfil.Path;
             var editPersona = new PersonaDto
             {
+                pathImagen = validarPerfi,
                 Id = persona.Id,
                 Nombre = persona.Nombre,
                 Apellido = persona.Apellido,
@@ -294,6 +316,15 @@ public class PersonaController : Controller
                         ControlIdBegin_time = this.DateTimeToUnix(personaDto.ControlIdBegin_time),
                         ControlIdEnd_time = this.DateTimeToUnix(personaDto.ControlIdEnd_time),
                     };
+                    //guardar imagen
+                    var delete = await this._imagenPerfilQuery.Delete(id);
+                    if (personaDto.perfil != null)
+                    {
+                        var fileFoto = await this.UploadFoto(personaDto.perfil);
+                        var base64 = this.ConvertToBase64(personaDto.perfil);
+                        var imagenSave = await this.GuardarImagen(personaUpdate, personaDto.perfil, fileFoto, base64);
+                    }
+
                     var persona = await this._personaQuery.UpdateOne(personaUpdate);
 
                     if (personaDto.Area != null)
@@ -316,7 +347,7 @@ public class PersonaController : Controller
                             index++;
                         }
                     }
-                    await this.UpdateDispositivo(persona);
+                    await this.UpdateDispositivo(persona, persona.perfil == null ? null : persona.perfil );
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["ErrorCard"] = "Card ya fue registrado";
@@ -341,11 +372,16 @@ public class PersonaController : Controller
             var persona = await this._personaQuery.GetOne(id);
             var delete = await this._personaQuery.Delete(persona.Id);
             await this.DeleteDispositivo(persona);
+            return Json(new
+            {
+                status = "success",
+                message = "Eliminado correctamente",
+            });
         }
         return Json(new
         {
-            status = "success",
-            message = "Eliminado correctamente",
+            status = "error",
+            message = "A ocurrido un error",
         });
     }
     [HttpPost("buscar")]
@@ -456,7 +492,7 @@ public class PersonaController : Controller
                 {
                     await this.CardStoreControlId(persona);
                 }
-                if (persona.perfiles != null)
+                if (persona.perfil != null)
                 {
                     await this.ImageStoreControlId(persona, imagenPerfil);
                 }
@@ -478,13 +514,22 @@ public class PersonaController : Controller
 
     private async Task<bool> ImageStoreControlId(Persona persona, ImagenPerfil imagenPerfil)
     {
-        var addImagen = await this._registroRostroControlIdQuery.Create(persona.ControlId, imagenPerfil.base64,this.DateTimeToUnix(imagenPerfil.FechaCreacion));
+        var addImagen = await this._registroRostroControlIdQuery.Create(persona.ControlId, imagenPerfil.base64, this.DateTimeToUnix(imagenPerfil.FechaCreacion));
         if (addImagen.status)
         {
             imagenPerfil.ControlUserId = persona.ControlId;
             imagenPerfil.ControlIdImage = imagenPerfil.ControlIdImage;
             imagenPerfil.ControlIdTimestamp = this.DateTimeToUnix(imagenPerfil.FechaCreacion);
             var updatePefil = await this._imagenPerfilQuery.UpdateControlId(imagenPerfil);
+        }
+        return addImagen.status;
+    }
+    private async Task<bool> ImageDeleteControlId(Persona persona)
+    {
+        var addImagen = await this._registroRostroControlIdQuery.Delete(persona.ControlId);
+        if (addImagen.status)
+        {
+            //var updatePefil = await this._imagenPerfilQuery.UpdateControlId(imagenPerfil);
         }
         return addImagen.status;
     }
@@ -524,7 +569,7 @@ public class PersonaController : Controller
     /*
        *UPDATE DATA CONTROL ID 
    */
-    private async Task<bool> UpdateDispositivo(Persona persona)
+    private async Task<bool> UpdateDispositivo(Persona persona, ImagenPerfil imagenPerfil)
     {
         /*consutar por dispositivos*/
         var dispositivos = await this._dispositivoQuery.GetAll();
@@ -539,6 +584,11 @@ public class PersonaController : Controller
                 if (persona.card != null)
                 {
                     await this.CardUpdateControlId(persona);
+                }
+                if (persona.perfil != null)
+                {
+                    await this.ImageDeleteControlId(persona);
+                    await this.ImageStoreControlId(persona, imagenPerfil);
                 }
             }
         }
@@ -562,7 +612,6 @@ public class PersonaController : Controller
         List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
         //elimina base de tarjetas anteriores para recrear
         await this._cardControlIdQuery.DeleteAllUserId(persona.card);
-        
         foreach (var card in persona.card)
         {
             if (card.ControlId != 0)
