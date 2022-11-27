@@ -4,22 +4,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ControlIDMvc.Dtos.ReciboEgresoDto;
-using ControlIDMvc.Querys;
 using ControlIDMvc.Entities;
+using ControlIDMvc.Querys;
 
 namespace ControlIDMvc.Controllers
 {
-    [Route("recibo-egreso")]
-    public class ReciboEgresoController : Controller
+    [Route("recibo-ingreso")]
+    public class ReciboIngresoController : Controller
     {
-        private readonly ILogger<ReciboEgresoController> _logger;
+        private readonly ILogger<ReciboIngresoController> _logger;
         private readonly MovimientoAsientoQuery _movimientoAsientoQuery;
         private readonly AsientoQuery _asientoQuery;
         private readonly PlanAsientoQuery _planAsientoQuery;
 
-        public ReciboEgresoController(
-            ILogger<ReciboEgresoController> logger,
+        public ReciboIngresoController(
+            ILogger<ReciboIngresoController> logger,
             MovimientoAsientoQuery movimientoAsientoQuery,
             AsientoQuery asientoQuery,
             PlanAsientoQuery planAsientoQuery
@@ -31,7 +32,7 @@ namespace ControlIDMvc.Controllers
             this._planAsientoQuery = planAsientoQuery;
         }
         [HttpGet("crear")]
-        public IActionResult Create()
+        public ActionResult Create()
         {
             int nroRecibo = 1000;
             var ReciboEgresoDto = new ReciboEgresoDto()
@@ -43,15 +44,8 @@ namespace ControlIDMvc.Controllers
                 MontoLiteral = "",
                 NombrePersona = "stiven"
             };
-            return View("~/Views/ReciboEgresos/Create.cshtml", ReciboEgresoDto);
+            return View("~/Views/ReciboIngreso/Create.cshtml", ReciboEgresoDto);
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
-        }
-
         [HttpPost("store")]
         public async Task<IActionResult> Store(ReciboEgresoDto reciboEgresoDto)
         {
@@ -64,7 +58,7 @@ namespace ControlIDMvc.Controllers
                 NroRecibo = reciboEgresoDto.NroRecibo,
                 PersonaId = 1,
                 MontoLiteral = reciboEgresoDto.MontoLiteral,
-                TipoMovimientoId = 1
+                TipoMovimientoId = 2
             };
             var nuevoReciboEgreso = await this._movimientoAsientoQuery.Store(insertMovimiento);
             //var insertItems = new List<Asiento>();
@@ -97,7 +91,7 @@ namespace ControlIDMvc.Controllers
             });
         }
         [HttpGet("editar/{id:int}")]
-        public async Task<IActionResult> Editar(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var movimiento = await this._movimientoAsientoQuery.GetOne(id);
             var items = new List<Items>();
@@ -133,7 +127,7 @@ namespace ControlIDMvc.Controllers
                 NombrePersona = "stiven",
                 Items = items
             };
-            return View("~/Views/ReciboEgresos/Edit.cshtml", ReciboEgresoDto);
+            return View("~/Views/ReciboIngreso/Edit.cshtml", ReciboEgresoDto);
         }
         [HttpPut("update/{id:int}")]
         public async Task<IActionResult> Update(int id, ReciboEgresoDto reciboEgresoDto)
@@ -176,5 +170,12 @@ namespace ControlIDMvc.Controllers
                 message = "Modificado"
             });
         }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View("Error!");
+        }
+
     }
 }

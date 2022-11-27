@@ -273,6 +273,29 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Proveedor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nit = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CI = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Telefono = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Dirrecion = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Proveedor", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Proyecto",
                 columns: table => new
                 {
@@ -335,6 +358,21 @@ namespace ControlIDMvc.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rol", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "TipoMovimiento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NombreMovimiento = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoMovimiento", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -765,6 +803,45 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "MovimientosAsiento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    TipoMovimientoId = table.Column<int>(type: "int", nullable: false),
+                    EntregeA = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EntregeATipo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PersonaId = table.Column<int>(type: "int", nullable: false),
+                    Monto = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    MontoLiteral = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NroRecibo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    NotaMovimiento = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovimientosAsiento", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MovimientosAsiento_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovimientosAsiento_TipoMovimiento_TipoMovimientoId",
+                        column: x => x.TipoMovimientoId,
+                        principalTable: "TipoMovimiento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Egreso",
                 columns: table => new
                 {
@@ -850,6 +927,29 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Asiento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NombreAsiento = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Monto = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    MovimientosAsientoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Asiento", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Asiento_MovimientosAsiento_MovimientosAsientoId",
+                        column: x => x.MovimientosAsientoId,
+                        principalTable: "MovimientosAsiento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "PlanCuentaCompuesta",
                 columns: table => new
                 {
@@ -874,6 +974,53 @@ namespace ControlIDMvc.Migrations
                         name: "FK_PlanCuentaCompuesta_PlanCuentaTitulo_PlanCuentaTituloId",
                         column: x => x.PlanCuentaTituloId,
                         principalTable: "PlanCuentaTitulo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Factura",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NroFactura = table.Column<int>(type: "int", nullable: false),
+                    AsientoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Factura", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Factura_Asiento_AsientoId",
+                        column: x => x.AsientoId,
+                        principalTable: "Asiento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PlanAsiento",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PlanCuenta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PlanId = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Debe = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    Haber = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
+                    AsientoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanAsiento", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlanAsiento_Asiento_AsientoId",
+                        column: x => x.AsientoId,
+                        principalTable: "Asiento",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -930,6 +1077,11 @@ namespace ControlIDMvc.Migrations
                 column: "ReglaAccesoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Asiento_MovimientosAsientoId",
+                table: "Asiento",
+                column: "MovimientosAsientoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Dia_HorarioId",
                 table: "Dia",
                 column: "HorarioId");
@@ -938,6 +1090,12 @@ namespace ControlIDMvc.Migrations
                 name: "IX_Egreso_UsuarioId",
                 table: "Egreso",
                 column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Factura_AsientoId",
+                table: "Factura",
+                column: "AsientoId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Grupo_Creado_porId",
@@ -981,6 +1139,16 @@ namespace ControlIDMvc.Migrations
                 column: "PersonaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MovimientosAsiento_PersonaId",
+                table: "MovimientosAsiento",
+                column: "PersonaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MovimientosAsiento_TipoMovimientoId",
+                table: "MovimientosAsiento",
+                column: "TipoMovimientoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersonaReglasAcceso_PersonaId",
                 table: "PersonaReglasAcceso",
                 column: "PersonaId");
@@ -989,6 +1157,11 @@ namespace ControlIDMvc.Migrations
                 name: "IX_PersonaReglasAcceso_ReglaAccesoId",
                 table: "PersonaReglasAcceso",
                 column: "ReglaAccesoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlanAsiento_AsientoId",
+                table: "PlanAsiento",
+                column: "AsientoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlanCuentaCompuesta_PlanCuentaTituloId",
@@ -1076,6 +1249,9 @@ namespace ControlIDMvc.Migrations
                 name: "Egreso");
 
             migrationBuilder.DropTable(
+                name: "Factura");
+
+            migrationBuilder.DropTable(
                 name: "Grupo");
 
             migrationBuilder.DropTable(
@@ -1094,10 +1270,16 @@ namespace ControlIDMvc.Migrations
                 name: "PersonaReglasAcceso");
 
             migrationBuilder.DropTable(
+                name: "PlanAsiento");
+
+            migrationBuilder.DropTable(
                 name: "PlanCuentaSubCuenta");
 
             migrationBuilder.DropTable(
                 name: "PortalReglaAcceso");
+
+            migrationBuilder.DropTable(
+                name: "Proveedor");
 
             migrationBuilder.DropTable(
                 name: "RolModulo");
@@ -1124,6 +1306,9 @@ namespace ControlIDMvc.Migrations
                 name: "Paquete");
 
             migrationBuilder.DropTable(
+                name: "Asiento");
+
+            migrationBuilder.DropTable(
                 name: "PlanCuentaCompuesta");
 
             migrationBuilder.DropTable(
@@ -1142,10 +1327,16 @@ namespace ControlIDMvc.Migrations
                 name: "Usuario");
 
             migrationBuilder.DropTable(
+                name: "MovimientosAsiento");
+
+            migrationBuilder.DropTable(
                 name: "PlanCuentaTitulo");
 
             migrationBuilder.DropTable(
                 name: "Persona");
+
+            migrationBuilder.DropTable(
+                name: "TipoMovimiento");
 
             migrationBuilder.DropTable(
                 name: "PlanCuentaRubro");

@@ -11,14 +11,14 @@ namespace ControlIDMvc.Entities
         public int Id { get; set; }
         public string Codigo { get; set; }
         public string NombreCuenta { get; set; }
-         [Column(TypeName = "decimal(20,2)")]
+        [Column(TypeName = "decimal(20,2)")]
         public decimal Moneda { get; set; }
-         [Column(TypeName = "decimal(20,2)")]
+        [Column(TypeName = "decimal(20,2)")]
         public decimal Valor { get; set; }
         public string Nivel { get; set; }
-         [Column(TypeName = "decimal(20,2)")]
+        [Column(TypeName = "decimal(20,2)")]
         public decimal Debe { get; set; }
-         [Column(TypeName = "decimal(20,2)")]
+        [Column(TypeName = "decimal(20,2)")]
         public decimal Haber { get; set; }
         public int PlanCuentaGrupoId { get; set; }
         public PlanCuentaGrupo PlanCuentaGrupo { get; set; }

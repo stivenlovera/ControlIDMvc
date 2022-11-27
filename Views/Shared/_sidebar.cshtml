@@ -140,29 +140,43 @@
                 <ul class="nav side-menu">
                     <li>
                         <a asp-controller="Caja" asp-action="Index">
-                            <i class="fa fa-line-chart"></i>
-                            Caja
-                        </a>
-                    </li>
-                </ul>
-
-                <ul class="nav side-menu">
-                    <li>
-                        <a asp-controller="PlanDeCuentas" asp-action="Index">
-                            <i class="fa fa-line-chart"></i>
-                            Plan De Cuentas
+                            <i class="fa fa-bank"></i>
+                            Resumen(descartado)
                         </a>
                     </li>
                 </ul>
                 <ul class="nav side-menu">
                     <li>
-                        <a asp-controller="ReciboEgreso" asp-action="Index">
+                        <a asp-controller="PlanCuentaGrupo" asp-action="Index">
+                            <i class="fa fa-bank"></i>
+                            Plan de Cuentas
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a asp-controller="Movimiento" asp-action="Index">
                             <i class="fa fa-line-chart"></i>
+                            Movimientos Generales
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a asp-controller="ReciboEgreso" asp-action="Create">
+                            <i class="fa fa-arrow-right"></i>
                             Recibo Egreso
                         </a>
                     </li>
                 </ul>
-
+                <ul class="nav side-menu">
+                    <li>
+                        <a asp-controller="ReciboIngreso" asp-action="Create">
+                            <i class="fa fa-arrow-left"></i>
+                            Recibo Ingreso
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

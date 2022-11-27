@@ -9,6 +9,7 @@ using ControlIDMvc.Models;
 using ControlIDMvc.Models.DatatableModel;
 using ControlIDMvc.Querys;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ControlIDMvc.Controllers
@@ -143,6 +144,36 @@ namespace ControlIDMvc.Controllers
             }
             return planCuentaListaDto;
         }
+
+        [HttpPost("select-plan-cuenta")]
+        public async Task<List<Select2>> Selectplan(string searchTerm)
+        {
+            var planCuenta = await this.Tabla();
+            var resultado = new List<ListaPlanes>();
+            var select = new List<Select2>();
+            if (searchTerm != "" && searchTerm!=null)
+            {
+                resultado = planCuenta.ListaPlanes.Where(x => x.Codigo.Contains(searchTerm)).ToList();
+                //var resultado=planCuenta.ListaPlanes.Where(x=>EF.Functions.Like(x.Codigo,$"%{searchTerm}%")).ToList();
+            }
+            else
+            {
+                resultado = planCuenta.ListaPlanes;
+            }
+
+            foreach (var plan in resultado)
+            {
+                select.Add(new Select2
+                {
+                    Id = plan.Codigo,
+                    Text = plan.Codigo,
+                    Nombre= plan.NombreCuenta,
+                    Codigo=plan.Codigo
+                });
+            }
+            return select;
+        }
+
         [HttpPost("data-table")]
         public async Task<ActionResult> Datatable()
         {
@@ -193,6 +224,7 @@ namespace ControlIDMvc.Controllers
                 data = empList
             });
         }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -415,21 +447,21 @@ namespace ControlIDMvc.Controllers
                 {
                     return Json(
                       new
-                       {
-                           status = "error",
-                           message = "A ocurrido un error",
-                           errors = new
-                           {
-                               Codigo = new Errors
-                               {
-                                   errors = new List<ErrorsMessage>(){
+                      {
+                          status = "error",
+                          message = "A ocurrido un error",
+                          errors = new
+                          {
+                              Codigo = new Errors
+                              {
+                                  errors = new List<ErrorsMessage>(){
                                         new ErrorsMessage{
                                             errorMessage="Codigo ya existe"
                                         }
                                     }
-                               }
-                           },
-                       });
+                              }
+                          },
+                      });
                 }
             }
             return Json(

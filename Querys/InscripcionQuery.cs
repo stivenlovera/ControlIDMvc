@@ -57,7 +57,6 @@ namespace ControlIDMvc.Querys
             }
             // get total count of records after search
             filterRecord = data.Count();
-            System.Console.WriteLine(" filtro " + sortColumn + " " + sortColumnDirection);
             //filtro columna
             if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection)) data = data.OrderBy(x => sortColumn).ThenBy(x => sortColumnDirection);
             //pagination

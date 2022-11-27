@@ -33,16 +33,18 @@ namespace ControlIDMvc
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Caja> Caja { get; set; }
         public DbSet<Egreso> Egreso { get; set; }
-
         public DbSet<PlanCuentaGrupo> PlanCuentaGrupo { get; set; }
         public DbSet<PlanCuentaRubro> PlanCuentaRubro { get; set; }
         public DbSet<PlanCuentaTitulo> PlanCuentaTitulo { get; set; }
         public DbSet<PlanCuentaCompuesta> PlanCuentaCompuesta { get; set; }
         public DbSet<PlanCuentaSubCuenta> PlanCuentaSubCuenta { get; set; }
-
-
+        public DbSet<MovimientosAsiento> MovimientosAsiento { get; set; }
+        public DbSet<Asiento> Asiento { get; set; }
+        public DbSet<Proveedor> Proveedor { get; set; }
+        public DbSet<Factura> Factura { get; set; }
+        public DbSet<TipoMovimiento> TipoMovimiento { get; set; }
         public DbSet<ImagenPerfil> ImagenPerfil { get; set; }
-        
+        public DbSet<PlanAsiento> PlanAsiento { get; set; }
     }
 }
 
