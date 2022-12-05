@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ControlIDMvc.Dtos.MovimientoDto;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
 using ControlIDMvc.Querys;
@@ -18,25 +19,48 @@ namespace ControlIDMvc.Controllers
         private readonly ILogger<MovimientoController> _logger;
         private readonly MovimientoAsientoQuery _movimientoAsientoQuery;
         private readonly AsientoQuery _asientoQuery;
+        private readonly UsuarioQuery _usuarioQuery;
 
         public MovimientoController(
             ILogger<MovimientoController> logger,
             MovimientoAsientoQuery movimientoAsientoQuery,
-            AsientoQuery asientoQuery
+            AsientoQuery asientoQuery,
+            UsuarioQuery usuarioQuery
             )
         {
             _logger = logger;
             this._movimientoAsientoQuery = movimientoAsientoQuery;
             this._asientoQuery = asientoQuery;
+            this._usuarioQuery = usuarioQuery;
         }
-        [HttpGet("")]
-        public ActionResult Index()
+        [HttpGet]
+        public async Task<ActionResult> Index(MovmientosDto MovmientosDto)
         {
-            return View("~/Views/Movimientos/Lista.cshtml");
+            MovmientosDto.Usuarios = new List<Dtos.MovimientoDto.Usuario>();
+            foreach (var usuario in await this._usuarioQuery.GetAll())
+            {
+                MovmientosDto.Usuarios.Add(new Dtos.MovimientoDto.Usuario
+                {
+                    Nombre = $"{usuario.Persona.Nombre} {usuario.Persona.Apellido}",
+                    Id = usuario.Persona.Id
+                });
+            }
+            MovmientosDto.TipoMovimientos = new List<Dtos.MovimientoDto.TipoMovimiento>(){
+                new Dtos.MovimientoDto.TipoMovimiento{
+                    Nombre="Ingreso",
+                    Id=2
+                },
+                new Dtos.MovimientoDto.TipoMovimiento{
+                    Nombre="Egreso",
+                    Id=1
+                }
+             };
+
+            return View("~/Views/Movimientos/Lista.cshtml", MovmientosDto);
         }
 
         [HttpPost("data-table")]
-        public async Task<IActionResult> DataTable()
+        public async Task<IActionResult> DataTable([FromQuery] FiltroDatatable FiltroDatatable)
         {
             var movimientos = await this.DatatableData();
             int totalRecord = 0;
@@ -48,7 +72,15 @@ namespace ControlIDMvc.Controllers
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
             int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
 
+            //activacion de filtros
+            var personaId = FiltroDatatable.PersonaId;
+
             var data = (from i in movimientos
+                        where i.PersonaId == FiltroDatatable.PersonaId
+                        &&
+                        i.TipoMovimientoId == FiltroDatatable.TipoMovimientoId
+                        &&
+                        i.Fecha >= FiltroDatatable.FechaInicio && i.Fecha <= FiltroDatatable.FechaFin
                         select new DatatableMovimiento()
                         {
                             Id = i.Id,

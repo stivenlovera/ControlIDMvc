@@ -39,37 +39,14 @@ public class HomeController : Controller
     public async Task<IActionResult> Index(HomeDto homeDto)
     {
         var auth = HttpContext.User.Claims.Where(x => x.Type == "Role").ToList();
-
-        var buscarMovimientos = await this._planAsientoQuery.PlanAsientosByPersonaId(Convert.ToInt32(User.FindFirst("UsuarioId").Value));
-        var buscarIncripciones =await this._inscripcionQuery.GetAllByPersonaId(Convert.ToInt32(User.FindFirst("UsuarioId").Value));
-        var buscarhabilitados =await this._inscripcionQuery.GetAllByPersonaId(Convert.ToInt32(User.FindFirst("UsuarioId").Value));
-        var plan1 = this.SearchPerPlanId(buscarMovimientos, "11101M01", "Efectivo");
-        var plan2 = this.SearchPerPlanId(buscarMovimientos, "11101M02", "Bancos");
-        var plan3 = this.SearchPerPlanId(buscarMovimientos, "11301M01", "Cuentas por Cobrar Comerciales");
-        homeDto.Totales = new List<Totales>();
-        homeDto.Totales.Add(
-           plan1
-        );
-        homeDto.Totales.Add(
-          plan2
-        );
-        homeDto.Totales.Add(
-            plan3
-        );
-        homeDto.Totales.Add(
-            new Totales{
-                Nombre="Total Nuevas Inscripciones",
-                PlanId="",
-                total=buscarIncripciones.Count
-            }
-        );
-        homeDto.Totales.Add(
-            new Totales{
-                Nombre="Usuarios Activos",
-                PlanId="",
-                total=2
-            }
-        );
+        if (User.IsInRole("Admin"))
+        {
+            homeDto = await this.PlanAsientoByAdmin(homeDto);
+        }
+        else
+        {
+            homeDto = await this.PlanAsientoByUsuario(homeDto);
+        }
         return View(homeDto);
     }
     private Totales SearchPerPlanId(List<PlanAsiento> PlanAsientos, string PlanId, string PlanCuenta)
@@ -85,10 +62,83 @@ public class HomeController : Controller
             total = haberTotal,
             PlanId = PlanId,
             Nombre = PlanCuenta,
-            
+
         };
         return result;
     }
+    public async Task<HomeDto> PlanAsientoByUsuario(HomeDto homeDto)
+    {
+        var buscarMovimientos = await this._planAsientoQuery.PlanAsientosByPersonaId(Convert.ToInt32(User.FindFirst("UsuarioId").Value));
+        var buscarIncripciones = await this._inscripcionQuery.GetAllByPersonaIPerDay(Convert.ToInt32(User.FindFirst("UsuarioId").Value));
+        var buscarhabilitados = await this._inscripcionQuery.GetAllByPersonaIPerDay(Convert.ToInt32(User.FindFirst("UsuarioId").Value));
+        var plan1 = this.SearchPerPlanId(buscarMovimientos, "11101M01", "Efectivo");
+        var plan2 = this.SearchPerPlanId(buscarMovimientos, "11101M02", "Bancos");
+        var plan3 = this.SearchPerPlanId(buscarMovimientos, "11301M01", "Cuentas por Cobrar Comerciales");
+        homeDto.Totales = new List<Totales>();
+        homeDto.Totales.Add(
+           plan1
+        );
+        homeDto.Totales.Add(
+          plan2
+        );
+        homeDto.Totales.Add(
+            plan3
+        );
+        homeDto.Totales.Add(
+            new Totales
+            {
+                Nombre = "Total Nuevas Inscripciones",
+                PlanId = "",
+                total = buscarIncripciones.Count
+            }
+        );
+        homeDto.Totales.Add(
+            new Totales
+            {
+                Nombre = "Usuarios Activos",
+                PlanId = "",
+                total = 2
+            }
+        );
+        return homeDto;
+    }
+    public async Task<HomeDto> PlanAsientoByAdmin(HomeDto homeDto)
+    {
+        var buscarMovimientos = await this._planAsientoQuery.PlanAsientosAll();
+        var buscarIncripciones = await this._inscripcionQuery.GetAllPerDay();
+        var buscarhabilitados = await this._inscripcionQuery.GetAllPerDay();
+        var plan1 = this.SearchPerPlanId(buscarMovimientos, "11101M01", "Efectivo");
+        var plan2 = this.SearchPerPlanId(buscarMovimientos, "11101M02", "Bancos");
+        var plan3 = this.SearchPerPlanId(buscarMovimientos, "11301M01", "Cuentas por Cobrar Comerciales");
+        homeDto.Totales = new List<Totales>();
+        homeDto.Totales.Add(
+           plan1
+        );
+        homeDto.Totales.Add(
+          plan2
+        );
+        homeDto.Totales.Add(
+            plan3
+        );
+        homeDto.Totales.Add(
+            new Totales
+            {
+                Nombre = "Total Nuevas Inscripciones",
+                PlanId = "",
+                total = buscarIncripciones.Count
+            }
+        );
+        homeDto.Totales.Add(
+            new Totales
+            {
+                Nombre = "Usuarios Activos",
+                PlanId = "",
+                total = 2
+            }
+        );
+        return homeDto;
+    }
+
     [Authorize(Roles = "Admin")]
     public IActionResult Personas()
     {

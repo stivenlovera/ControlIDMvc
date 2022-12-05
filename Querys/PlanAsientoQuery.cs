@@ -25,10 +25,22 @@ namespace ControlIDMvc.Querys
             var result = from p in _dbContext.PlanAsiento
                          join a in _dbContext.Asiento on p.AsientoId equals a.Id
                          join m in _dbContext.MovimientosAsiento on a.MovimientosAsientoId equals m.Id
-                         where m.PersonaId==PersonaId
+                         where m.PersonaId == PersonaId
+                         &&
+                         (m.Fecha >= DateTime.Now.AddDays(-1) && m.Fecha < DateTime.Now)
                          select p;
             var planesAsientoPersona = await result.ToListAsync();
-
+            return planesAsientoPersona;
+        }
+        public async Task<List<PlanAsiento>> PlanAsientosAll()
+        {
+            var result = from p in _dbContext.PlanAsiento
+                         join a in _dbContext.Asiento on p.AsientoId equals a.Id
+                         join m in _dbContext.MovimientosAsiento on a.MovimientosAsientoId equals m.Id
+                         where
+                         (m.Fecha >= DateTime.Now.AddDays(-1) && m.Fecha < DateTime.Now)
+                         select p;
+            var planesAsientoPersona = await result.ToListAsync();
             return planesAsientoPersona;
         }
     }

@@ -14,6 +14,6 @@ namespace ControlIDMvc.Dtos.HomeDto
         public decimal total { get; set; }
         public string PlanId { get; set; }
         public string Nombre { get; set; }
-        public string Detalle { get; set; }="Resumen de esta semana";
+        public string Detalle { get; set; }="Resumen del dia";
     }
 }

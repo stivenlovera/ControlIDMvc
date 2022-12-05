@@ -78,11 +78,23 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return Inscripcion;
         }
-        public async Task<List<Inscripcion>> GetAllByPersonaId(int PersonaId)
+        public async Task<List<Inscripcion>> GetAllByPersonaIPerDay(int PersonaId)
         {
-            return await _dbContext.Inscripcion.Where(x => x.PersonaId==PersonaId).ToListAsync();
+            return await _dbContext.Inscripcion
+            .Where(x => x.PersonaId == PersonaId)
+            .Where(x => x.FechaCreacion >= DateTime.Now.AddDays(-1) && x.FechaCreacion < DateTime.Now)
+            .ToListAsync();
         }
-
+        public async Task<List<Inscripcion>> GetAll()
+        {
+            return await _dbContext.Inscripcion.ToListAsync();
+        }
+        public async Task<List<Inscripcion>> GetAllPerDay()
+        {
+            return await _dbContext.Inscripcion
+            .Where(x => x.FechaCreacion >= DateTime.Now.AddDays(-1) && x.FechaCreacion < DateTime.Now)
+            .ToListAsync();
+        }
         public async Task<Inscripcion> Edit(int id)
         {
             var inscripcion = await _dbContext.Inscripcion.Where(i => i.Id == id).Include(p => p.Persona).Include(p => p.Paquete).FirstOrDefaultAsync();

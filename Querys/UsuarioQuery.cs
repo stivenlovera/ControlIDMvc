@@ -69,13 +69,12 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Usuario> Login(string user, string password)
         {
-           return await this._dbContext.Usuario.Where(u => u.User == user).Where(u => u.Password == password).Include(x => x.Persona).ThenInclude(x=>x.perfil).FirstOrDefaultAsync();
+            return await this._dbContext.Usuario.Where(u => u.User == user).Where(u => u.Password == password).Include(x => x.Persona).ThenInclude(x => x.perfil).FirstOrDefaultAsync();
         }
-        public async Task<List<UsuarioDto>> GetAll()
+        public async Task<List<Usuario>> GetAll()
         {
-            var usuarios = await this._dbContext.Usuario.ToListAsync();
-            return _mapper.Map<List<UsuarioDto>>(usuarios);
-
+            var usuarios = await this._dbContext.Usuario.Include(x => x.Persona).ToListAsync();
+            return usuarios;
         }
         public async Task<List<UsuarioDto>> GetAllLike(string value)
         {
@@ -96,11 +95,11 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Usuario> Update(Usuario usuario)
         {
-           _dbContext.Entry(await _dbContext.Usuario.FirstOrDefaultAsync(x => x.Id == usuario.Id)).CurrentValues.SetValues(new
+            _dbContext.Entry(await _dbContext.Usuario.FirstOrDefaultAsync(x => x.Id == usuario.Id)).CurrentValues.SetValues(new
             {
-                Id=usuario.Id,
-                User=usuario.User,
-                Password=usuario.Password
+                Id = usuario.Id,
+                User = usuario.User,
+                Password = usuario.Password
             });
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Usuario.Where(p => p.Id == usuario.Id).FirstAsync();
