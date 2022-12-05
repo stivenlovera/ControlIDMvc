@@ -23,5 +23,6 @@ namespace ControlIDMvc.Dtos.Persona
         public DateTime ControlIdEnd_time { get; set; }
         public string pathImagen { get; set; }
         public IFormFile perfil { get; set; }
+        public int ReglaAccesoId { get; set; }
     }
 }

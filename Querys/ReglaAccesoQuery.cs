@@ -85,6 +85,11 @@ namespace ControlIDMvc.Querys
                 return false;
             }
         }
+        public async Task<List<ReglaAcceso>> GetAll()
+        {
+            var reglasAcceso = await _dbContext.ReglaAcceso.Include(x => x.PersonaReglasAcceso).Include(x => x.AreaSReglaAccesos).Include(x => x.PortalReglaAccesos).Include(x => x.HorarioReglasAcceso).ToListAsync();
+            return reglasAcceso;
+        }
         public async Task<ReglaAcceso> GetOne(int reglaAccesoId)
         {
             var reglasAcceso = await _dbContext.ReglaAcceso.Where(ra => ra.Id == reglaAccesoId).Include(x => x.PersonaReglasAcceso).Include(x => x.AreaSReglaAccesos).Include(x => x.PortalReglaAccesos).Include(x => x.HorarioReglasAcceso).FirstOrDefaultAsync();
@@ -151,7 +156,7 @@ namespace ControlIDMvc.Querys
         public async Task<ReglaAcceso> UpdateControlId(ReglaAcceso reglaAcceso)
         {
             _dbContext.Entry(await _dbContext.ReglaAcceso.FirstOrDefaultAsync(x => x.Id == reglaAcceso.Id)).CurrentValues.SetValues(
-               new 
+               new
                {
                    ControlId = reglaAcceso.ControlId,
                    ControlIdName = reglaAcceso.Nombre,

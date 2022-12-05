@@ -17,7 +17,7 @@ using System.Web;
 
 namespace ControlIDMvc.Controllers;
 
- [Authorize]
+[Authorize]
 [Route("persona")]
 public class PersonaController : Controller
 {
@@ -37,7 +37,10 @@ public class PersonaController : Controller
     private readonly CardControlIdQuery _cardControlIdQuery;
     private readonly DispositivoQuery _dispositivoQuery;
     private readonly RegistroRostroControlIdQuery _registroRostroControlIdQuery;
+    private readonly UsuarioRulesAccessControlIdQuery _usuarioRulesAccessControlIdQuery;
     private readonly ImagenPerfilQuery _imagenPerfilQuery;
+    private readonly ReglaAccesoQuery _reglaAccesoQuery;
+    private readonly PersonaReglaAccesoQuery _personaReglaAccesoQuery;
     ApiRutas _ApiRutas;
     public PersonaController(
         ILogger<HomeController> logger,
@@ -50,7 +53,10 @@ public class PersonaController : Controller
         CardControlIdQuery cardControlIdQuery,
         DispositivoQuery dispositivoQuery,
         RegistroRostroControlIdQuery registroRostroControlIdQuery,
-        ImagenPerfilQuery imagenPerfilQuery
+        UsuarioRulesAccessControlIdQuery usuarioRulesAccessControlIdQuery,
+        ImagenPerfilQuery imagenPerfilQuery,
+        ReglaAccesoQuery reglaAccesoQuery,
+        PersonaReglaAccesoQuery personaReglaAccesoQuery
         )
     {
         this.logger = logger;
@@ -63,7 +69,10 @@ public class PersonaController : Controller
         this._cardControlIdQuery = cardControlIdQuery;
         this._dispositivoQuery = dispositivoQuery;
         this._registroRostroControlIdQuery = registroRostroControlIdQuery;
+        this._usuarioRulesAccessControlIdQuery = usuarioRulesAccessControlIdQuery;
         this._imagenPerfilQuery = imagenPerfilQuery;
+        this._reglaAccesoQuery = reglaAccesoQuery;
+        this._personaReglaAccesoQuery = personaReglaAccesoQuery;
         this._logger = logger;
 
         this._loginControlIdQuery = loginControlIdQuery;
@@ -78,8 +87,9 @@ public class PersonaController : Controller
     }
 
     [HttpGet("create")]
-    public ActionResult Create()
+    public async Task<ActionResult> Create()
     {
+        ViewData["ReglasAcceso"] = await this._reglaAccesoQuery.GetAll();
         return View("~/Views/Persona/Create.cshtml");
     }
     private async Task<Boolean> loginControlId()
@@ -148,7 +158,8 @@ public class PersonaController : Controller
                             index++;
                         }
                     }
-                    await this.SaveDispositivo(persona, persona.perfil == null ? null : persona.perfil);
+                    var reglaAcceso = await this._reglaAccesoQuery.GetOne(personaCreateDto.ReglaAccesoId);
+                    await this.SaveDispositivo(persona, persona.perfil == null ? null : persona.perfil, reglaAcceso);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["ErrorCard"] = "Tarjeta ya registrada";
@@ -258,6 +269,8 @@ public class PersonaController : Controller
     [HttpGet("editar/{id:int}")]
     public async Task<ActionResult> Edit(int id)
     {
+
+        ViewData["ReglasAcceso"] = await this._reglaAccesoQuery.GetAll();
         ViewData["tarjetas"] = await this._tarjetaQuery.GetAllByPersona(id);
         var persona = await this._personaQuery.GetOne(id);
         if (persona == null)
@@ -318,7 +331,7 @@ public class PersonaController : Controller
                         ControlIdEnd_time = this.DateTimeToUnix(personaDto.ControlIdEnd_time),
                     };
                     //guardar imagen
-                    
+
                     if (personaDto.perfil != null)
                     {
                         var delete = await this._imagenPerfilQuery.Delete(id);
@@ -349,7 +362,8 @@ public class PersonaController : Controller
                             index++;
                         }
                     }
-                    await this.UpdateDispositivo(persona, persona.perfil == null ? null : persona.perfil );
+                    var reglaAcceso = await this._reglaAccesoQuery.GetOne(personaDto.ReglaAccesoId);
+                    await this.UpdateDispositivo(persona, persona.perfil == null ? null : persona.perfil, reglaAcceso);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["ErrorCard"] = "Card ya fue registrado";
@@ -405,7 +419,7 @@ public class PersonaController : Controller
                 apellido = persona.Apellido,
                 fecha_inicio = fecha_inicio,
                 fecha_fin = fecha_fin,
-                perfil=persona.perfil
+                perfil = persona.perfil
             });
         }
         return Json(lista_personas);
@@ -479,7 +493,7 @@ public class PersonaController : Controller
         return login.estado;
     }
     /*------USUARIO------*/
-    private async Task<bool> SaveDispositivo(Persona persona, ImagenPerfil imagenPerfil)
+    private async Task<bool> SaveDispositivo(Persona persona, ImagenPerfil imagenPerfil, ReglaAcceso reglasAcceso)
     {
         /*consutar por dispositivos*/
         var dispositivos = await this._dispositivoQuery.GetAll();
@@ -490,6 +504,16 @@ public class PersonaController : Controller
             {
                 //crear usuario
                 await this.UserStoreControlId(persona);
+                //CREATE REGLA ACCESOO
+                var nueva = new List<PersonaReglasAcceso>();
+                nueva.Add(new PersonaReglasAcceso
+                {
+                    ControlIdAccessRulesId = reglasAcceso.ControlId,
+                    ControlIdUserId = persona.ControlId,
+                    PersonaId = persona.Id,
+                    ReglaAccesoId = reglasAcceso.Id
+                });
+                await this.StorePersonaAccesoRules(nueva);
                 //crear tarjetas si hay 
                 if (persona.card != null)
                 {
@@ -513,6 +537,25 @@ public class PersonaController : Controller
             var updateUsuario = await this._personaQuery.UpdateOne(persona);
         }
         return addUsuario.status;
+    }
+
+    private async Task<bool> StorePersonaAccesoRules(List<PersonaReglasAcceso> personaReglasAccesos)
+    {
+        var apiResponse = await this._usuarioRulesAccessControlIdQuery.CreateAll(personaReglasAccesos);
+        if (apiResponse.status)
+        {
+            foreach (var personaReglasAcceso in personaReglasAccesos)
+            {
+                personaReglasAcceso.ControlIdAccessRulesId = personaReglasAcceso.ReglaAcceso.ControlId;
+                personaReglasAcceso.ControlIdUserId = personaReglasAcceso.Persona.ControlId;
+                await this._personaReglaAccesoQuery.UpdateControlId(personaReglasAcceso);
+            }
+            return apiResponse.status;
+        }
+        else
+        {
+            return apiResponse.status;
+        }
     }
 
     private async Task<bool> ImageStoreControlId(Persona persona, ImagenPerfil imagenPerfil)
@@ -572,7 +615,7 @@ public class PersonaController : Controller
     /*
        *UPDATE DATA CONTROL ID 
    */
-    private async Task<bool> UpdateDispositivo(Persona persona, ImagenPerfil imagenPerfil)
+    private async Task<bool> UpdateDispositivo(Persona persona, ImagenPerfil imagenPerfil, ReglaAcceso reglasAcceso)
     {
         /*consutar por dispositivos*/
         var dispositivos = await this._dispositivoQuery.GetAll();
@@ -583,6 +626,17 @@ public class PersonaController : Controller
             {
                 //crear usuario
                 await this.UserUpdateControlId(persona);
+                await this.DeletePersonaAccesoRules(persona.ControlId);
+                //DELETE y CREATE REGLA ACCESOO
+                var nueva = new List<PersonaReglasAcceso>();
+                nueva.Add(new PersonaReglasAcceso
+                {
+                    ControlIdAccessRulesId = reglasAcceso.ControlId,
+                    ControlIdUserId = persona.ControlId,
+                    PersonaId = persona.Id,
+                    ReglaAccesoId = reglasAcceso.Id
+                });
+                await this.StorePersonaAccesoRules(nueva);
                 //crear tarjetas si hay 
                 if (persona.card != null)
                 {
@@ -609,6 +663,19 @@ public class PersonaController : Controller
             }
         }
         return addUsuario.status;
+    }
+
+    private async Task<bool> DeletePersonaAccesoRules(int UsuarioId)
+    {
+        var apiResponse = await this._usuarioRulesAccessControlIdQuery.DeleteReglaUsuarioId(UsuarioId);
+        if (apiResponse.status)
+        {
+            return apiResponse.status;
+        }
+        else
+        {
+            return apiResponse.status;
+        }
     }
     private async Task<bool> CardUpdateControlId(Persona persona)
     {

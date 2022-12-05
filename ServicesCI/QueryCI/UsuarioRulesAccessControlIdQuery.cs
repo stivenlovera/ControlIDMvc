@@ -58,6 +58,21 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             };
             return await  this.RunDelete(body);
         }
+        public async Task<ResponseUserAccessRolesDelete> DeleteReglaUsuarioId(int user_id)
+        {
+            BodyDeleteObject body = new BodyDeleteObject()
+            {
+                objeto = "user_access_rules",
+                where = new
+                {
+                    user_access_rules = new
+                    {
+                        user_id = user_id
+                    }
+                }
+            };
+            return await  this.RunDelete(body);
+        }
         public BodyDeleteObject DeleteUserId(int user_id)
         {
             BodyDeleteObject body = new BodyDeleteObject()

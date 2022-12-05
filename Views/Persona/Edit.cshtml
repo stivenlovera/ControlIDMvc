@@ -1,9 +1,8 @@
 @model ControlIDMvc.Dtos.Persona.PersonaDto
 @{
     ViewData["Title"] = "Editar Persona";
-    string format = "yyyy-MM-dd";
     var tarjetas = ViewData["tarjetas"] as List<ControlIDMvc.Entities.Tarjeta>;
-
+    var reglaAccesos = ViewData["ReglasAcceso"] as List<ControlIDMvc.Entities.ReglaAcceso>;
     /*image*/
     Model.pathImagen=Model.pathImagen == "" ? "profile_user.jpg" : @Model.pathImagen;
     var FechaActual=DateTime.Now;
@@ -307,17 +306,15 @@
                                             <div class="col-md-6">
                                                 <div class="item form-group">
                                                     <label class="col-form-label col-md-3 col-sm-3"
-                                                        for="nombre">Lector<span class="required">*</span>
+                                                        for="nombre">Rol de acceso<span class="required">*</span>
                                                     </label>
                                                     <div class="col-md-10 col-sm-10">
-                                                        <select id="heard" class="form-control">
-                                                            <option value="" selected>Lector Biometrico USB</option>
-                                                            </select>
-                                                    </div>
-                                                    <div class="col-md-9 col-sm-9">
-                                                        <button type="button" class="btn btn-success btn-xs">Registrar
-                                                            con
-                                                            dispositivo</button>
+                                                        <select id="heard" class="form-control" name="reglaAccesoId">
+                                                            @foreach (var reglaAcceso in reglaAccesos)
+                                                            {
+                                                                <option value="@reglaAcceso.Id">@reglaAcceso.Nombre</option>
+                                                            }
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="item form-group">
@@ -420,7 +417,7 @@
                                             </table>
                                         </div>
                                          }
-                                        @if (User.IsInRole("Admin"))
+                                        @if (User.IsInRole("Cajera") || User.IsInRole("Admin"))
                                         {
                                         <div class="tab-pane fade show" id="informacion" role="tabpanel"
                                             aria-labelledby="informacion-tab">
@@ -442,7 +439,8 @@
                                                         </label>
                                                         <div class="col-md-6 col-sm-8">
                                                             <input id="inicio_permiso" class="form-control" 
-                                                                type="date" name="ControlIdBegin_time" value='@FechaActual.ToString("yyyy-MM-dd")' >
+                                                                type="date" name="ControlIdBegin_time"
+                                                                value='@Model.ControlIdBegin_time.ToString("yyyy-MM-dd")' >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -453,7 +451,7 @@
                                                         <div class="col-md-8 col-sm-8">
                                                             <input id="fin_permiso" class="form-control"
                                                                 type="date" name="ControlIdEnd_time"
-                                                                value='FechaActual.ToString("yyyy-MM-dd")'>
+                                                                value='@Model.ControlIdEnd_time.ToString("yyyy-MM-dd")'>
                                                         </div>
                                                     </div>
                                                 </div>
