@@ -17,6 +17,7 @@ using System.Web;
 
 namespace ControlIDMvc.Controllers;
 
+ [Authorize]
 [Route("persona")]
 public class PersonaController : Controller
 {
@@ -317,9 +318,10 @@ public class PersonaController : Controller
                         ControlIdEnd_time = this.DateTimeToUnix(personaDto.ControlIdEnd_time),
                     };
                     //guardar imagen
-                    var delete = await this._imagenPerfilQuery.Delete(id);
+                    
                     if (personaDto.perfil != null)
                     {
+                        var delete = await this._imagenPerfilQuery.Delete(id);
                         var fileFoto = await this.UploadFoto(personaDto.perfil);
                         var base64 = this.ConvertToBase64(personaDto.perfil);
                         var imagenSave = await this.GuardarImagen(personaUpdate, personaDto.perfil, fileFoto, base64);
@@ -402,7 +404,8 @@ public class PersonaController : Controller
                 nombre = persona.Nombre,
                 apellido = persona.Apellido,
                 fecha_inicio = fecha_inicio,
-                fecha_fin = fecha_fin
+                fecha_fin = fecha_fin,
+                perfil=persona.perfil
             });
         }
         return Json(lista_personas);

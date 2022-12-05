@@ -17,7 +17,10 @@ namespace ControlIDMvc.Entities
         public decimal Costo { get; set; }
         public int PaqueteId { get; set; }
         public Paquete Paquete { get; set; }
+        public int ClienteId { get; set; }
         public int PersonaId { get; set; }
         public Persona Persona { get; set; }
+        public int MetodoPagoId { get; set; }
+        public MetodoPago MetodoPago { get; set; }
     }
 }

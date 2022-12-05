@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using ControlIDMvc.Dtos.ReciboEgresoDto;
 using ControlIDMvc.Querys;
 using ControlIDMvc.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+     [Authorize]
     [Route("recibo-egreso")]
     public class ReciboEgresoController : Controller
     {

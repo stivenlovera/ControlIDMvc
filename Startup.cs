@@ -29,15 +29,15 @@ namespace ControlIDMvc
 
             Services.Services.AddHttpContextAccessor();
             Services.Services.AddHttpClient();
-            /* Services.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+            Services.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 option =>
                 {
-                    option.AccessDeniedPath = "/home";
+                    option.AccessDeniedPath = "/login";
                     option.LoginPath = "/login";
-                    option.LogoutPath = "/Login/Logout";
-                    option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                    //option.LogoutPath = "/";
+                    option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                 }
-            ); */
+            );
             Services.Services.AddTransient<HttpClientService>();
             /*modelos sistema*/
             Services.Services.AddTransient<PersonaQuery>();
@@ -63,7 +63,7 @@ namespace ControlIDMvc
             Services.Services.AddTransient<DiaQuery>();
             Services.Services.AddTransient<AsientoQuery>();
             Services.Services.AddTransient<MovimientoAsientoQuery>();
-            Services.Services.AddTransient<PlanAsiento>(); 
+            Services.Services.AddTransient<PlanAsiento>();
             Services.Services.AddTransient<PlanAsientoQuery>();
 
             Services.Services.AddTransient<PlanCuentasGrupoQuery>();
@@ -71,7 +71,7 @@ namespace ControlIDMvc
             Services.Services.AddTransient<PlanCuentaTituloQuery>();
             Services.Services.AddTransient<PlanCuentaCompuestaQuery>();
             Services.Services.AddTransient<PlanCuentaSubCuentaQuery>();
-
+            Services.Services.AddTransient<MetodoPagoQuery>();
             Services.Services.AddTransient<ImagenPerfilQuery>();
 
             /*modelo Control ID*/

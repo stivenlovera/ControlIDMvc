@@ -35,7 +35,6 @@ namespace ControlIDMvc.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            
             return View("~/Views/Login/Index.cshtml");
         }
 
@@ -51,10 +50,17 @@ namespace ControlIDMvc.Controllers
             var user = await this._usuarioQuery.Login(loginDto.User, loginDto.Password);
             if (user != null)
             {
+                //verificar perfil
+                string perfil="profile_user.jpg";
+                if (user.Persona.perfil!=null)
+                {
+                    perfil=user.Persona.perfil.Path;
+                }
                 /*construyendo claves*/
                 var claims = new List<Claim>{
-                    new Claim(ClaimTypes.Name,loginDto.User),
-                    new Claim("Usuario",user.User),
+                    new Claim(ClaimTypes.Name,$"{user.Persona.Nombre} {user.Persona.Apellido}"),
+                    new Claim("UsuarioId",user.Persona.Id.ToString()),
+                    new Claim("Imagen",perfil),
                 };
                 /*obteiendo roles*/
                 var roles = await this._rolesUsuarioQuery.GetRoles(user.Id);
@@ -79,11 +85,12 @@ namespace ControlIDMvc.Controllers
             return View("Error!");
         }
 
-        [HttpGet("logout")]
+        [HttpPost("logout")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return View("~/Views/Login/Index.cshtml");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

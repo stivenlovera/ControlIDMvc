@@ -7,15 +7,15 @@ namespace ControlIDMvc.Models.DatatableModel
 {
     public class DatatablePlanCuentas
     {
-        public int Id { get; set; }
-        public string Codigo { get; set; }
-        public string NombreCuenta { get; set; }
-        public decimal Moneda { get; set; }
-        public decimal Valor { get; set; }
-        public string Nivel { get; set; }
-        public string ModalEdit { get; set; }
-        public string ModalCreate { get; set; }
-        public decimal Debe { get; set; }
-        public decimal Haber { get; set; }
+        public int id { get; set; }
+        public string codigo { get; set; }
+        public string nombreCuenta { get; set; }
+        public decimal moneda { get; set; }
+        public decimal valor { get; set; }
+        public string nivel { get; set; }
+        public string modalEdit { get; set; }
+        public string modalCreate { get; set; }
+        public decimal debe { get; set; }
+        public decimal haber { get; set; }
     }
 }

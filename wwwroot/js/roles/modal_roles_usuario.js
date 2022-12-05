@@ -1,6 +1,6 @@
 $(document).on("click", ".modal_persona", function () {
     console.log($(this).data('id'))
-    $('#modal_usuario_rol').modal('show');
+
     $.ajax({
         type: 'GET',
         url: `/roles/show/${$(this).data('id')}`,
@@ -14,13 +14,14 @@ $(document).on("click", ".modal_persona", function () {
             $('#Password').val(response.data.password);
             $('#nombres').val(response.data.nombre);
             $('#apellidos').val(response.data.apellido);
-            $('#direccion').val(response.data.direccion); 
-            let option=[];
+            $('#direccion').val(response.data.direccion);
+            let option = [];
             response.data.roles.forEach(rol => {
-                option.push( rol.id);
+                option.push(rol.id);
             });
-           
+
             $('#RolIds').val(option).trigger('change');
+            $('#modal_usuario_rol').modal('show');
         },
         error: function (jqXHR, textStatus, errorThrown) {
             error_status(jqXHR)
@@ -38,19 +39,21 @@ $(document).on("click", "#save_usuario_rol", function () {
         dataType: "json",
         data: $('#form_usuario_rol').serialize(),
         success: function (response) {
-            if (response) {
-                Swal.fire({
-                    icon: 'error',
-                    title: response.message,
-                    html: validateError(response)
-                });
-            } else {
+            if (response.status == 'success') {
                 Swal.fire({
                     icon: 'success',
                     title: response.message,
                     html: response.descripcion,
                     showConfirmButton: true,
-                })
+                });
+                $('#modal_usuario_rol').modal('hide');
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: response.message,
+                    html: validateError(response.data)
+                });
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

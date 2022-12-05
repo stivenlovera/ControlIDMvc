@@ -9,9 +9,12 @@ using ControlIDMvc.ServicesCI;
 using ControlIDMvc.ServicesCI.QueryCI;
 using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("inscripcion")]
     public class InscripcionController : Controller
     {
@@ -19,31 +22,40 @@ namespace ControlIDMvc.Controllers
         private readonly PersonaQuery _personaQuery;
         private readonly InscripcionQuery _inscripcionQuery;
         private readonly CajaQuery _cajaQuery;
+        private readonly PlanCuentaSubCuentaQuery _planCuentaSubCuentaQuery;
+        private readonly MetodoPagoQuery _metodoPagoQuery;
         private readonly LoginControlIdQuery _loginControlIdQuery;
         private readonly HttpClientService _httpClientService;
         private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
         private readonly DispositivoQuery _dispositivoQuery;
+        private readonly MovimientoAsientoQuery _movimientoAsientoQuery;
         ApiRutas _ApiRutas;
         public InscripcionController(
             PaqueteQuery PaqueteQuery,
             PersonaQuery personaQuery,
             InscripcionQuery inscripcionQuery,
             CajaQuery cajaQuery,
+            PlanCuentaSubCuentaQuery planCuentaSubCuentaQuery,
+            MetodoPagoQuery metodoPagoQuery,
             /*controlId*/
             LoginControlIdQuery loginControlIdQuery,
             HttpClientService httpClientService,
             UsuarioControlIdQuery usuarioControlIdQuery,
-            DispositivoQuery dispositivoQuery
+            DispositivoQuery dispositivoQuery,
+            MovimientoAsientoQuery movimientoAsientoQuery
         )
         {
             this._paqueteQuery = PaqueteQuery;
             this._personaQuery = personaQuery;
             this._inscripcionQuery = inscripcionQuery;
             this._cajaQuery = cajaQuery;
+            this._planCuentaSubCuentaQuery = planCuentaSubCuentaQuery;
+            this._metodoPagoQuery = metodoPagoQuery;
             this._loginControlIdQuery = loginControlIdQuery;
             this._httpClientService = httpClientService;
             this._usuarioControlIdQuery = usuarioControlIdQuery;
             this._dispositivoQuery = dispositivoQuery;
+            this._movimientoAsientoQuery = movimientoAsientoQuery;
             this._ApiRutas = new ApiRutas();
         }
         [HttpGet]
@@ -76,6 +88,7 @@ namespace ControlIDMvc.Controllers
             DateTime fechaRecibo = DateTime.Now;
             fechaRecibo.ToString("yyyyMMdd");
             ViewData["numeroRecibo"] = fechaRecibo.ToString("MMddHHmmss");
+            ViewData["metodosPagos"] = await this._metodoPagoQuery.GetAll();
             return View("~/Views/Inscripcion/Create.cshtml");
         }
 
@@ -91,16 +104,45 @@ namespace ControlIDMvc.Controllers
             DateTime fechaRecibo = DateTime.Now;
             fechaRecibo.ToString("yyyyMMdd");
             ViewData["numeroRecibo"] = fechaRecibo.ToString("MMddHHmmss");
+            ViewData["metodosPagos"] = await this._metodoPagoQuery.GetAll();
 
             if (ModelState.IsValid)
             {
-                var inscripcion = await this._inscripcionQuery.Store(InscripcionCreateDto);
-                var caja = await this.addCash(inscripcion);
+                var PersonaId = Convert.ToInt32(User.FindFirst("UsuarioId").Value);
+                var cliente = await this._personaQuery.GetOneByCI(InscripcionCreateDto.CI);
+                var insert = new Inscripcion
+                {
+                    Costo = InscripcionCreateDto.Costo,
+                    FechaCreacion = InscripcionCreateDto.FechaCreacion,
+                    FechaFin = InscripcionCreateDto.FechaFin,
+                    FechaInicio = InscripcionCreateDto.FechaInicio,
+                    MetodoPagoId = InscripcionCreateDto.MetodoId,
+                    NumeroRecibo = InscripcionCreateDto.NumeroRecibo,
+                    PaqueteId = InscripcionCreateDto.PaqueteId,
+                    PersonaId = PersonaId,
+                    ClienteId=cliente.Id
+                };
+
+                //registrando Ingresos
+                var metodo = await this.ObtenerMetodoCuenta(InscripcionCreateDto.MetodoId);
+                await this.IngresoAutomatico(
+                    metodo.PlanId,
+                    metodo.PlanCuenta,
+                    InscripcionCreateDto.Nombres,
+                    InscripcionCreateDto.FechaCreacion,
+                    InscripcionCreateDto.Costo,
+                    InscripcionCreateDto.NumeroRecibo,
+                    PersonaId,
+                    2
+                );
+
+                var inscripcion = await this._inscripcionQuery.Store(insert);
+                //var caja = await this.addCash(inscripcion);
                 //update dispositivo 
-                var persona = await this._personaQuery.GetOne(InscripcionCreateDto.PersonaId);
-                persona.ControlIdBegin_time = this.DateTimeToUnix(InscripcionCreateDto.FechaInicio);
-                persona.ControlIdEnd_time = this.DateTimeToUnix(InscripcionCreateDto.FechaFin);
-                var updateFecha = await this._personaQuery.UpdateOne(persona);
+                cliente.ControlIdBegin_time = this.DateTimeToUnix(InscripcionCreateDto.FechaInicio);
+                cliente.ControlIdEnd_time = this.DateTimeToUnix(InscripcionCreateDto.FechaFin);
+                var updateFecha = await this._personaQuery.UpdateOne(cliente);
+                
                 await this.UpdateDispositivo(updateFecha);
                 return RedirectToAction("PreviewRecibo", new { id = 1 });
             }
@@ -163,7 +205,7 @@ namespace ControlIDMvc.Controllers
             {
                 var data = new Inscripcion
                 {
-                    Id=inscripcionUpdateDto.Id,
+                    Id = inscripcionUpdateDto.Id,
                     PersonaId = inscripcionUpdateDto.Id,
                     Costo = inscripcionUpdateDto.Costo,
                     FechaFin = inscripcionUpdateDto.FechaFin,
@@ -174,14 +216,14 @@ namespace ControlIDMvc.Controllers
                 };
                 var updateInscripcion = await this._inscripcionQuery.Update(data, id);
                 //update dispositivo
-                var persona = await this._personaQuery.GetOne(inscripcionUpdateDto.PersonaId);
+                var persona = await this._personaQuery.GetOneByCI(inscripcionUpdateDto.CI);
                 persona.ControlIdBegin_time = this.DateTimeToUnix(inscripcionUpdateDto.FechaInicio);
                 persona.ControlIdEnd_time = this.DateTimeToUnix(inscripcionUpdateDto.FechaFin);
                 var updateFecha = await this._personaQuery.UpdateOne(persona);
                 await this.UpdateDispositivo(updateFecha);
                 return RedirectToAction("PreviewRecibo", new { id = 1 });
             }
-            var aux=ModelState.Values;
+            var aux = ModelState.Values;
             return View("~/Views/Inscripcion/Edit.cshtml", inscripcionUpdateDto);
         }
 
@@ -227,6 +269,11 @@ namespace ControlIDMvc.Controllers
             }
             return paquetes;
         }
+        /*insercion de inscripcion por defecto*/
+        private async Task<MetodoPago> ObtenerMetodoCuenta(int MetodoPagoId)
+        {
+            return await this._metodoPagoQuery.ObtenerMetodoPago(MetodoPagoId);
+        }
         /*Utils*/
         private long DateTimeToUnix(DateTime MyDateTime)
         {
@@ -238,6 +285,52 @@ namespace ControlIDMvc.Controllers
         /*
         * Modelo de negocio
         */
+        //metodo de pago defaul
+        private async Task<bool> IngresoAutomatico(
+            string PlanCuentaId,
+            string NombrePlanCuenta,
+            string EntregeA,
+            DateTime Fecha,
+            decimal Monto,
+            string NroRecibo,
+            int PersonaId,
+            int TipoMovimiento
+        )
+        {
+            var insertMovimiento = new MovimientosAsiento
+            {
+                EntregeA = EntregeA,
+                EntregeATipo = "Cliente",
+                Fecha = Fecha,
+                Monto = Monto,
+                NroRecibo = NroRecibo,
+                PersonaId = PersonaId,
+                MontoLiteral = "MONTO LITERAL",
+                TipoMovimientoId = 2,
+                Asientos = new List<Asiento>(){
+                    new Asiento{
+                        Monto=Monto,
+                        NombreAsiento="Pago por Inscripcion",
+                        PlanAsientos=new List<PlanAsiento>(){
+                            new PlanAsiento{
+                                Debe=Monto,
+                                Haber=0,
+                                PlanId="50101M02",
+                                PlanCuenta="Servicios"
+                            },
+                            new PlanAsiento{
+                                Debe=0,
+                                Haber=Monto,
+                                PlanId=PlanCuentaId,
+                                PlanCuenta=NombrePlanCuenta
+                            }
+                        }
+                    }
+                }
+            };
+            var nuevoReciboEgreso = await this._movimientoAsientoQuery.Store(insertMovimiento);
+            return true;
+        }
         private async Task<bool> addCash(InscripcionDto inscripcionDto)
         {
             var egresoCaja = new CajaCreateDto

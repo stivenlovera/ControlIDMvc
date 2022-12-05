@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using ControlIDMvc.Dtos.RolUsuario;
 using ControlIDMvc.Dtos.Usuario;
 using ControlIDMvc.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace ControlIDMvc.Controllers
 {
+     [Authorize]
     [Route("roles")]
     public class RolController : Controller
     {
@@ -54,7 +56,7 @@ namespace ControlIDMvc.Controllers
         [HttpPost("data-table-rol")]
         public ActionResult DataTableRol()
         {
-            var dataTable = this._personaQuery.DataTable(Request);
+            var dataTable = this._rolQuery.DataTable(Request);
             return Json(dataTable);
         }
 
@@ -64,10 +66,14 @@ namespace ControlIDMvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                System.Console.WriteLine(ModelState.ErrorCount);
-                return Json(ModelState);
+                return Json(new
+                {
+                    status = "error",
+                    message = "Error complete campos",
+                    data = ModelState
+                });
             }
-            if (usuarioRolesCreateDto.Id==0)
+            if (usuarioRolesCreateDto.Id == 0)
             {
                 UsuarioCreateDto usaurio = new UsuarioCreateDto
                 {
@@ -101,7 +107,7 @@ namespace ControlIDMvc.Controllers
             }
             return Json(new
             {
-                status = "ok",
+                status = "success",
                 message = "guardado correctamente"
             });
         }

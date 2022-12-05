@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ControlIDMvc.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("caja")]
     public class CajaController : Controller
     {

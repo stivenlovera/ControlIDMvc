@@ -7,11 +7,13 @@ using ControlIDMvc.Dtos.PlanCuentaCompuesta;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models;
 using ControlIDMvc.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("plan-compuesta")]
     public class PlanCuentaCompuestaController : Controller
     {

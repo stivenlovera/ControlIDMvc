@@ -12,9 +12,11 @@ using ControlIDMvc.ServicesCI;
 using ControlIDMvc.ServicesCI.Dtos.time_zonesDto;
 using Newtonsoft.Json;
 using ControlIDMvc.ServicesCI.Dtos.time_spansDto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("horario")]
     public class HorarioController : Controller
     {
@@ -164,7 +166,7 @@ namespace ControlIDMvc.Controllers
                 };
                 var horario = await this._horarioQuery.update(update);
                 //editar dias
-                var updateControlId= await ModificarHora(horario,horario.Dias);
+                var updateControlId = await ModificarHora(horario, horario.Dias);
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Horario/Editar.cshtml", horarioDto);
@@ -378,7 +380,7 @@ namespace ControlIDMvc.Controllers
                     insert.Add(
                     new Dia
                     {
-                        HorarioId=horarioDto.Id,
+                        HorarioId = horarioDto.Id,
                         ControlEnd = Convert.ToInt32(dia.hora_fin.Hour) * ((Convert.ToInt32(dia.hora_fin.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.hora_fin.Minute * 60))) * 60,
                         ControlStart = Convert.ToInt32(dia.hora_inicio.Hour) * ((Convert.ToInt32(dia.hora_inicio.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.hora_inicio.Minute * 60))) * 60,
                         ControlHol1 = 0,
@@ -535,7 +537,7 @@ namespace ControlIDMvc.Controllers
                 {
                     //crear horario
                     await this.UpdateHorario(horario);
-                    await this.DeleteHorarioDias(horario,horario.Dias);
+                    await this.DeleteHorarioDias(horario, horario.Dias);
                     await this.StoreDia(horario, horario.Dias);
 
                 }
@@ -588,7 +590,7 @@ namespace ControlIDMvc.Controllers
             foreach (var dia in dias)
             {
                 //delete all  horario controlId 
-                var apiResponse = await this._diasControlIdQuery.Delete(horario,dia);
+                var apiResponse = await this._diasControlIdQuery.Delete(horario, dia);
                 if (apiResponse.status)
                 {
                     return apiResponse.status;

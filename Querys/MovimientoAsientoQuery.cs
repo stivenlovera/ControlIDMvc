@@ -23,17 +23,21 @@ namespace ControlIDMvc.Querys
         }
         public async Task<MovimientosAsiento> GetOne(int id)
         {
-            return await _dbContext.MovimientosAsiento.Where(x => x.Id == id).Include(x => x.Asientos).ThenInclude(x=>x.PlanAsientos).FirstAsync();
+            return await _dbContext.MovimientosAsiento.Where(x => x.Id == id).Include(x => x.Asientos).ThenInclude(x => x.PlanAsientos).FirstAsync();
+        }
+        public async Task<List<MovimientosAsiento>> LikePersonaId(int PersonaId)
+        {
+            return await _dbContext.MovimientosAsiento.Where(x => x.PersonaId.ToString().Contains(PersonaId.ToString())).Include(x=>x.Asientos).ToListAsync();
         }
         public async Task<List<MovimientosAsiento>> ShowAllGrl()
         {
-            return await _dbContext.MovimientosAsiento.Include(X=>X.Persona).Include(x=>x.TipoMovimiento).ToListAsync();
+            return await _dbContext.MovimientosAsiento.Include(X => X.Persona).Include(x => x.TipoMovimiento).ToListAsync();
         }
-      public async Task<MovimientosAsiento> Update(MovimientosAsiento movimientosAsiento)
+        public async Task<MovimientosAsiento> Update(MovimientosAsiento movimientosAsiento)
         {
             _dbContext.Entry(await _dbContext.MovimientosAsiento.FirstOrDefaultAsync(x => x.Id == movimientosAsiento.Id)).CurrentValues.SetValues(new
             {
-                Id=movimientosAsiento.Id,
+                Id = movimientosAsiento.Id,
                 Monto = movimientosAsiento.Monto,
                 EntregeA = movimientosAsiento.EntregeA,
                 MontoLiteral = movimientosAsiento.MontoLiteral,
@@ -53,5 +57,6 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
+        
     }
 }

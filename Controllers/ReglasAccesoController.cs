@@ -16,9 +16,11 @@ using ControlIDMvc.Dtos.HorarioReglaAcceso;
 using ControlIDMvc.Dtos.AreaReglaAccesoCreateDto;
 using ControlIDMvc.ServicesCI.portalsAccessRulesDto;
 using ControlIDMvc.Dtos.PortalReglaAcceso;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+     [Authorize]
     [Route("regla-acceso")]
     public class ReglasAccesoController : Controller
     {

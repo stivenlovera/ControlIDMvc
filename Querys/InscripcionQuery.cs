@@ -14,7 +14,10 @@ namespace ControlIDMvc.Querys
     {
         private readonly DBContext _dbContext;
         private readonly IMapper _mapper;
-        public InscripcionQuery(DBContext dbContext, IMapper mapper)
+        public InscripcionQuery(
+            DBContext dbContext,
+            IMapper mapper
+            )
         {
             this._dbContext = dbContext;
             this._mapper = mapper;
@@ -69,12 +72,15 @@ namespace ControlIDMvc.Querys
                 data = empList
             };
         }
-        public async Task<InscripcionDto> Store(InscripcionCreateDto inscripcionCreateDto)
+        public async Task<Inscripcion> Store(Inscripcion Inscripcion)
         {
-            var inscripcion = _mapper.Map<Inscripcion>(inscripcionCreateDto);
-            _dbContext.Inscripcion.Add(inscripcion);
+            _dbContext.Inscripcion.Add(Inscripcion);
             await _dbContext.SaveChangesAsync();
-            return _mapper.Map<InscripcionDto>(inscripcion);
+            return Inscripcion;
+        }
+        public async Task<List<Inscripcion>> GetAllByPersonaId(int PersonaId)
+        {
+            return await _dbContext.Inscripcion.Where(x => x.PersonaId==PersonaId).ToListAsync();
         }
 
         public async Task<Inscripcion> Edit(int id)

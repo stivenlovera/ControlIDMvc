@@ -8,12 +8,14 @@ using ControlIDMvc.Entities;
 using ControlIDMvc.Models;
 using ControlIDMvc.Models.DatatableModel;
 using ControlIDMvc.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("PlanDeCuentas")]
     public class PlanCuentaGrupoController : Controller
     {
@@ -151,7 +153,7 @@ namespace ControlIDMvc.Controllers
             var planCuenta = await this.Tabla();
             var resultado = new List<ListaPlanes>();
             var select = new List<Select2>();
-            if (searchTerm != "" && searchTerm!=null)
+            if (searchTerm != "" && searchTerm != null)
             {
                 resultado = planCuenta.ListaPlanes.Where(x => x.Codigo.Contains(searchTerm)).ToList();
                 //var resultado=planCuenta.ListaPlanes.Where(x=>EF.Functions.Like(x.Codigo,$"%{searchTerm}%")).ToList();
@@ -167,8 +169,8 @@ namespace ControlIDMvc.Controllers
                 {
                     Id = plan.Codigo,
                     Text = plan.Codigo,
-                    Nombre= plan.NombreCuenta,
-                    Codigo=plan.Codigo
+                    Nombre = plan.NombreCuenta,
+                    Codigo = plan.Codigo
                 });
             }
             return select;
@@ -190,28 +192,27 @@ namespace ControlIDMvc.Controllers
             var data = (from i in planCuenta.ListaPlanes
                         select new DatatablePlanCuentas()
                         {
-                            Id = i.Id,
-                            Codigo = i.Codigo,
-                            Debe = i.Debe,
-                            Haber = i.Haber,
-                            ModalCreate = i.ModalCreate,
-                            ModalEdit = i.ModalEdit,
-                            Moneda = i.Moneda,
-                            Nivel = i.Nivel,
-                            NombreCuenta = i.NombreCuenta,
-                            Valor = i.Valor,
-
+                            id = i.Id,
+                            codigo = i.Codigo,
+                            debe = i.Debe,
+                            haber = i.Haber,
+                            modalCreate = i.ModalCreate,
+                            modalEdit = i.ModalEdit,
+                            moneda = i.Moneda,
+                            nivel = i.Nivel,
+                            nombreCuenta = i.NombreCuenta,
+                            valor = i.Valor,
                         });
 
             totalRecord = data.Count();
             // buscar por valor
             if (!string.IsNullOrEmpty(searchValue))
             {
-                data = data.Where(x => x.Codigo.ToLower().Contains(searchValue.ToLower()) || x.Nivel.ToLower().Contains(searchValue.ToLower()) || x.NombreCuenta.ToLower().Contains(searchValue.ToLower()) || x.Valor.ToString().ToLower().Contains(searchValue.ToLower()));
+                data = data.Where(x => x.codigo.ToLower().Contains(searchValue.ToLower()) || x.nivel.ToLower().Contains(searchValue.ToLower()) || x.nombreCuenta.ToLower().Contains(searchValue.ToLower()) || x.valor.ToString().ToLower().Contains(searchValue.ToLower()));
             }
             // get total count of records after search
             filterRecord = data.Count();
-            System.Console.WriteLine(" filtro " + sortColumn + " " + sortColumnDirection);
+
             //filtro columna
             if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection)) data = data.OrderBy(x => sortColumn).ThenBy(x => sortColumnDirection);
             //pagination

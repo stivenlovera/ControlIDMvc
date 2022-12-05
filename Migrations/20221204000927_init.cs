@@ -154,6 +154,29 @@ namespace ControlIDMvc.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "MetodoPago",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NombreMetodo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PlanCuenta = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PlanId = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PlanCuentaPadre = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PlanaPadreId = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MetodoPago", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Modulo",
                 columns: table => new
                 {
@@ -498,11 +521,19 @@ namespace ControlIDMvc.Migrations
                     FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Costo = table.Column<decimal>(type: "decimal(20,2)", nullable: false),
                     PaqueteId = table.Column<int>(type: "int", nullable: false),
-                    PersonaId = table.Column<int>(type: "int", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false),
+                    PersonaId = table.Column<int>(type: "int", nullable: false),
+                    MetodoPagoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Inscripcion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Inscripcion_MetodoPago_MetodoPagoId",
+                        column: x => x.MetodoPagoId,
+                        principalTable: "MetodoPago",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Inscripcion_Paquete_PaqueteId",
                         column: x => x.PaqueteId,
@@ -1129,6 +1160,11 @@ namespace ControlIDMvc.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Inscripcion_MetodoPagoId",
+                table: "Inscripcion",
+                column: "MetodoPagoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inscripcion_PaqueteId",
                 table: "Inscripcion",
                 column: "PaqueteId");
@@ -1301,6 +1337,9 @@ namespace ControlIDMvc.Migrations
 
             migrationBuilder.DropTable(
                 name: "Horario");
+
+            migrationBuilder.DropTable(
+                name: "MetodoPago");
 
             migrationBuilder.DropTable(
                 name: "Paquete");

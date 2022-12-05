@@ -53,7 +53,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<bool> Delete(int id)
         {
-            var imagenPerfil = await _dbContext.ImagenPerfil.Where(x => x.PersonaId == id).FirstAsync();
+            var imagenPerfil = await _dbContext.ImagenPerfil.Where(x => x.PersonaId == id).FirstOrDefaultAsync();
             if (imagenPerfil != null)
             {
                 _dbContext.ImagenPerfil.Remove(imagenPerfil);

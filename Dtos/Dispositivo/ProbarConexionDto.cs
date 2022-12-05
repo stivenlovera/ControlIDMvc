@@ -15,6 +15,6 @@ namespace ControlIDMvc.Dtos.Dispositivo
         [Required(ErrorMessage = "Ip es requerido")]
         public string Ip { get; set; }
         [Required(ErrorMessage = "Puerto es requerido")]
-        public int Port { get; set; }
+        public int Puerto { get; set; }
     }
 }

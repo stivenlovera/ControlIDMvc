@@ -83,7 +83,7 @@
     <!-- bootstrap-daterangepicker -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        var base_url = "@Url.Content("~/Persona")"
+        var base_url = '@Context.Request.Host.Value'; 
     </script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>

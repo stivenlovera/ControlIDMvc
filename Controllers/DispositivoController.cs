@@ -18,9 +18,11 @@ using ControlIDMvc.Dtos.Area;
 using ControlIDMvc.Dtos.Accion;
 using ControlIDMvc.ServicesCI.Dtos.actionsDto;
 using ControlIDMvc.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("dispositivo")]
     public class DispositivoController : Controller
     {
@@ -159,39 +161,50 @@ namespace ControlIDMvc.Controllers
         [HttpPost("probar-conexion")]
         public async Task<ActionResult> ProbarConexion(ProbarConexionDto probarConexionDto)
         {
-            if (ModelState.IsValid)
+            try
             {
-                BodyLogin cuerpo = this._loginControlIdQuery.Login(probarConexionDto.Usuario, probarConexionDto.Password);
-                Response login = await this._httpClientService.LoginRun(probarConexionDto.Ip, probarConexionDto.Port, this._apiRutas.ApiUrlLogin, cuerpo, "");
-                if (login.estado)
+                if (ModelState.IsValid)
                 {
-                    return Json(new
+                    BodyLogin cuerpo = this._loginControlIdQuery.Login(probarConexionDto.Usuario, probarConexionDto.Password);
+                    Response login = await this._httpClientService.LoginRun(probarConexionDto.Ip, probarConexionDto.Puerto, this._apiRutas.ApiUrlLogin, cuerpo, "");
+                    if (login.estado)
                     {
-                        message = "Conexion satisfactoria",
-                        descripcion = "Dispositivo encontrado"
-                    });
+                        return Json(new
+                        {
+                            message = "Conexion satisfactoria",
+                            descripcion = "Dispositivo encontrado"
+                        });
+                    }
+                    else
+                    {
+                        return Json(new
+                        {
+                            message = "Error de conectividad",
+                            descripcion = "No se pudo conectar al dipositivo"
+                        });
+                    }
                 }
-                else
+                return Json(new
                 {
-                    return Json(new
-                    {
-                        message = "Error de conectividad",
-                        descripcion = "No se pudo conectar al dipositivo"
-                    });
-                }
+                    message = "Error de conexion",
+                    errors = ModelState
+                });
             }
-            return Json(new
+            catch (System.Exception)
             {
-                message = "Error de conexion",
-                errors = ModelState
-            });
+                return Json(new
+                {
+                    message = "Error de conectividad",
+                    descripcion = "No se pudo conectar al dipositivo"
+                });
+            }
         }
 
         /*
             *CARGAR DESDE CONTROL ID 
         */
         /*login dispositivo*/
-        private async Task<bool> LoginControlId(string ip, int port, string user,  string password, string api)
+        private async Task<bool> LoginControlId(string ip, int port, string user, string password, string api)
         {
             BodyLogin cuerpo = _loginControlIdQuery.Login(user, password);
             Response login = await this._httpClientService.LoginRun(ip, port, api, cuerpo, "");
@@ -231,7 +244,7 @@ namespace ControlIDMvc.Controllers
                 await this.HorarioStoreControlId();
                 await this.DiaStoreControlId();
                 await this.HorarioAccessRulesControlId();
-                
+
                 await this.AreaReglasAccesoStore();
                 await this.DipositivoStore(dispositivoCreateDto);
                 //save data dispositivo
@@ -269,8 +282,8 @@ namespace ControlIDMvc.Controllers
                 var portals = new List<Portal>();
                 foreach (var portal in apiportales.portalsDtos)
                 {
-                    var obtenerFromArea=await this._areaQuery.GetControlId(portal.area_from_id);
-                    var obtenerToArea=await this._areaQuery.GetControlId(portal.area_to_id);
+                    var obtenerFromArea = await this._areaQuery.GetControlId(portal.area_from_id);
+                    var obtenerToArea = await this._areaQuery.GetControlId(portal.area_to_id);
                     portals.Add(new Portal
                     {
                         Nombre = portal.name,
@@ -279,8 +292,8 @@ namespace ControlIDMvc.Controllers
                         ControlIdName = portal.name,
                         ControlIdAreaFromId = portal.area_from_id,
                         ControlIdAreaToId = portal.area_to_id,
-                        AreaFromId=obtenerFromArea.Id,
-                        AreaToId=obtenerToArea.Id
+                        AreaFromId = obtenerFromArea.Id,
+                        AreaToId = obtenerToArea.Id
                     });
                 }
                 var storePortals = await this._portalQuery.StoreAll(portals);
@@ -428,7 +441,7 @@ namespace ControlIDMvc.Controllers
                 foreach (var time_Zones_Access_Rules in apiHorario.time_Zones_Access_RulesDtos)
                 {
                     var horario = await this._horarioQuery.SearchControlId(time_Zones_Access_Rules.time_zone_id);
-                    var reglasAcceso= await this._reglaAccesoQuery.SearchControlId(time_Zones_Access_Rules.access_rule_id);
+                    var reglasAcceso = await this._reglaAccesoQuery.SearchControlId(time_Zones_Access_Rules.access_rule_id);
                     horarioAccessRules.Add(new HorarioReglaAcceso
                     {
                         ControlIdAccessRulesId = time_Zones_Access_Rules.access_rule_id,

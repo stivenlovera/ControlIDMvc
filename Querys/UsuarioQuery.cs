@@ -67,11 +67,9 @@ namespace ControlIDMvc.Querys
                 data = usuarios
             };
         }
-        public async Task<UsuarioDto> Login(string user, string password)
+        public async Task<Usuario> Login(string user, string password)
         {
-            var usuario = await this._dbContext.Usuario.Where(u => u.User == user).Where( u=> u.Password == password).FirstOrDefaultAsync();
-
-            return _mapper.Map<UsuarioDto>(usuario);
+           return await this._dbContext.Usuario.Where(u => u.User == user).Where(u => u.Password == password).Include(x => x.Persona).ThenInclude(x=>x.perfil).FirstOrDefaultAsync();
         }
         public async Task<List<UsuarioDto>> GetAll()
         {
@@ -91,20 +89,23 @@ namespace ControlIDMvc.Querys
             await _dbContext.SaveChangesAsync();
             return _mapper.Map<UsuarioDto>(usuario);
         }
-         public async Task<UsuarioDto> ShowPersonaId(int id)
+        public async Task<UsuarioDto> ShowPersonaId(int id)
         {
-            var persona = await _dbContext.Usuario.Where(u=> u.PersonaId==id).FirstOrDefaultAsync();
+            var persona = await _dbContext.Usuario.Where(u => u.PersonaId == id).FirstOrDefaultAsync();
             return _mapper.Map<UsuarioDto>(persona);
         }
-        public async Task<UsuarioDto> Update(UsuarioCreateDto usuarioCreateDto, int id)
+        public async Task<Usuario> Update(Usuario usuario)
         {
-            var usuario = _mapper.Map<Usuario>(usuarioCreateDto);
-            usuario.Id = id;
-            _dbContext.Update(usuario);
+           _dbContext.Entry(await _dbContext.Usuario.FirstOrDefaultAsync(x => x.Id == usuario.Id)).CurrentValues.SetValues(new
+            {
+                Id=usuario.Id,
+                User=usuario.User,
+                Password=usuario.Password
+            });
             await _dbContext.SaveChangesAsync();
-            return _mapper.Map<UsuarioDto>(usuario);
+            return await _dbContext.Usuario.Where(p => p.Id == usuario.Id).FirstAsync();
         }
-         public async Task<UsuarioDto> ValidatePersonaId(int id)
+        public async Task<UsuarioDto> ValidatePersonaId(int id)
         {
             var usuario = await _dbContext.Usuario.Where(x => x.PersonaId == id).FirstOrDefaultAsync();
             return _mapper.Map<UsuarioDto>(usuario);

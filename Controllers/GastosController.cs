@@ -4,9 +4,11 @@ using ControlIDMvc.Dtos.Egreso;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Querys;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+     [Authorize]
     [Route("gasto")]
     public class GastosController : Controller
     {

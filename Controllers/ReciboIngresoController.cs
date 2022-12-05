@@ -8,9 +8,11 @@ using Microsoft.Extensions.Logging;
 using ControlIDMvc.Dtos.ReciboEgresoDto;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Querys;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("recibo-ingreso")]
     public class ReciboIngresoController : Controller
     {

@@ -91,7 +91,12 @@ namespace ControlIDMvc.Querys
         }
         public async Task<Persona> GetOne(int id)
         {
-            var persona = await _dbContext.Persona.Where(persona => persona.Id == id).Include(p => p.card).Include(x=>x.perfil).FirstAsync();
+            var persona = await _dbContext.Persona.Where(persona => persona.Id == id).Include(p => p.card).Include(x => x.perfil).FirstAsync();
+            return persona;
+        }
+        public async Task<Persona> GetOneByCI(string CI)
+        {
+            var persona = await _dbContext.Persona.Where(persona => persona.Ci == CI).Include(p => p.card).Include(x => x.perfil).FirstAsync();
             return persona;
         }
         public async Task<bool> ValidarUsuario(string ci)
@@ -155,7 +160,7 @@ namespace ControlIDMvc.Querys
         }
         public async Task<List<Persona>> GetAllLikeCi(int value)
         {
-            return await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).ToListAsync();
+            return await this._dbContext.Persona.Where(p => p.Ci.Contains(value.ToString())).Include(x => x.perfil).ToListAsync();
         }
         public async Task<List<Persona>> GetAllLikeId(int value)
         {

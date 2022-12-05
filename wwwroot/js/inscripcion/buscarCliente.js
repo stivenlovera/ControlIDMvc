@@ -29,9 +29,15 @@ $(document).on("keypress", "#Buscar", function (e) {
 
 
 function render_resutado(response) {
-    resultadoHtml=``;
+    resultadoHtml = ``;
     if (response.length > 0) {
         response.forEach(persona => {
+            let image = "";
+            if (persona.perfil == null) {
+                image = "profile_user.jpg";
+            } else {
+                image = persona.perfil.path;
+            }
             resultadoHtml += ` 
         <div class="col-md-6 col-sm-6 profile_details">
             <div class="well profile_view">
@@ -47,7 +53,7 @@ function render_resutado(response) {
                         </ul>
                     </div>
                     <div class="right col-md-5 col-sm-5 text-center">
-                        <img src="https://d500.epimg.net/cincodias/imagenes/2016/07/04/lifestyle/1467646262_522853_1467646344_noticia_normal.jpg"
+                        <img src="/images/perfiles/${image}"
                             alt="" class="img-circle img-fluid">
                     </div>
                 </div>

@@ -552,6 +552,9 @@ namespace ControlIDMvc.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Costo")
                         .HasColumnType("decimal(20,2)");
 
@@ -564,6 +567,9 @@ namespace ControlIDMvc.Migrations
                     b.Property<DateTime>("FechaInicio")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("MetodoPagoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("NumeroRecibo")
                         .HasColumnType("longtext");
 
@@ -575,11 +581,39 @@ namespace ControlIDMvc.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MetodoPagoId");
+
                     b.HasIndex("PaqueteId");
 
                     b.HasIndex("PersonaId");
 
                     b.ToTable("Inscripcion");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.MetodoPago", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreMetodo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PlanCuenta")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PlanCuentaPadre")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PlanId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PlanaPadreId")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MetodoPago");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Modulo", b =>
@@ -1374,6 +1408,12 @@ namespace ControlIDMvc.Migrations
 
             modelBuilder.Entity("ControlIDMvc.Entities.Inscripcion", b =>
                 {
+                    b.HasOne("ControlIDMvc.Entities.MetodoPago", "MetodoPago")
+                        .WithMany("inscripcion")
+                        .HasForeignKey("MetodoPagoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ControlIDMvc.Entities.Paquete", "Paquete")
                         .WithMany("Inscripciones")
                         .HasForeignKey("PaqueteId")
@@ -1385,6 +1425,8 @@ namespace ControlIDMvc.Migrations
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MetodoPago");
 
                     b.Navigation("Paquete");
 
@@ -1585,6 +1627,11 @@ namespace ControlIDMvc.Migrations
                     b.Navigation("Dias");
 
                     b.Navigation("HorarioReglaAccesos");
+                });
+
+            modelBuilder.Entity("ControlIDMvc.Entities.MetodoPago", b =>
+                {
+                    b.Navigation("inscripcion");
                 });
 
             modelBuilder.Entity("ControlIDMvc.Entities.Modulo", b =>

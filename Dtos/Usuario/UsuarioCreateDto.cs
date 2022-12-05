@@ -23,9 +23,9 @@ namespace ControlIDMvc.Dtos.Usuario
         public string apellidos { get; set; }
         [Required(ErrorMessage = "Debe selecionar almenos un rol")]
         public List<string> RolIds { get; set; }
-        [Required(ErrorMessage = "Debe selecionar un usuario")]
+        [Required(ErrorMessage = "Debe describir un usuario")]
         public string User { get; set; }
-        [Required(ErrorMessage = "Debe selecionar una contraseña")]
+        [Required(ErrorMessage = "Debe describir una contraseña")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Error persona")]
         public int PersonaId { get; set; }

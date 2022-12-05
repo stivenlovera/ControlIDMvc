@@ -65,8 +65,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 data.Add(new time_spansCreateDto
                 {
                     time_zone_id = horario.ControlId,
-                    start = Convert.ToInt32(dia.Start.Hour) * ((Convert.ToInt32(dia.Start.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.Start.Minute * 60))) * 60,
-                    end = Convert.ToInt32(dia.End.Hour) * ((Convert.ToInt32(dia.End.Minute * 60)) == 0 ? 60 : (Convert.ToInt32(dia.End.Minute * 60))) * 60,
+                    start = (dia.Start.Hour) * (dia.Start.Minute)  * 60,
+                    end = (dia.End.Hour) * (dia.End.Minute )* 60,
                     sun = dia.Sun,
                     mon = dia.Mon,
                     thu = dia.Thu,
@@ -128,7 +128,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunUpdate(body);
             return response;
         }
-        public async Task<ResponseDiasDelete> Delete(Horario horario,Dia dia)
+        public async Task<ResponseDiasDelete> Delete(Horario horario, Dia dia)
         {
             BodyDeleteObject body = new BodyDeleteObject()
             {

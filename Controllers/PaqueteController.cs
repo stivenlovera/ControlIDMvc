@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using ControlIDMvc.Dtos.Paquete;
 using ControlIDMvc.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("paquete")]
     public class PaqueteController : Controller
     {
@@ -19,7 +21,7 @@ namespace ControlIDMvc.Controllers
         {
             this._paqueteQuery = PaqueteQuery;
         }
-        
+
         [HttpGet]
         public ActionResult Index()
         {

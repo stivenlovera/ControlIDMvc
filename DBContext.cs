@@ -45,6 +45,7 @@ namespace ControlIDMvc
         public DbSet<TipoMovimiento> TipoMovimiento { get; set; }
         public DbSet<ImagenPerfil> ImagenPerfil { get; set; }
         public DbSet<PlanAsiento> PlanAsiento { get; set; }
+        public DbSet<MetodoPago> MetodoPago { get; set; }
     }
 }
 

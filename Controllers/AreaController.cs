@@ -12,9 +12,11 @@ using ControlIDMvc.ServicesCI.Dtos.access_rulesDto;
 using Newtonsoft.Json;
 using ControlIDMvc.ServicesCI.Dtos.portalsDto;
 using ControlIDMvc.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("area")]
     public class AreaController : Controller
     {
@@ -257,7 +259,7 @@ namespace ControlIDMvc.Controllers
             var verificar = await this._areaQuery.VerificarDelete(id);
             if (!verificar)
             {
-                var area=await this._areaQuery.GetOne(id);
+                var area = await this._areaQuery.GetOne(id);
                 if (await this._areaQuery.Delete(id))
                 {
                     await this.DeleteArea(area);
@@ -344,8 +346,8 @@ namespace ControlIDMvc.Controllers
             var gePortals = await this._portalQuery.GetAllAreaId(area.Id);
             foreach (var portal in gePortals)
             {
-                portal.ControlIdAreaFromId=area.ControlId;
-                portal.ControlIdAreaToId=area.ControlId;
+                portal.ControlIdAreaFromId = area.ControlId;
+                portal.ControlIdAreaToId = area.ControlId;
                 var apiResponse = await this._portalsControlIdQuery.Update(portal);
                 if (apiResponse.status)
                 {

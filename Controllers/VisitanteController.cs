@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace ControlIDMvc.Controllers
 {
+     [Authorize]
     public class VisitanteController : Controller
     {
         private readonly DBContext _dbContext;

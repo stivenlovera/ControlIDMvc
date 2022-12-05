@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
 using ControlIDMvc.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlIDMvc.Controllers
 {
+    [Authorize]
     [Route("movimientos")]
     public class MovimientoController : Controller
     {

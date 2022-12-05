@@ -20,7 +20,7 @@ namespace ControlIDMvc.Dtos.Inscripcion
         [Required(ErrorMessage = "Seleccione un paquete")]
         public int PaqueteId { get; set; }
         [Required(ErrorMessage = "Seleccione una persona")]
-        public int PersonaId { get; set; }
+        public int ClienteId { get; set; }
         [Required(ErrorMessage = "Nombre es requerido")]
         public string Nombres { get; set; }
         [Required(ErrorMessage = "Apellido es requerido")]
@@ -29,5 +29,7 @@ namespace ControlIDMvc.Dtos.Inscripcion
         public string CI { get; set; }
         [Required(ErrorMessage = "Nombre cliente es requerido")]
         public int? Dias { get; set; }
+        [Required(ErrorMessage = "Selecione Metodo")]
+        public int MetodoId { get; set; }
     }
 }
