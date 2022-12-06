@@ -490,6 +490,7 @@ public class PersonaController : Controller
         this._usuarioControlIdQuery.Params(port, ip, user, password, login.data);
         this._cardControlIdQuery.Params(port, ip, user, password, login.data);
         this._registroRostroControlIdQuery.Params(port, ip, user, password, login.data);
+        this._usuarioRulesAccessControlIdQuery.Params(port, ip, user, password, login.data);
         return login.estado;
     }
     /*------USUARIO------*/
