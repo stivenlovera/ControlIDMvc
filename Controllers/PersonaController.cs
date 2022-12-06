@@ -637,7 +637,9 @@ public class PersonaController : Controller
                     ControlIdAccessRulesId = reglasAcceso.ControlId,
                     ControlIdUserId = persona.ControlId,
                     PersonaId = persona.Id,
-                    ReglaAccesoId = reglasAcceso.Id
+                    ReglaAccesoId = reglasAcceso.Id,
+                    Persona = persona,
+                    ReglaAcceso = reglasAcceso
                 });
                 await this.StorePersonaAccesoRules(nueva);
                 //crear tarjetas si hay 
