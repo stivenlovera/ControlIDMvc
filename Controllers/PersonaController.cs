@@ -159,6 +159,12 @@ public class PersonaController : Controller
                         }
                     }
                     var reglaAcceso = await this._reglaAccesoQuery.GetOne(personaCreateDto.ReglaAccesoId);
+                    var insert = new PersonaReglasAcceso
+                    {
+                        PersonaId = persona.Id,
+                        ReglaAccesoId = reglaAcceso.Id
+                    };
+                    var personaReglaAcceso = await this._personaReglaAccesoQuery.Store(insert);
                     await this.SaveDispositivo(persona, persona.perfil == null ? null : persona.perfil, reglaAcceso);
                     return RedirectToAction(nameof(Index));
                 }
@@ -344,6 +350,7 @@ public class PersonaController : Controller
 
                     if (personaDto.Area != null)
                     {
+                        await this._tarjetaQuery.DeleteUsuarioId(id);
                         int index = 0;
                         foreach (var area in personaDto.Area)
                         {
@@ -362,7 +369,16 @@ public class PersonaController : Controller
                             index++;
                         }
                     }
+                    //borrado inicial
+                    await this._personaReglaAccesoQuery.DeleteAllPersonaId(persona.Id);
                     var reglaAcceso = await this._reglaAccesoQuery.GetOne(personaDto.ReglaAccesoId);
+                    var insert = new PersonaReglasAcceso
+                    {
+                        PersonaId = persona.Id,
+                        ReglaAccesoId = reglaAcceso.Id
+                    };
+                    var personaReglaAcceso = await this._personaReglaAccesoQuery.Store(insert);
+                    //dipositivo
                     await this.UpdateDispositivo(persona, persona.perfil == null ? null : persona.perfil, reglaAcceso);
                     return RedirectToAction(nameof(Index));
                 }
@@ -630,8 +646,8 @@ public class PersonaController : Controller
             {
                 //crear usuario
                 await this.UserUpdateControlId(persona);
-                await this.DeletePersonaAccesoRules(persona.ControlId);
                 //DELETE y CREATE REGLA ACCESOO
+                await this.DeletePersonaAccesoRules(persona.ControlId);
                 var nueva = new List<PersonaReglasAcceso>();
                 nueva.Add(new PersonaReglasAcceso
                 {
@@ -644,7 +660,7 @@ public class PersonaController : Controller
                 });
                 await this.StorePersonaAccesoRules(nueva);
                 //crear tarjetas si hay 
-                if (persona.card != null)
+                if (persona.card.Count> 0)
                 {
                     await this.CardUpdateControlId(persona);
                 }

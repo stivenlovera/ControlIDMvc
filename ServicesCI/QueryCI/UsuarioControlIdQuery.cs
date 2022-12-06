@@ -38,7 +38,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                     begin_time=personaCreateDto.ControlIdBegin_time,
                     end_time=personaCreateDto.ControlIdEnd_time,
                     password=personaCreateDto.ControlIdPassword,
-                    name=personaCreateDto.Nombre,
+                    name=$"{personaCreateDto.Nombre} {personaCreateDto.Apellido}",
                     registration=personaCreateDto.ControlIdRegistration,
                     salt=personaCreateDto.ControlIdSalt,
                 }
@@ -61,7 +61,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     begin_time = persona.ControlIdBegin_time,
                     end_time = persona.ControlIdEnd_time,
-                    name = persona.ControlIdName,
+                    name = $"{persona.Nombre} {persona.Apellido}",
                     password = persona.ControlIdPassword,
                     registration = persona.ControlIdRegistration,
                     salt = persona.ControlIdSalt

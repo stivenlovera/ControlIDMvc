@@ -44,6 +44,17 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
+        public async Task<bool> DeleteAllPersonaId(int PersonaId)
+        {
+            var buscar_personas = await this._dbContext.PersonaReglasAcceso.Where(x => x.PersonaId == PersonaId).ToListAsync();
+            _dbContext.PersonaReglasAcceso.RemoveRange(buscar_personas);
+            var resultado = await _dbContext.SaveChangesAsync();
+            if (resultado > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task<List<PersonaReglasAcceso>> StoreAll(List<PersonaReglasAcceso> personaReglasAccesos)
         {
             await _dbContext.PersonaReglasAcceso.AddRangeAsync(personaReglasAccesos);

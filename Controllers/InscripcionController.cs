@@ -172,13 +172,13 @@ namespace ControlIDMvc.Controllers
             ViewData["personas"] = personas;
             var inscripcion = await this._inscripcionQuery.Edit(id);
             ViewData["numeroRecibo"] = inscripcion.NumeroRecibo;
-
+            var cliente = await this._personaQuery.GetOne(inscripcion.ClienteId);
             InscripcionUpdateDto inscripcionUpdateDto = new InscripcionUpdateDto
             {
                 Id = inscripcion.Id,
-                Nombres = inscripcion.Persona.Nombre,
-                Apellidos = inscripcion.Persona.Apellido,
-                CI = inscripcion.Persona.Ci,
+                Nombres = cliente.Nombre,
+                Apellidos = cliente.Apellido,
+                CI = cliente.Ci,
                 Costo = inscripcion.Paquete.Costo,
                 Dias = inscripcion.Paquete.Dias,
                 FechaCreacion = inscripcion.FechaCreacion,

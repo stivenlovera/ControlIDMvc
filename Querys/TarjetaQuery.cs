@@ -68,5 +68,19 @@ namespace ControlIDMvc.Querys
             var listaTarjetas = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.PersonaId == personaId).ToListAsync();
             return listaTarjetas;
         }
+        public async Task<bool> DeleteUsuarioId(int PersonaId)
+        {
+            var tarjetas = await _dbContext.Tarjeta.Where(x => x.PersonaId == PersonaId).ToListAsync();
+            if (tarjetas.Count > 0)
+            {
+                _dbContext.Tarjeta.RemoveRange(tarjetas);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
     }
 }
