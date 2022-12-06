@@ -27,8 +27,8 @@ namespace ControlIDMvc.Dtos.Persona
         public string ControlIdPassword { get; set; }
         public string ControlIdName { get; set; }
         public string ControlIdSalt { get; set; }
-        public DateTime ControlIdBegin_time { get; set; }
-        public DateTime ControlIdEnd_time { get; set; }
+        public DateTime ControlIdBegin_time { get; set; }=DateTime.Now.AddDays(-1);
+        public DateTime ControlIdEnd_time { get; set; }=DateTime.Now.AddDays(-1);
         public string ControlIdRegistration { get; set; }
         [JsonProperty(PropertyName = "cards")]
         public List<string> Area { get; set; }
