@@ -107,9 +107,9 @@ public class HomeController : Controller
         var buscarMovimientos = await this._planAsientoQuery.PlanAsientosAll();
         var buscarIncripciones = await this._inscripcionQuery.GetAllPerDay();
         var buscarhabilitados = await this._inscripcionQuery.GetAllPerDay();
-        var plan1 = this.SearchPerPlanId(buscarMovimientos, "11101M01", "Efectivo");
-        var plan2 = this.SearchPerPlanId(buscarMovimientos, "11101M02", "Bancos");
-        var plan3 = this.SearchPerPlanId(buscarMovimientos, "11301M01", "Cuentas por Cobrar Comerciales");
+        var plan1 = this.SearchPerPlanId(buscarMovimientos, "11101M01", "Pago Efectivo");
+        var plan2 = this.SearchPerPlanId(buscarMovimientos, "11101M02", "Pago por QR");
+        var plan3 = this.SearchPerPlanId(buscarMovimientos, "11301M01", "Pago Con tarjeta");
         homeDto.Totales = new List<Totales>();
         homeDto.Totales.Add(
            plan1

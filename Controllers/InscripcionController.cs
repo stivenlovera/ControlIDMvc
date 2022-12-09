@@ -11,6 +11,9 @@ using ControlIDMvc.ServicesCI.UtilidadesCI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using ControlIDMvc.Utils;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ControlIDMvc.Models;
 
 namespace ControlIDMvc.Controllers
 {
@@ -29,6 +32,8 @@ namespace ControlIDMvc.Controllers
         private readonly UsuarioControlIdQuery _usuarioControlIdQuery;
         private readonly DispositivoQuery _dispositivoQuery;
         private readonly MovimientoAsientoQuery _movimientoAsientoQuery;
+        private readonly GeneratePDF _generatePDF;
+        private readonly RazorRendererHelper _razorRendererHelper;
         ApiRutas _ApiRutas;
         public InscripcionController(
             PaqueteQuery PaqueteQuery,
@@ -42,7 +47,10 @@ namespace ControlIDMvc.Controllers
             HttpClientService httpClientService,
             UsuarioControlIdQuery usuarioControlIdQuery,
             DispositivoQuery dispositivoQuery,
-            MovimientoAsientoQuery movimientoAsientoQuery
+            MovimientoAsientoQuery movimientoAsientoQuery,
+            //documentos
+            GeneratePDF generatePDF,
+            RazorRendererHelper razorRendererHelper
         )
         {
             this._paqueteQuery = PaqueteQuery;
@@ -56,6 +64,8 @@ namespace ControlIDMvc.Controllers
             this._usuarioControlIdQuery = usuarioControlIdQuery;
             this._dispositivoQuery = dispositivoQuery;
             this._movimientoAsientoQuery = movimientoAsientoQuery;
+            this._generatePDF = generatePDF;
+            this._razorRendererHelper = razorRendererHelper;
             this._ApiRutas = new ApiRutas();
         }
         [HttpGet]
@@ -120,7 +130,7 @@ namespace ControlIDMvc.Controllers
                     NumeroRecibo = InscripcionCreateDto.NumeroRecibo,
                     PaqueteId = InscripcionCreateDto.PaqueteId,
                     PersonaId = PersonaId,
-                    ClienteId=cliente.Id
+                    ClienteId = cliente.Id
                 };
 
                 //registrando Ingresos
@@ -128,7 +138,7 @@ namespace ControlIDMvc.Controllers
                 await this.IngresoAutomatico(
                     metodo.PlanId,
                     metodo.PlanCuenta,
-                    InscripcionCreateDto.Nombres,
+                    $"{InscripcionCreateDto.Nombres} {InscripcionCreateDto.Apellidos}",
                     InscripcionCreateDto.FechaCreacion,
                     InscripcionCreateDto.Costo,
                     InscripcionCreateDto.NumeroRecibo,
@@ -142,7 +152,7 @@ namespace ControlIDMvc.Controllers
                 cliente.ControlIdBegin_time = this.DateTimeToUnix(InscripcionCreateDto.FechaInicio);
                 cliente.ControlIdEnd_time = this.DateTimeToUnix(InscripcionCreateDto.FechaFin);
                 var updateFecha = await this._personaQuery.UpdateOne(cliente);
-                
+
                 await this.UpdateDispositivo(updateFecha);
                 return RedirectToAction("PreviewRecibo", new { id = 1 });
             }
@@ -253,22 +263,25 @@ namespace ControlIDMvc.Controllers
             }
         }
 
-        [HttpPost("select-paquetes")]
-        public async Task<List<PaqueteDto>> Select(SelectDto selectDto)
+        [HttpGet("Inscripcion-recibo")]
+        public async Task<FileStreamResult> InscripcionRecibo(SelectDto selectDto)
         {
-            List<PaqueteDto> paquetes = new List<PaqueteDto>();
-            System.Console.WriteLine(String.IsNullOrEmpty(selectDto.searchTerm));
-            if (String.IsNullOrEmpty(selectDto.searchTerm))
+            var recibo = new Recibo
             {
-                paquetes = await this._paqueteQuery.GetAll();
-            }
-            else
-            {
-                paquetes = await this._paqueteQuery.GetAllLike(selectDto.searchTerm);
-
-            }
-            return paquetes;
+                Costo = 100m,
+                Fecha = DateTime.Now,
+                Nombres = "demo demo"
+            };
+            var htmlContent = this._razorRendererHelper.RenderPartialToString("/Views/DOCUMENTOS/Recibo.cshtml", recibo);
+            var pdf = this._generatePDF.Generate(htmlContent, "xxxx-xxxx-xxxx", false);
+            var stream = new MemoryStream(pdf);
+            var contentType = @"application/pdf";
+            var fileName = $"Demo.pdf";
+            //stream.Seek(0, SeekOrigin.Begin);
+            //return File(stream, contentType, fileName);
+            return new FileStreamResult(stream, contentType);
         }
+
         /*insercion de inscripcion por defecto*/
         private async Task<MetodoPago> ObtenerMetodoCuenta(int MetodoPagoId)
         {

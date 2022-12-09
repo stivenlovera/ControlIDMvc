@@ -1,0 +1,24 @@
+.body {
+    text-align: justify;
+    font: Serif;
+    margin: 20px;
+    font: Serif;
+    font-size: 19px;
+}
+
+.centrado {
+    text-align: center;
+    font-size: 19px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.titulo {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.parrafo {
+    font-size: 19px;
+    padding-bottom: 0px;
+}

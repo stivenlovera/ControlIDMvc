@@ -1,7 +1,7 @@
 @model ControlIDMvc.Dtos.MovimientoDto.MovmientosDto
 @{
     ViewData["Title"] = "Lista Movimientos";
-    var FechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+    var FechaActual = DateTime.Now.ToString("yyyy-MM-dd");
 }
 <style>
     td.details-control {
@@ -55,7 +55,8 @@
                                                 <label class="col-form-label col-md-4 col-sm-4 label-align"
                                                     for="first-name">Fecha Inicio</label>
                                                 <div class="col-md-8 col-sm-8 ">
-                                                    <input type="date" id="FechaInicio" name="FechaInicio" value="@FechaActual" class="form-control ">
+                                                    <input type="date" id="FechaInicio" name="FechaInicio"
+                                                        value="@FechaActual" class="form-control ">
                                                 </div>
                                             </div>
                                         </div>
@@ -64,7 +65,8 @@
                                                 <label class="col-form-label col-md-4 col-sm-4 label-align"
                                                     for="first-name">Fecha Fin </label>
                                                 <div class="col-md-8 col-sm-8 ">
-                                                    <input type="date" id="FechaFin" name="FechaFin" value="@FechaActual" class="form-control ">
+                                                    <input type="date" id="FechaFin" name="FechaFin"
+                                                        value="@FechaActual" class="form-control ">
                                                 </div>
                                             </div>
                                         </div>
@@ -165,7 +167,7 @@
         filter: true,
         order: [],
         ajax: {
-            url: "movimientos/data-table",
+            url: `movimientos/data-table?FechaInicio=${$('#FechaInicio').val()}&FechaFin=${$('#FechaFin').val()}&TipoMovimientoId=${$('#TipoMovimientoId').val()}&PersonaId=${$('#PersonaId').val()}`,
             type: "POST",
 
         },
@@ -303,7 +305,7 @@
             return asientos;
         }
     }
-     $(document).on('change', '#FechaFin', function () {
+    $(document).on('change', '#FechaFin', function () {
         console.log($(this).val())
         table.ajax.url(
             `movimientos/data-table?FechaInicio=${$('#FechaInicio').val()}&FechaFin=${$('#FechaFin').val()}&TipoMovimientoId=${$('#TipoMovimientoId').val()}&PersonaId=${$('#PersonaId').val()}`

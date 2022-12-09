@@ -84,7 +84,7 @@ namespace ControlIDMvc.Controllers
                         select new DatatableMovimiento()
                         {
                             Id = i.Id,
-                            Usuario = i.Persona.Nombre,
+                            Usuario = $"{i.Persona.Nombre} {i.Persona.Apellido}",
                             Fecha = i.Fecha.ToString("dd/MM/yyyy"),
                             MontoTotal = i.Monto,
                             NumeroRecibo = i.NroRecibo,

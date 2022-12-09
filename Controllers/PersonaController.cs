@@ -345,23 +345,21 @@ public class PersonaController : Controller
                         var base64 = this.ConvertToBase64(personaDto.perfil);
                         var imagenSave = await this.GuardarImagen(personaUpdate, personaDto.perfil, fileFoto, base64);
                     }
-
                     var persona = await this._personaQuery.UpdateOne(personaUpdate);
 
                     if (personaDto.Area != null)
                     {
-                        await this._tarjetaQuery.DeleteUsuarioId(id);
                         int index = 0;
                         foreach (var area in personaDto.Area)
                         {
                             TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
                             {
                                 Area = Convert.ToInt32(area),
-                                Codigo = Convert.ToInt32(personaDto.Area[index]),
+                                Codigo = Convert.ToInt32(personaDto.Codigo[index]),
                                 ControlId = 0,
                                 PersonaId = persona.Id,
                             };
-                            var verificar = await this._tarjetaQuery.VerityCard(Convert.ToInt32(area), Convert.ToInt32(personaDto.Area[index]));
+                            var verificar = await this._tarjetaQuery.VerityCardUpdatePersonaId(Convert.ToInt32(area), Convert.ToInt32(personaDto.Area[index]), id);
                             if (!verificar)
                             {
                                 await this._tarjetaQuery.Store(tarjetaCreateDto);
@@ -660,9 +658,10 @@ public class PersonaController : Controller
                 });
                 await this.StorePersonaAccesoRules(nueva);
                 //crear tarjetas si hay 
-                if (persona.card.Count> 0)
+                if (persona.card.Count > 0)
                 {
-                    await this.CardUpdateControlId(persona);
+                    await this.CardDeleteControlId(persona);
+                    await this.CardStoreControlId(persona);
                 }
                 if (persona.perfil != null)
                 {
@@ -755,22 +754,23 @@ public class PersonaController : Controller
     }
     private async Task<bool> CardDeleteControlId(Persona persona)
     {
-        List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
         if (persona.card.Count > 0)
         {
-            foreach (var card in persona.card)
+            var createCard = await this._cardControlIdQuery.DeleteAllUserId(persona.card);
+            if (createCard.status)
             {
-                var newCard = this.ConvertCard(Convert.ToInt32(persona.ControlId), card.area.ToString(), card.codigo.ToString());
-                cardsCreateDto.Add(newCard);
-                var createCard = await this._cardControlIdQuery.CreateAll(persona.card);
-                if (createCard.status)
-                {
-                    card.ControlId = createCard.ids[0];
-                    var updateCard = await this._tarjetaQuery.UpdateOne(card);
-                }
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
-        return true;
+        else
+        {
+            return false;
+        }
     }
 }
+
 

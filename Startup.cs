@@ -5,6 +5,10 @@ using ControlIDMvc.ServicesCI.QueryCI;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using DinkToPdf.Contracts;
+using DinkToPdf;
+using ControlIDMvc.Utils;
+
 namespace ControlIDMvc
 {
     public class Startup
@@ -92,7 +96,14 @@ namespace ControlIDMvc
             Services.Services.AddTransient<DispositivoControlIdQuery>();
             Services.Services.AddTransient<RegistroRostroControlIdQuery>();
 
+            Services.Services.AddSingleton<IConverter>(provider => new SynchronizedConverter(new PdfTools()));
+
+            //util
+            Services.Services.AddTransient<RazorRendererHelper>();
+            Services.Services.AddTransient<GeneratePDF>();
+            //AUTOMAPPER
             Services.Services.AddAutoMapper(typeof(Startup));
+
         }
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {

@@ -34,6 +34,11 @@ namespace ControlIDMvc.Querys
             var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo).AnyAsync();
             return existCard;
         }
+         public async Task<bool> VerityCardUpdatePersonaId(int area, int codigo, int PersonaId)
+        {
+            var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo).AnyAsync();
+            return existCard;
+        }
         public async Task<bool> VerityCardEditar(int area, int codigo, int personaId)
         {
             var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo && tarjeta.PersonaId != personaId).AnyAsync();
