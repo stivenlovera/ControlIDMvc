@@ -1,7 +1,12 @@
 using ControlIDMvc;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+});
 var Startup = new Startup(builder.Configuration);
 Startup.ConfigureServices(builder);
 

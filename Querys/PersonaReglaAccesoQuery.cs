@@ -44,6 +44,35 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
+        public async Task<PersonaReglasAcceso> CheckIfExist(int PersonaId, int ReglaAccesoId)
+        {
+            var verificar = await
+            (from pra in _dbContext.PersonaReglasAcceso
+            .Include(x => x.ReglaAcceso)
+             where (pra.PersonaId == PersonaId && pra.ReglaAccesoId == ReglaAccesoId)
+             select pra
+            ).FirstOrDefaultAsync();
+            return verificar;
+        }
+        public async Task<bool> DeleteNotUsedPeronaId(int PersonaId, List<int> ReglaAccesoIds)
+        {
+            var eliminar = (from pra in this._dbContext.PersonaReglasAcceso
+                            where
+                            !(ReglaAccesoIds.Contains(pra.ReglaAccesoId)) &&
+                            pra.PersonaId == PersonaId
+                            select pra
+            );
+            if (eliminar.Count() > 0)
+            {
+                _dbContext.PersonaReglasAcceso.RemoveRange(eliminar);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public async Task<bool> DeleteAllPersonaId(int PersonaId)
         {
             var buscar_personas = await this._dbContext.PersonaReglasAcceso.Where(x => x.PersonaId == PersonaId).ToListAsync();

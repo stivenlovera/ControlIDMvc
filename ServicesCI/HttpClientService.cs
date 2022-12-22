@@ -15,12 +15,9 @@ namespace ControlIDMvc.ServicesCI
             {
                 var stringContent = new StringContent(JsonConvert.SerializeObject(str), UnicodeEncoding.UTF8, "application/json"); // use MediaTypeNames.Application.Json in Core 3.0+ and Standard 2.1+
                 System.Console.WriteLine($"http://{host}:{port}/{url}?session={session}");
-                Console.WriteLine(JsonConvert.SerializeObject(str, Formatting.Indented));
                 HttpResponseMessage response = await client.PostAsync($"http://{host}:{port}/{url}?session={session}", stringContent);
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseBody + "1" + response.StatusCode.ToString());
-
                 return new Response()
                 {
                     estado = true,

@@ -135,13 +135,8 @@ namespace ControlIDMvc.ServicesCI.QueryCI
             var response = await this.RunDelete(body);
             return response;
         }
-        public async Task<ResponseCardsDelete> DeleteAllUserId(List<Tarjeta> tarjetas)
+        public async Task<ResponseCardsDelete> DeleteAllUserId(int UsuarioId)
         {
-            var tarjetasIds = new List<int>();
-            foreach (var tarjeta in tarjetas)
-            {
-                tarjetasIds.Add(tarjeta.ControlId);
-            }
             BodyDeleteObject body = new BodyDeleteObject()
             {
                 objeto = "cards",
@@ -149,7 +144,7 @@ namespace ControlIDMvc.ServicesCI.QueryCI
                 {
                     cards = new
                     {
-                        id = tarjetasIds
+                        user_id = UsuarioId
                     }
                 }
             };

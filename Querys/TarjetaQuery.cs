@@ -29,14 +29,25 @@ namespace ControlIDMvc.Querys
                 return false;
             }
         }
+        public async Task<Tarjeta> StoreControlId(Tarjeta tarjeta)
+        {
+            _dbContext.Tarjeta.Add(tarjeta);
+            await _dbContext.SaveChangesAsync();
+            return tarjeta;
+        }
         public async Task<bool> VerityCard(int area, int codigo)
         {
             var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo).AnyAsync();
             return existCard;
         }
-         public async Task<bool> VerityCardUpdatePersonaId(int area, int codigo, int PersonaId)
+        public async Task<bool> VerityCardUpdatePersonaId(int area, int codigo, int PersonaId)
         {
             var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo).AnyAsync();
+            return existCard;
+        }
+        public async Task<Tarjeta> VerityCardAndReturn(int area, int codigo)
+        {
+            var existCard = await _dbContext.Tarjeta.Where(tarjeta => tarjeta.area == area && tarjeta.codigo == codigo).FirstOrDefaultAsync();
             return existCard;
         }
         public async Task<bool> VerityCardEditar(int area, int codigo, int personaId)
@@ -85,7 +96,23 @@ namespace ControlIDMvc.Querys
             {
                 return false;
             }
-
+        }
+        public async Task<bool> DeleteTarjetasNoUsed(int PersonaId, List<int> Ids)
+        {
+            var eliminar = (from t in this._dbContext.Tarjeta
+                            where !( Ids.Contains(t.Id))
+                            select t
+            );
+            if (eliminar.Count() > 0)
+            {
+                _dbContext.Tarjeta.RemoveRange(eliminar);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

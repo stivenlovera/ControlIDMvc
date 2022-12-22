@@ -7,12 +7,12 @@ namespace ControlIDMvc.Models.DatatableModel
 {
     public class DatatableMovimiento
     {
-        public int Id { get; set; }
-        public string Usuario { get; set; }
-        public string NumeroRecibo { get; set; }
-        public string Fecha { get; set; }
-        public string TipoMovimiento { get; set; }
-        public string Receptor { get; set; }
-        public decimal MontoTotal { get; set; }
+        public int id { get; set; }
+        public string usuario { get; set; }
+        public string numeroRecibo { get; set; }
+        public string fecha { get; set; }
+        public string tipoMovimiento { get; set; }
+        public string receptor { get; set; }
+        public decimal montoTotal { get; set; }
     }
 }

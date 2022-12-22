@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ControlIDMvc.Entities;
+using ControlIDMvc.Models.DatatableModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlIDMvc.Querys
@@ -27,11 +28,40 @@ namespace ControlIDMvc.Querys
         }
         public async Task<List<MovimientosAsiento>> LikePersonaId(int PersonaId)
         {
-            return await _dbContext.MovimientosAsiento.Where(x => x.PersonaId.ToString().Contains(PersonaId.ToString())).Include(x=>x.Asientos).ToListAsync();
+            return await _dbContext.MovimientosAsiento.Where(x => x.PersonaId.ToString().Contains(PersonaId.ToString())).Include(x => x.Asientos).ToListAsync();
         }
-        public async Task<List<MovimientosAsiento>> ShowAllGrl()
+        public async Task<List<DatatableMovimiento>> ShowAllGrl()
         {
-            return await _dbContext.MovimientosAsiento.Include(X => X.Persona).Include(x => x.TipoMovimiento).ToListAsync();
+            var data = await (from m in _dbContext.MovimientosAsiento
+                              select new DatatableMovimiento()
+                              {
+                                  fecha = m.Fecha.ToString("yyyy/MM/dd"),
+                                  id = m.Id,
+                                  montoTotal = m.Monto,
+                                  numeroRecibo = m.NroRecibo,
+                                  receptor = m.EntregeA,
+                                  tipoMovimiento = m.TipoMovimiento.NombreMovimiento,
+                                  usuario = m.Persona.Nombre
+                              }).ToListAsync();
+            return data;
+        }
+        public async Task<List<DatatableMovimiento>> Datatable(DateTime FechaInicio, DateTime FechaFinal, int TipoMovimiento, int UsuarioId)
+        {
+            var data = await (from m in _dbContext.MovimientosAsiento
+                              where m.TipoMovimientoId == TipoMovimiento &&
+                              (m.Fecha >= FechaInicio && m.Fecha < FechaFinal)
+                              /* where m.Persona.Id == UsuarioId */
+                              select new DatatableMovimiento()
+                              {
+                                  fecha = m.Fecha.ToString("yyyy/MM/dd"),
+                                  id = m.Id,
+                                  montoTotal = m.Monto,
+                                  numeroRecibo = m.NroRecibo,
+                                  receptor = m.EntregeA,
+                                  tipoMovimiento = m.TipoMovimiento.NombreMovimiento,
+                                  usuario = m.Persona.Nombre
+                              }).ToListAsync();
+            return data;
         }
         public async Task<MovimientosAsiento> Update(MovimientosAsiento movimientosAsiento)
         {
@@ -57,6 +87,6 @@ namespace ControlIDMvc.Querys
             }
             return false;
         }
-        
+
     }
 }

@@ -27,7 +27,6 @@ public class PersonaController : Controller
     public string password = "admin";
     public int port { get; set; }
     private readonly ILogger<HomeController> _logger;
-    private readonly ILogger<HomeController> logger;
     private readonly HttpClientService _httpClientService;
     private readonly IWebHostEnvironment _webHostEnvironment;
     private PersonaQuery _personaQuery;
@@ -59,7 +58,6 @@ public class PersonaController : Controller
         PersonaReglaAccesoQuery personaReglaAccesoQuery
         )
     {
-        this.logger = logger;
         this._httpClientService = httpClientService;
         this._webHostEnvironment = webHostEnvironment;
         this._personaQuery = personaQuery;
@@ -82,6 +80,7 @@ public class PersonaController : Controller
     [HttpGet]
     public async Task<ActionResult> Index()
     {
+        this._logger.LogWarning("Index() Iniciando....");
         var personas = await this._personaQuery.GetAll();
         return View("~/Views/Persona/Lista.cshtml");
     }
@@ -89,6 +88,7 @@ public class PersonaController : Controller
     [HttpGet("create")]
     public async Task<ActionResult> Create()
     {
+        
         ViewData["ReglasAcceso"] = await this._reglaAccesoQuery.GetAll();
         return View("~/Views/Persona/Create.cshtml");
     }
@@ -349,35 +349,45 @@ public class PersonaController : Controller
 
                     if (personaDto.Area != null)
                     {
+                        var ids = new List<int>();
                         int index = 0;
                         foreach (var area in personaDto.Area)
                         {
-                            TarjetaCreateDto tarjetaCreateDto = new TarjetaCreateDto
+
+                            var verificar = await this._tarjetaQuery.VerityCardAndReturn(Convert.ToInt32(area), Convert.ToInt32(personaDto.Codigo[index]));
+                            if (verificar == null)
                             {
-                                Area = Convert.ToInt32(area),
-                                Codigo = Convert.ToInt32(personaDto.Codigo[index]),
-                                ControlId = 0,
-                                PersonaId = persona.Id,
-                            };
-                            var verificar = await this._tarjetaQuery.VerityCardUpdatePersonaId(Convert.ToInt32(area), Convert.ToInt32(personaDto.Area[index]), id);
-                            if (!verificar)
+                                var nuevo = await this._tarjetaQuery.StoreControlId(new Tarjeta
+                                {
+                                    area = Convert.ToInt32(area),
+                                    codigo = Convert.ToInt32(personaDto.Codigo[index]),
+                                    PersonaId = id
+                                });
+                                ids.Add(nuevo.Id);
+                            }
+                            else
                             {
-                                await this._tarjetaQuery.Store(tarjetaCreateDto);
+                                var update = await this._tarjetaQuery.UpdateOne(verificar);
+                                ids.Add(update.Id);
                             }
                             index++;
                         }
+                        var DeleteTarjeta = this._tarjetaQuery.DeleteTarjetasNoUsed(id, ids);
                     }
                     //borrado inicial
-                    await this._personaReglaAccesoQuery.DeleteAllPersonaId(persona.Id);
-                    var reglaAcceso = await this._reglaAccesoQuery.GetOne(personaDto.ReglaAccesoId);
-                    var insert = new PersonaReglasAcceso
+                    var personaReglaAcceso = await this._personaReglaAccesoQuery.CheckIfExist(id, personaDto.ReglaAccesoId);
+                    if (personaReglaAcceso == null)
                     {
-                        PersonaId = persona.Id,
-                        ReglaAccesoId = reglaAcceso.Id
-                    };
-                    var personaReglaAcceso = await this._personaReglaAccesoQuery.Store(insert);
+                        var insert = new PersonaReglasAcceso
+                        {
+                            PersonaId = persona.Id,
+                            ReglaAccesoId = personaDto.ReglaAccesoId
+                        };
+                        var nuevo = await this._personaReglaAccesoQuery.Store(insert);
+                    }
+
                     //dipositivo
-                    await this.UpdateDispositivo(persona, persona.perfil == null ? null : persona.perfil, reglaAcceso);
+                    await this.UpdateDispositivo(persona, persona.perfil == null ? null : persona.perfil, personaReglaAcceso.ReglaAcceso);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["ErrorCard"] = "Card ya fue registrado";
@@ -702,7 +712,7 @@ public class PersonaController : Controller
     {
         List<cardsCreateDto> cardsCreateDto = new List<cardsCreateDto>();
         //elimina base de tarjetas anteriores para recrear
-        await this._cardControlIdQuery.DeleteAllUserId(persona.card);
+        await this._cardControlIdQuery.DeleteAllUserId(persona.ControlId);
         foreach (var card in persona.card)
         {
             if (card.ControlId != 0)
@@ -756,7 +766,7 @@ public class PersonaController : Controller
     {
         if (persona.card.Count > 0)
         {
-            var createCard = await this._cardControlIdQuery.DeleteAllUserId(persona.card);
+            var createCard = await this._cardControlIdQuery.DeleteAllUserId(persona.ControlId);
             if (createCard.status)
             {
                 return true;

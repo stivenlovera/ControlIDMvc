@@ -1,0 +1,19 @@
+## Para ejecutar log en un entorno WINDOWS atravez de powershell o cmd deacuerdo al dia Log-20221210.log
+Get-Content Log-20221210.log -Wait -Tail 30
+## Para ejecutar log en un entorno LINUX deacuerdo al dia Log-20221210.log
+tail -f Log-20221210.log 
+
+## Copie y renombre appsettings.json.example a appsettings.json
+
+## Desarrollo Dotnet net5.0 (opcional) 
+dotnet restore
+dotnet watch run 
+
+## Deploy dotnet --arch aquitectura  --output carpeta de destino
+dotnet clean
+dotnet build
+## en windos en cmd
+dotnet publish --arch x64 --output c:\inetpub\wwwroot\build
+## en windos en gitbash
+dotnet publish --arch x64 --output /c/inetpub/wwwroot/build
+

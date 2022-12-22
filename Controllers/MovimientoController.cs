@@ -7,8 +7,11 @@ using ControlIDMvc.Dtos.MovimientoDto;
 using ControlIDMvc.Entities;
 using ControlIDMvc.Models.DatatableModel;
 using ControlIDMvc.Querys;
+using jQueryDatatableServerSideNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ControlIDMvc.Controllers
 {
@@ -60,49 +63,51 @@ namespace ControlIDMvc.Controllers
         }
 
         [HttpPost("data-table")]
-        public async Task<IActionResult> DataTable([FromQuery] FiltroDatatable FiltroDatatable)
+        public async Task<IActionResult> LoadTable(FiltroDatatable filtroDatatable)
         {
-            var movimientos = await this.DatatableData();
             int totalRecord = 0;
             int filterRecord = 0;
             var draw = Request.Form["draw"].FirstOrDefault();
+            var sortColumnIndex = Request.Form["order[0][column]"].FirstOrDefault();
             var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
             var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
             var searchValue = Request.Form["search[value]"].FirstOrDefault();
             int pageSize = Convert.ToInt32(Request.Form["length"].FirstOrDefault() ?? "0");
             int skip = Convert.ToInt32(Request.Form["start"].FirstOrDefault() ?? "0");
-
-            //activacion de filtros
-            var personaId = FiltroDatatable.PersonaId;
-
-            var data = (from i in movimientos
-                        where i.PersonaId == FiltroDatatable.PersonaId
-                        &&
-                        i.TipoMovimientoId == FiltroDatatable.TipoMovimientoId
-                        &&
-                        i.Fecha >= FiltroDatatable.FechaInicio && i.Fecha <= FiltroDatatable.FechaFin
-                        select new DatatableMovimiento()
-                        {
-                            Id = i.Id,
-                            Usuario = $"{i.Persona.Nombre} {i.Persona.Apellido}",
-                            Fecha = i.Fecha.ToString("dd/MM/yyyy"),
-                            MontoTotal = i.Monto,
-                            NumeroRecibo = i.NroRecibo,
-                            Receptor = i.EntregeA,
-                            TipoMovimiento = i.TipoMovimiento.NombreMovimiento
-                        });
-
+            var aux = await this._movimientoAsientoQuery.Datatable(filtroDatatable.FechaInicio,filtroDatatable.FechaFin,filtroDatatable.TipoMovimientoId,filtroDatatable.PersonaId);
+            var data = aux.AsQueryable();
+            //get total count of data in table
             totalRecord = data.Count();
-            // buscar por valor
+            // search data when search value found
             if (!string.IsNullOrEmpty(searchValue))
             {
-                data = data.Where(x => x.Usuario.ToLower().Contains(searchValue.ToLower()) || x.Fecha.ToLower().Contains(searchValue.ToLower()) || x.NumeroRecibo.ToLower().Contains(searchValue.ToLower()) || x.MontoTotal.ToString().ToLower().Contains(searchValue.ToLower()));
+                data = data.Where(
+                x => x.receptor.ToLower().Contains(searchValue.ToLower()) ||
+                x.montoTotal.ToString().ToLower().Contains(searchValue.ToLower()) ||
+                x.usuario.ToLower().Contains(searchValue.ToLower()) ||
+                x.tipoMovimiento.ToString().ToLower().Contains(searchValue.ToLower()));
             }
-            // get total count of records after search
+            // get total count of records after searchEntregeA
             filterRecord = data.Count();
-            System.Console.WriteLine(" filtro " + sortColumn + " " + sortColumnDirection);
-            //filtro columna
-            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection)) data = data.OrderBy(x => sortColumn).ThenBy(x => sortColumnDirection);
+            //sort data
+            //if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection)) data = data.OrderBy("");
+            //numero de de columnas
+            if (Convert.ToInt32(sortColumnIndex) == 1)
+            {
+                data = sortColumnDirection == "asc" ? data.OrderBy(c => c.usuario) : data.OrderByDescending(c => c.usuario);
+            }
+            if (Convert.ToInt32(sortColumnIndex) == 2)
+            {
+                data = sortColumnDirection == "asc" ? data.OrderBy(c => c.numeroRecibo) : data.OrderByDescending(c => c.numeroRecibo);
+            }
+            if (Convert.ToInt32(sortColumnIndex) == 5)
+            {
+                data = sortColumnDirection == "asc" ? data.OrderBy(c => c.receptor) : data.OrderByDescending(c => c.receptor);
+            }
+            if (Convert.ToInt32(sortColumnIndex) == 6)
+            {
+                data = sortColumnDirection == "asc" ? data.OrderBy(c => c.montoTotal) : data.OrderByDescending(c => c.montoTotal);
+            }
             //pagination
             var empList = data.Skip(skip).Take(pageSize).ToList();
             return Json(new
@@ -112,6 +117,7 @@ namespace ControlIDMvc.Controllers
                 recordsFiltered = filterRecord,
                 data = empList
             });
+
         }
         [HttpGet("detail/{id:int}")]
         public async Task<IActionResult> Detail(int id)
@@ -124,7 +130,7 @@ namespace ControlIDMvc.Controllers
                 data = asientos
             });
         }
-        private async Task<List<MovimientosAsiento>> DatatableData()
+        private async Task<List<DatatableMovimiento>> DatatableData()
         {
             //select 
             var movimientos = await this._movimientoAsientoQuery.ShowAllGrl();

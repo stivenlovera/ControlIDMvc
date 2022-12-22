@@ -147,8 +147,6 @@ namespace ControlIDMvc.Controllers
                 );
 
                 var inscripcion = await this._inscripcionQuery.Store(insert);
-                //var caja = await this.addCash(inscripcion);
-                //update dispositivo 
                 cliente.ControlIdBegin_time = this.DateTimeToUnix(InscripcionCreateDto.FechaInicio);
                 cliente.ControlIdEnd_time = this.DateTimeToUnix(InscripcionCreateDto.FechaFin);
                 var updateFecha = await this._personaQuery.UpdateOne(cliente);
